@@ -1,0 +1,19 @@
+{
+	"name": "bleicker/framework",
+	"require": {
+		"bleicker/controller": "*",
+		"bleicker/exception": "*",
+		"bleicker/fastrouter": "*",
+		"bleicker/request": "*",
+		"bleicker/response": "*"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "*"
+	},
+	"authors": [
+		{
+			"name": "Carsten Bleicker",
+			"email": "carsten@bleicker.de"
+		}
+	]
+}
