@@ -1,11 +1,11 @@
 {
 	"name": "bleicker/framework",
 	"require": {
-		"bleicker/controller": "*",
-		"bleicker/exception": "*",
-		"bleicker/fastrouter": "*",
-		"bleicker/request": "*",
-		"bleicker/response": "*"
+		"bleicker/controller": "dev-master",
+		"bleicker/exception": "dev-master",
+		"bleicker/fastrouter": "dev-master",
+		"bleicker/request": "dev-master",
+		"bleicker/response": "dev-master"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "*"
