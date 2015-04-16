@@ -15,5 +15,10 @@
 			"name": "Carsten Bleicker",
 			"email": "carsten@bleicker.de"
 		}
-	]
+	],
+	"autoload": {
+		"psr-4": {
+			"Bleicker\\Framework\\": "src"
+		}
+	}
 }
