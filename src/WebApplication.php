@@ -10,8 +10,6 @@ use Bleicker\Request\MainRequestInterface;
 use Bleicker\Response\Http\Response;
 use Bleicker\Response\MainResponseInterface;
 use Bleicker\Routing\RouterInterface;
-use Bleicker\View\ViewResolver;
-use Bleicker\View\ViewResolverInterface;
 use TYPO3\Fluid\Core\Cache\FluidCacheInterface;
 use TYPO3\Fluid\Core\Cache\SimpleFileCache;
 
