@@ -3,8 +3,6 @@
 namespace Bleicker\Framework;
 
 use Bleicker\FastRouter\Router;
-use Bleicker\Framework\Http\MimeTypeExtensionGuesser;
-use Bleicker\Framework\Http\MimeTypeExtensionGuesserInterface;
 use Bleicker\Request\HandlerInterface;
 use Bleicker\Request\Http\Handler;
 use Bleicker\Request\Http\Request;
