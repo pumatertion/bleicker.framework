@@ -16,44 +16,39 @@ interface RegistryInterface {
 	/**
 	 * @param string $path
 	 * @param mixed $value
-	 * @return $this
+	 * @return void
 	 */
-	public function add($path, $value = NULL);
+	public static function add($path, $value = NULL);
 
 	/**
 	 * @param string $path
 	 * @return mixed
 	 */
-	public function get($path);
+	public static function get($path);
 
 	/**
 	 * @param string $classNameOrInterfaceNameTheFactoryIsFor
 	 * @param mixed $value
-	 * @return $this
+	 * @return void
 	 */
-	public function addFactory($classNameOrInterfaceNameTheFactoryIsFor, $value);
+	public static function addFactory($classNameOrInterfaceNameTheFactoryIsFor, $value);
 
 	/**
 	 * @param string $classNameOrInterfaceNameTheFactoryIsFor
 	 * @return mixed
 	 */
-	public function getFactory($classNameOrInterfaceNameTheFactoryIsFor);
+	public static function getFactory($classNameOrInterfaceNameTheFactoryIsFor);
 
 	/**
 	 * @param string $interfaceNameTheImplementionIsFor
 	 * @param mixed $value
-	 * @return $this
+	 * @return void
 	 */
-	public function addImplementation($interfaceNameTheImplementionIsFor, $value);
+	public static function addImplementation($interfaceNameTheImplementionIsFor, $value);
 
 	/**
 	 * @param string $interfaceNameTheImplementionIsFor
 	 * @return mixed
 	 */
-	public function getImplementation($interfaceNameTheImplementionIsFor);
-
-	/**
-	 * @return array
-	 */
-	public function getStorage();
+	public static function getImplementation($interfaceNameTheImplementionIsFor);
 }

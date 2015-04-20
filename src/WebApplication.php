@@ -20,13 +20,14 @@ use TYPO3\Fluid\Core\Cache\SimpleFileCache;
  */
 class WebApplication extends AbstractKernel implements ApplicationInterface {
 
-	protected function __construct() {
+	public function __construct() {
 		parent::__construct();
-		static::getRegistry()->addImplementation(MainRequestInterface::class, Request::createFromGlobals());
-		static::getRegistry()->addImplementation(MainResponseInterface::class, new Response());
-		static::getRegistry()->addImplementation(RouterInterface::class, Router::getInstance());
-		static::getRegistry()->addImplementation(HandlerInterface::class, new Handler());
-		static::getRegistry()->addImplementation(FluidCacheInterface::class, new SimpleFileCache(ROOT_DIRECTORY . '/Cache'));
+		Registry::addImplementation(MainRequestInterface::class, Request::createFromGlobals());
+		Registry::addImplementation(MainResponseInterface::class, new Response());
+		Registry::addImplementation(RouterInterface::class, Router::getInstance());
+		Registry::addImplementation(MimeTypeExtensionGuesserInterface::class, new MimeTypeExtensionGuesser());
+		Registry::addImplementation(HandlerInterface::class, new Handler());
+		Registry::addImplementation(FluidCacheInterface::class, new SimpleFileCache(ROOT_DIRECTORY . '/Cache'));
 	}
 
 	/**
@@ -34,11 +35,11 @@ class WebApplication extends AbstractKernel implements ApplicationInterface {
 	 */
 	public function run() {
 		/** @var Handler $httpHandler */
-		$httpHandler = static::getRegistry()->getImplementation(HandlerInterface::class);
+		$httpHandler = Registry::getImplementation(HandlerInterface::class);
 		$httpHandler->initialize()->handle();
 
 		/** @var Response $response */
-		$response = static::getRegistry()->getImplementation(MainResponseInterface::class);
+		$response = Registry::getImplementation(MainResponseInterface::class);
 		$response->send();
 	}
 }
