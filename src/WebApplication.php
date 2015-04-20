@@ -3,6 +3,8 @@
 namespace Bleicker\Framework;
 
 use Bleicker\FastRouter\Router;
+use Bleicker\Framework\Http\MimeTypeExtensionGuesser;
+use Bleicker\Framework\Http\MimeTypeExtensionGuesserInterface;
 use Bleicker\Request\HandlerInterface;
 use Bleicker\Request\Http\Handler;
 use Bleicker\Request\Http\Request;
@@ -25,7 +27,6 @@ class WebApplication extends AbstractKernel implements ApplicationInterface {
 		Registry::addImplementation(MainRequestInterface::class, Request::createFromGlobals());
 		Registry::addImplementation(MainResponseInterface::class, new Response());
 		Registry::addImplementation(RouterInterface::class, Router::getInstance());
-		Registry::addImplementation(MimeTypeExtensionGuesserInterface::class, new MimeTypeExtensionGuesser());
 		Registry::addImplementation(HandlerInterface::class, new Handler());
 		Registry::addImplementation(FluidCacheInterface::class, new SimpleFileCache(ROOT_DIRECTORY . '/Cache'));
 	}
