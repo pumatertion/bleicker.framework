@@ -13,8 +13,6 @@ class ObjectManager implements ObjectManagerInterface {
 	 * @param $objectNameOrInterfaceName
 	 * @param $argument ...$argument
 	 */
-	public function get($objectNameOrInterfaceName, $argument){
-
+	public function get($objectNameOrInterfaceName, $argument) {
 	}
-
 }
