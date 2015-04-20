@@ -26,7 +26,6 @@ class WebApplication extends AbstractKernel implements ApplicationInterface {
 		Registry::addImplementation(MainResponseInterface::class, new Response());
 		Registry::addImplementation(RouterInterface::class, Router::getInstance());
 		Registry::addImplementation(HandlerInterface::class, new Handler());
-		Registry::addImplementation(FluidCacheInterface::class, new SimpleFileCache(ROOT_DIRECTORY . '/Cache'));
 	}
 
 	/**
