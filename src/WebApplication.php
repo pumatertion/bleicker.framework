@@ -3,8 +3,7 @@
 namespace Bleicker\Framework;
 
 use Bleicker\FastRouter\Router;
-use Bleicker\Framework\Context\ContextInterface;
-use Bleicker\Framework\Context\Development;
+use Bleicker\Framework\Context\Context;
 use Bleicker\Request\HandlerInterface;
 use Bleicker\Request\Http\Handler;
 use Bleicker\Request\Http\Request;
@@ -12,8 +11,6 @@ use Bleicker\Request\MainRequestInterface;
 use Bleicker\Response\Http\Response;
 use Bleicker\Response\MainResponseInterface;
 use Bleicker\Routing\RouterInterface;
-use TYPO3\Fluid\Core\Cache\FluidCacheInterface;
-use TYPO3\Fluid\Core\Cache\SimpleFileCache;
 
 /**
  * Class WebApplication
@@ -26,7 +23,7 @@ class WebApplication extends AbstractKernel implements ApplicationInterface {
 		parent::__construct();
 		Registry::addImplementation(MainRequestInterface::class, Request::createFromGlobals());
 		Registry::addImplementation(MainResponseInterface::class, new Response());
-		Registry::addImplementation(RouterInterface::class, Router::getInstance(ROOT_DIRECTORY . DIRECTORY_SEPARATOR . 'Cache' . DIRECTORY_SEPARATOR .'route.cache.php', Registry::getImplementation(ContextInterface::class) instanceof Development ? FALSE : TRUE));
+		Registry::addImplementation(RouterInterface::class, Router::getInstance(ROOT_DIRECTORY . DIRECTORY_SEPARATOR . 'Cache' . DIRECTORY_SEPARATOR . 'route.cache.php', Context::isDevelopment() ? FALSE : TRUE));
 		Registry::addImplementation(HandlerInterface::class, new Handler());
 	}
 

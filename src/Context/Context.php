@@ -3,10 +3,10 @@
 namespace Bleicker\Framework\Context;
 
 /**
- * Class Development
+ * Class Context
  *
  * @package Bleicker\Framework\Context
  */
-class Development implements ContextInterface {
+class Context extends AbstractContext {
 
 }
