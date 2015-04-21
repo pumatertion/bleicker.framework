@@ -5,7 +5,8 @@
 		"bleicker/exception": "dev-master",
 		"bleicker/fastrouter": "dev-master",
 		"bleicker/request": "dev-master",
-		"bleicker/response": "dev-master"
+		"bleicker/response": "dev-master",
+		"bleicker/persistence": "dev-master"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "*"
