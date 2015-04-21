@@ -51,4 +51,9 @@ interface RegistryInterface {
 	 * @return mixed
 	 */
 	public static function getImplementation($interfaceNameTheImplementionIsFor);
+
+	/**
+	 * @return array
+	 */
+	public static function getAll();
 }

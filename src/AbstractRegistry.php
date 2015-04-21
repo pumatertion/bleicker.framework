@@ -74,4 +74,11 @@ abstract class AbstractRegistry implements RegistryInterface {
 		}
 		return NULL;
 	}
+
+	/**
+	 * @return array
+	 */
+	public static function getAll() {
+		return static::$storage;
+	}
 }
