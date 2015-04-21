@@ -9,7 +9,7 @@ namespace Bleicker\Framework\Context;
  */
 abstract class AbstractContext implements ContextInterface{
 
-	const ENV_VAR = 'CONTEXT', PRODUCTION = 'production', DEVELOPMENT = 'development';
+	const ENV_VAR = 'CONTEXT', PRODUCTION = 'production', DEVELOPMENT = FALSE;
 
 	/**
 	 * @return boolean
