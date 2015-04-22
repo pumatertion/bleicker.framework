@@ -81,4 +81,11 @@ abstract class AbstractRegistry implements RegistryInterface {
 	public static function getAll() {
 		return static::$storage;
 	}
+
+	/**
+	 * @return void
+	 */
+	public static function prune() {
+		static::$storage = [self::IIMPLENTATION_PATH => [], self::FACTORY_PATH => []];
+	}
 }

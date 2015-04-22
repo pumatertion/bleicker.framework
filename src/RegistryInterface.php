@@ -56,4 +56,9 @@ interface RegistryInterface {
 	 * @return array
 	 */
 	public static function getAll();
+
+	/**
+	 * @return void
+	 */
+	public static function prune();
 }
