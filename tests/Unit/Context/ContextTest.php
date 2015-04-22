@@ -3,14 +3,14 @@
 namespace Tests\Bleicker\Framework\Unit\Context;
 
 use Bleicker\Framework\Context\Context;
-use Tests\Bleicker\Framework\BaseTestCase;
+use Tests\Bleicker\Framework\UnitTestCase;
 
 /**
  * Class ContextTest
  *
  * @package Tests\Bleicker\Framework\Unit\Context
  */
-class ContextTest extends BaseTestCase {
+class ContextTest extends UnitTestCase {
 
 	/**
 	 * @test
@@ -18,5 +18,4 @@ class ContextTest extends BaseTestCase {
 	public function contextIsTesting() {
 		$this->assertTrue(Context::isTesting());
 	}
-
 }

@@ -3,14 +3,14 @@
 namespace Tests\Bleicker\Framework\Unit\Utility;
 
 use Bleicker\Framework\Utility\Arrays;
-use Tests\Bleicker\Framework\BaseTestCase;
+use Tests\Bleicker\Framework\UnitTestCase;
 
 /**
  * Class ArraysTest
  *
  * @package Tests\Bleicker\Framework\Unit\Utility
  */
-class ArraysTest extends BaseTestCase {
+class ArraysTest extends UnitTestCase {
 
 	/**
 	 * @test

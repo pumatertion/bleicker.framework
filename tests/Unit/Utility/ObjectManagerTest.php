@@ -4,16 +4,16 @@ namespace Tests\Bleicker\Framework\Unit\Utility;
 
 use Bleicker\Framework\Registry;
 use Bleicker\Framework\Utility\ObjectManager;
-use Tests\Bleicker\Framework\BaseTestCase;
 use Tests\Bleicker\Framework\Unit\Fixtures\SimpleClass;
 use Tests\Bleicker\Framework\Unit\Fixtures\SimpleClassHavingConstructorArgument;
+use Tests\Bleicker\Framework\UnitTestCase;
 
 /**
  * Class ObjectManagerTest
  *
  * @package Tests\Bleicker\Framework\Unit\Utility
  */
-class ObjectManagerTest extends BaseTestCase {
+class ObjectManagerTest extends UnitTestCase {
 
 	protected function tearDown() {
 		parent::tearDown();
@@ -60,7 +60,7 @@ class ObjectManagerTest extends BaseTestCase {
 	 * @test
 	 */
 	public function getClassFromRegistriesImplementationReturnsRegistryInstanceIfImplemantationIsAClosure() {
-		Registry::addImplementation(SimpleClassHavingConstructorArgument::class, function($title){
+		Registry::addImplementation(SimpleClassHavingConstructorArgument::class, function ($title) {
 			return new SimpleClassHavingConstructorArgument($title);
 		});
 		$object = ObjectManager::get(SimpleClassHavingConstructorArgument::class, 'foo');
@@ -71,8 +71,8 @@ class ObjectManagerTest extends BaseTestCase {
 	/**
 	 * @test
 	 */
-	public function getSingletonClosureIsRegistedAsConcreteImplementation(){
-		Registry::addImplementation(SimpleClassHavingConstructorArgument::class, function($title){
+	public function getSingletonClosureIsRegistedAsConcreteImplementation() {
+		Registry::addImplementation(SimpleClassHavingConstructorArgument::class, function ($title) {
 			return new SimpleClassHavingConstructorArgument($title);
 		});
 		Registry::makeSingletonImplementation(SimpleClassHavingConstructorArgument::class);
@@ -81,5 +81,4 @@ class ObjectManagerTest extends BaseTestCase {
 		$this->assertInstanceOf(SimpleClassHavingConstructorArgument::class, Registry::getImplementation(SimpleClassHavingConstructorArgument::class));
 		$this->assertTrue($object === Registry::getImplementation(SimpleClassHavingConstructorArgument::class));
 	}
-
 }
