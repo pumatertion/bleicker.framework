@@ -14,7 +14,7 @@ abstract class AbstractRegistry implements RegistryInterface {
 	/**
 	 * @var array
 	 */
-	protected static $storage = [self::IIMPLENTATION_PATH => []];
+	protected static $storage = [self::IIMPLENTATION_PATH => [], self::SINGLETONS_PATH => []];
 
 	/**
 	 * @param string $path
@@ -60,6 +60,40 @@ abstract class AbstractRegistry implements RegistryInterface {
 	}
 
 	/**
+	 * @param $interfaceNameTheImplementionIsFor
+	 * @return void
+	 */
+	public static function makeSingletonImplementation($interfaceNameTheImplementionIsFor) {
+		static::$storage[static::SINGLETONS_PATH][$interfaceNameTheImplementionIsFor] = TRUE;
+	}
+
+	/**
+	 * @param $interfaceNameTheImplementionIsFor
+	 * @return void
+	 */
+	public static function makePrototypeImplementation($interfaceNameTheImplementionIsFor) {
+		if (array_key_exists($interfaceNameTheImplementionIsFor, static::$storage[static::SINGLETONS_PATH])) {
+			unset(static::$storage[static::SINGLETONS_PATH][$interfaceNameTheImplementionIsFor]);
+		}
+	}
+
+	/**
+	 * @param $interfaceNameTheImplementionIsFor
+	 * @return boolean
+	 */
+	public static function isSingletonImplementation($interfaceNameTheImplementionIsFor) {
+		return array_key_exists($interfaceNameTheImplementionIsFor, static::$storage[static::SINGLETONS_PATH]) ? TRUE : FALSE;
+	}
+
+	/**
+	 * @param $interfaceNameTheImplementionIsFor
+	 * @return boolean
+	 */
+	public static function isPrototypeImplementation($interfaceNameTheImplementionIsFor) {
+		return !static::isSingletonImplementation($interfaceNameTheImplementionIsFor);
+	}
+
+	/**
 	 * @return array
 	 */
 	public static function getAll() {
@@ -70,6 +104,6 @@ abstract class AbstractRegistry implements RegistryInterface {
 	 * @return void
 	 */
 	public static function prune() {
-		static::$storage = [self::IIMPLENTATION_PATH => []];
+		static::$storage = [self::IIMPLENTATION_PATH => [], self::SINGLETONS_PATH => []];
 	}
 }

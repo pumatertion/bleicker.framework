@@ -32,6 +32,9 @@ class ObjectManager implements ObjectManagerInterface {
 		if ($implementation instanceof Closure) {
 			$arguments = array_slice(func_get_args(), 1);
 			$object = call_user_func_array($implementation, $arguments);
+			if(Registry::isSingletonImplementation($objectNameOrInterfaceName)){
+				Registry::addImplementation($objectNameOrInterfaceName, $object);
+			}
 			return $object;
 		}
 

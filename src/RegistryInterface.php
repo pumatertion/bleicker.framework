@@ -11,7 +11,7 @@ use Bleicker\Framework\Utility\Arrays;
  */
 interface RegistryInterface {
 
-	const IIMPLENTATION_PATH = 'implementations', PATHSEPERATOR = Arrays::PATHSEPARATOR;
+	const IIMPLENTATION_PATH = 'implementations', SINGLETONS_PATH = 'singletons', PATHSEPERATOR = Arrays::PATHSEPARATOR;
 
 	/**
 	 * @param string $path
@@ -38,6 +38,24 @@ interface RegistryInterface {
 	 * @return mixed
 	 */
 	public static function getImplementation($interfaceNameTheImplementionIsFor);
+
+	/**
+	 * @param $interfaceNameTheImplementionIsFor
+	 * @return void
+	 */
+	public static function makeSingletonImplementation($interfaceNameTheImplementionIsFor);
+
+	/**
+	 * @param $interfaceNameTheImplementionIsFor
+	 * @return void
+	 */
+	public static function makePrototypeImplementation($interfaceNameTheImplementionIsFor);
+
+	/**
+	 * @param $interfaceNameTheImplementionIsFor
+	 * @return boolean
+	 */
+	public static function isSingletonImplementation($interfaceNameTheImplementionIsFor);
 
 	/**
 	 * @return array

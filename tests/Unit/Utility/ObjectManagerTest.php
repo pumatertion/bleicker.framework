@@ -67,4 +67,19 @@ class ObjectManagerTest extends BaseTestCase {
 		$this->assertInstanceOf(SimpleClassHavingConstructorArgument::class, $object);
 		$this->assertEquals('foo', $object->getTitle());
 	}
+
+	/**
+	 * @test
+	 */
+	public function getSingletonClosureIsRegistedAsConcreteImplementation(){
+		Registry::addImplementation(SimpleClassHavingConstructorArgument::class, function($title){
+			return new SimpleClassHavingConstructorArgument($title);
+		});
+		Registry::makeSingletonImplementation(SimpleClassHavingConstructorArgument::class);
+		$object = ObjectManager::get(SimpleClassHavingConstructorArgument::class, 'foo');
+		$this->assertInstanceOf(SimpleClassHavingConstructorArgument::class, $object);
+		$this->assertInstanceOf(SimpleClassHavingConstructorArgument::class, Registry::getImplementation(SimpleClassHavingConstructorArgument::class));
+		$this->assertTrue($object === Registry::getImplementation(SimpleClassHavingConstructorArgument::class));
+	}
+
 }

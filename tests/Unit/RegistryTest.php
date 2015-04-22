@@ -59,6 +59,55 @@ class RegistryTest extends BaseTestCase {
 	/**
 	 * @test
 	 */
+	public function registryImplementationIsSingleton(){
+		Registry::addImplementation(SimpleClass::class, function () {
+			return new SimpleClass();
+		});
+		Registry::makeSingletonImplementation(SimpleClass::class);
+		$this->assertTrue(Registry::isSingletonImplementation(SimpleClass::class));
+		$this->assertFalse(Registry::isPrototypeImplementation(SimpleClass::class));
+	}
+
+	/**
+	 * @test
+	 */
+	public function registryImplementationIsPrototypeByDefault(){
+		Registry::addImplementation(SimpleClass::class, function () {
+			return new SimpleClass();
+		});
+		$this->assertFalse(Registry::isSingletonImplementation(SimpleClass::class));
+		$this->assertTrue(Registry::isPrototypeImplementation(SimpleClass::class));
+	}
+
+	/**
+	 * @test
+	 */
+	public function registryImplementationIsPrototypeAfterSwitch(){
+		Registry::addImplementation(SimpleClass::class, function () {
+			return new SimpleClass();
+		});
+		Registry::makeSingletonImplementation(SimpleClass::class);
+		Registry::makePrototypeImplementation(SimpleClass::class);
+		$this->assertFalse(Registry::isSingletonImplementation(SimpleClass::class));
+		$this->assertTrue(Registry::isPrototypeImplementation(SimpleClass::class));
+	}
+
+	/**
+	 * @test
+	 */
+	public function registryImplementationIsSingletonAfterSwitch(){
+		Registry::addImplementation(SimpleClass::class, function () {
+			return new SimpleClass();
+		});
+		Registry::makePrototypeImplementation(SimpleClass::class);
+		Registry::makeSingletonImplementation(SimpleClass::class);
+		$this->assertTrue(Registry::isSingletonImplementation(SimpleClass::class));
+		$this->assertFalse(Registry::isPrototypeImplementation(SimpleClass::class));
+	}
+
+	/**
+	 * @test
+	 */
 	public function registryAdd() {
 		Registry::add('foo', 'bar');
 		$this->assertEquals('bar', Registry::get('foo'));
