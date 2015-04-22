@@ -20,7 +20,6 @@ use Bleicker\Routing\RouterInterface;
 class WebApplication extends AbstractKernel implements ApplicationInterface {
 
 	public function __construct() {
-		parent::__construct();
 		Registry::addImplementation(MainRequestInterface::class, Request::createFromGlobals());
 		Registry::addImplementation(MainResponseInterface::class, new Response());
 		Registry::addImplementation(RouterInterface::class, Router::getInstance(ROOT_DIRECTORY . DIRECTORY_SEPARATOR . 'Cache' . DIRECTORY_SEPARATOR . 'route.cache.php', Context::isProduction() ? FALSE : TRUE));
