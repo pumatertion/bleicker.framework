@@ -10,3 +10,5 @@ if ((!$classLoader = includeIfExists(__DIR__ . '/../vendor/autoload.php')) && (!
 		'php composer.phar install' . PHP_EOL;
 	exit(1);
 }
+
+$classLoader->addPsr4('Tests\\Bleicker\\Framework\\', __DIR__ . '/');
