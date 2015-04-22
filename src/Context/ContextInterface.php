@@ -19,4 +19,9 @@ interface ContextInterface {
 	 */
 	public static function isProduction();
 
+	/**
+	 * @return boolean
+	 */
+	public static function isTesting();
+
 }
