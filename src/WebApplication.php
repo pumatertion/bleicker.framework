@@ -4,6 +4,7 @@ namespace Bleicker\Framework;
 
 use Bleicker\FastRouter\Router;
 use Bleicker\Framework\Context\Context;
+use Bleicker\Framework\Utility\ObjectManager;
 use Bleicker\Request\HandlerInterface;
 use Bleicker\Request\Http\Handler;
 use Bleicker\Request\Http\Request;
@@ -31,11 +32,11 @@ class WebApplication extends AbstractKernel implements ApplicationInterface {
 	 */
 	public function run() {
 		/** @var Handler $httpHandler */
-		$httpHandler = Registry::getImplementation(HandlerInterface::class);
+		$httpHandler = ObjectManager::get(HandlerInterface::class);
 		$httpHandler->initialize()->handle();
 
 		/** @var Response $response */
-		$response = Registry::getImplementation(MainResponseInterface::class);
+		$response = ObjectManager::get(MainResponseInterface::class);
 		$response->send();
 	}
 }
