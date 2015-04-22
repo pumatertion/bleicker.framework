@@ -31,7 +31,7 @@ class ObjectManager implements ObjectManagerInterface {
 
 		if ($implementation instanceof Closure) {
 			$arguments = array_slice(func_get_args(), 1);
-			$object = call_user_func($implementation, $arguments);
+			$object = call_user_func_array($implementation, $arguments);
 			return $object;
 		}
 
