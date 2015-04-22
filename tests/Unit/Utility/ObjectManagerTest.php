@@ -60,7 +60,7 @@ class ObjectManagerTest extends BaseTestCase {
 	 * @test
 	 */
 	public function getClassFromRegistriesImplementationReturnsRegistryInstanceIfImplemantationIsAClosure() {
-		Registry::addImplementation(SimpleClass::class, function($title){
+		Registry::addImplementation(SimpleClassHavingConstructorArgument::class, function($title){
 			return new SimpleClassHavingConstructorArgument($title);
 		});
 		$object = ObjectManager::get(SimpleClassHavingConstructorArgument::class, 'foo');
