@@ -15,8 +15,8 @@ use Tests\Bleicker\Framework\Unit\Fixtures\SimpleClassHavingConstructorArgument;
  */
 class ObjectManagerTest extends BaseTestCase {
 
-	protected function setUp() {
-		parent::setUp();
+	protected function tearDown() {
+		parent::tearDown();
 		Registry::prune();
 	}
 
@@ -25,7 +25,6 @@ class ObjectManagerTest extends BaseTestCase {
 	 * @expectedException \Bleicker\Framework\Exception\ExistingClassOrInterfaceNameExpectedException
 	 */
 	public function getNonExistingClassOrInterfaceThrowsException() {
-		Registry::prune();
 		ObjectManager::get('Foo\\Bar');
 	}
 
@@ -33,7 +32,6 @@ class ObjectManagerTest extends BaseTestCase {
 	 * @test
 	 */
 	public function getClassWithoutAnyContructorArgumentReturnsInstance() {
-		Registry::prune();
 		$object = ObjectManager::get(SimpleClass::class);
 		$this->assertInstanceOf(SimpleClass::class, $object);
 	}
@@ -43,7 +41,6 @@ class ObjectManagerTest extends BaseTestCase {
 	 * @expectedException \Bleicker\Framework\Exception\ArgumentsGivenButImplementationIsAlreadyAnObjectException
 	 */
 	public function getClassOrInterfaceThrowsExceptionIfImplementationIsAlreadyAnObjectAndArgumentsGiven() {
-		Registry::prune();
 		Registry::addImplementation(SimpleClassHavingConstructorArgument::class, new SimpleClassHavingConstructorArgument('foo'));
 		ObjectManager::get(SimpleClassHavingConstructorArgument::class, 'foo');
 	}
@@ -62,7 +59,6 @@ class ObjectManagerTest extends BaseTestCase {
 	 * @test
 	 */
 	public function getClassFromRegistriesImplementationReturnsRegistryInstance() {
-		Registry::prune();
 		Registry::addImplementation(SimpleClass::class, new SimpleClass());
 		$object = ObjectManager::get(SimpleClass::class);
 		$this->assertTrue(Registry::getImplementation(SimpleClass::class) === $object);
@@ -72,7 +68,6 @@ class ObjectManagerTest extends BaseTestCase {
 	 * @test
 	 */
 	public function getClassFromRegistriesImplementationReturnsRegistryInstanceIfImplemantationIsAClosure() {
-		Registry::prune();
 		Registry::addImplementation(SimpleClass::class, function($title){
 			return new SimpleClassHavingConstructorArgument($title);
 		});
