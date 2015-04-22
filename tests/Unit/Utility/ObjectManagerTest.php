@@ -22,14 +22,6 @@ class ObjectManagerTest extends BaseTestCase {
 
 	/**
 	 * @test
-	 * @expectedException \Bleicker\Framework\Exception\ExistingClassOrInterfaceNameExpectedException
-	 */
-	public function getNonExistingClassOrInterfaceThrowsException() {
-		ObjectManager::get('Foo\\Bar');
-	}
-
-	/**
-	 * @test
 	 */
 	public function getClassWithoutAnyContructorArgumentReturnsInstance() {
 		$object = ObjectManager::get(SimpleClass::class);

@@ -22,9 +22,6 @@ class ObjectManager implements ObjectManagerInterface {
 	 * @throws ArgumentsGivenButImplementationIsAlreadyAnObjectException
 	 */
 	public static function get($objectNameOrInterfaceName, $argument = NULL) {
-		if (!class_exists($objectNameOrInterfaceName)) {
-			throw new ExistingClassOrInterfaceNameExpectedException('Class or Interface does not exist', 1429643755);
-		}
 
 		$implementation = static::getObjectFromRegistryImplementations($objectNameOrInterfaceName);
 
