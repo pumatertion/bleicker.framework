@@ -8,7 +8,6 @@ use Bleicker\Framework\Exception\InvalidArgumentException;
  * Class AbstractRegistry
  *
  * @package Bleicker\Framework
- * @todo Add Support for paths seperated by "."
  */
 abstract class AbstractRegistry implements RegistryInterface {
 
