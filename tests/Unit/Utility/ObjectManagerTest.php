@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Bleicker\Framework\Unit;
+namespace Tests\Bleicker\Framework\Unit\Utility;
 
 use Bleicker\Framework\Registry;
 use Bleicker\Framework\Utility\ObjectManager;
@@ -11,7 +11,7 @@ use Tests\Bleicker\Framework\Unit\Fixtures\SimpleClassHavingConstructorArgument;
 /**
  * Class ObjectManagerTest
  *
- * @package Tests\Bleicker\Framework\Unit
+ * @package Tests\Bleicker\Framework\Unit\Utility
  */
 class ObjectManagerTest extends BaseTestCase {
 
