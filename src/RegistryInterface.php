@@ -11,7 +11,7 @@ use Bleicker\Framework\Utility\Arrays;
  */
 interface RegistryInterface {
 
-	const FACTORY_PATH = 'factories', IIMPLENTATION_PATH = 'implementations', PATHSEPERATOR = Arrays::PATHSEPARATOR;
+	const IIMPLENTATION_PATH = 'implementations', PATHSEPERATOR = Arrays::PATHSEPARATOR;
 
 	/**
 	 * @param string $path
@@ -25,19 +25,6 @@ interface RegistryInterface {
 	 * @return mixed
 	 */
 	public static function get($path);
-
-	/**
-	 * @param string $classNameOrInterfaceNameTheFactoryIsFor
-	 * @param mixed $value
-	 * @return void
-	 */
-	public static function addFactory($classNameOrInterfaceNameTheFactoryIsFor, $value = NULL);
-
-	/**
-	 * @param string $classNameOrInterfaceNameTheFactoryIsFor
-	 * @return mixed
-	 */
-	public static function getFactory($classNameOrInterfaceNameTheFactoryIsFor);
 
 	/**
 	 * @param string $interfaceNameTheImplementionIsFor

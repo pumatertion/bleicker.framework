@@ -15,7 +15,7 @@ abstract class AbstractRegistry implements RegistryInterface {
 	/**
 	 * @var array
 	 */
-	protected static $storage = [self::IIMPLENTATION_PATH => [], self::FACTORY_PATH => []];
+	protected static $storage = [self::IIMPLENTATION_PATH => []];
 
 	/**
 	 * @param string $path
@@ -33,26 +33,6 @@ abstract class AbstractRegistry implements RegistryInterface {
 	public static function get($path) {
 		if (array_key_exists($path, static::$storage)) {
 			return static::$storage[$path];
-		}
-		return NULL;
-	}
-
-	/**
-	 * @param string $classNameOrInterfaceNameTheFactoryIsFor
-	 * @param mixed|null $value
-	 * @return void
-	 */
-	public static function addFactory($classNameOrInterfaceNameTheFactoryIsFor, $value = NULL) {
-		static::$storage[static::FACTORY_PATH][$classNameOrInterfaceNameTheFactoryIsFor] = $value;
-	}
-
-	/**
-	 * @param string $classNameOrInterfaceNameTheFactoryIsFor
-	 * @return mixed
-	 */
-	public static function getFactory($classNameOrInterfaceNameTheFactoryIsFor) {
-		if (array_key_exists($classNameOrInterfaceNameTheFactoryIsFor, static::$storage[static::FACTORY_PATH])) {
-			return static::$storage[static::FACTORY_PATH][$classNameOrInterfaceNameTheFactoryIsFor];
 		}
 		return NULL;
 	}
@@ -91,6 +71,6 @@ abstract class AbstractRegistry implements RegistryInterface {
 	 * @return void
 	 */
 	public static function prune() {
-		static::$storage = [self::IIMPLENTATION_PATH => [], self::FACTORY_PATH => []];
+		static::$storage = [self::IIMPLENTATION_PATH => []];
 	}
 }
