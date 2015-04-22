@@ -21,5 +21,10 @@
 		"psr-4": {
 			"Bleicker\\Framework\\": "src"
 		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Tests\\Bleicker\\Framework\\": "tests"
+		}
 	}
 }

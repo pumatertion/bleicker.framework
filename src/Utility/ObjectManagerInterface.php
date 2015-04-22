@@ -12,5 +12,5 @@ interface ObjectManagerInterface {
 	 * @param $objectNameOrInterfaceName
 	 * @param $argument ...$argument
 	 */
-	public function get($objectNameOrInterfaceName, $argument);
+	public static function get($objectNameOrInterfaceName, $argument = NULL);
 }

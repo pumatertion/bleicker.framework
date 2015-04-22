@@ -31,7 +31,7 @@ interface RegistryInterface {
 	 * @param mixed $value
 	 * @return void
 	 */
-	public static function addFactory($classNameOrInterfaceNameTheFactoryIsFor, $value);
+	public static function addFactory($classNameOrInterfaceNameTheFactoryIsFor, $value = NULL);
 
 	/**
 	 * @param string $classNameOrInterfaceNameTheFactoryIsFor
@@ -44,7 +44,7 @@ interface RegistryInterface {
 	 * @param mixed $value
 	 * @return void
 	 */
-	public static function addImplementation($interfaceNameTheImplementionIsFor, $value);
+	public static function addImplementation($interfaceNameTheImplementionIsFor, $value = NULL);
 
 	/**
 	 * @param string $interfaceNameTheImplementionIsFor
@@ -56,4 +56,9 @@ interface RegistryInterface {
 	 * @return array
 	 */
 	public static function getAll();
+
+	/**
+	 * @return void
+	 */
+	public static function prune();
 }

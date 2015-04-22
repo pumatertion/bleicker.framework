@@ -2,6 +2,8 @@
 
 namespace Bleicker\Framework;
 
+use Bleicker\Framework\Exception\InvalidArgumentException;
+
 /**
  * Class AbstractRegistry
  *
@@ -17,7 +19,7 @@ abstract class AbstractRegistry implements RegistryInterface {
 
 	/**
 	 * @param string $path
-	 * @param mixed $value
+	 * @param mixed|null $value
 	 * @return void
 	 */
 	public static function add($path, $value = NULL) {
@@ -37,10 +39,10 @@ abstract class AbstractRegistry implements RegistryInterface {
 
 	/**
 	 * @param string $classNameOrInterfaceNameTheFactoryIsFor
-	 * @param mixed $value
+	 * @param mixed|null $value
 	 * @return void
 	 */
-	public static function addFactory($classNameOrInterfaceNameTheFactoryIsFor, $value) {
+	public static function addFactory($classNameOrInterfaceNameTheFactoryIsFor, $value = NULL) {
 		static::$storage[static::FACTORY_PATH][$classNameOrInterfaceNameTheFactoryIsFor] = $value;
 	}
 
@@ -57,10 +59,13 @@ abstract class AbstractRegistry implements RegistryInterface {
 
 	/**
 	 * @param string $interfaceNameTheImplementionIsFor
-	 * @param mixed $value
-	 * @return void
+	 * @param mixed|null $value
+	 * @throws InvalidArgumentException
 	 */
-	public static function addImplementation($interfaceNameTheImplementionIsFor, $value) {
+	public static function addImplementation($interfaceNameTheImplementionIsFor, $value = NULL) {
+		if ($value !== NULL && !is_object($value)) {
+			throw new InvalidArgumentException('Argument $value has to be an object or closure', 1429688409);
+		}
 		static::$storage[static::IIMPLENTATION_PATH][$interfaceNameTheImplementionIsFor] = $value;
 	}
 
@@ -80,5 +85,12 @@ abstract class AbstractRegistry implements RegistryInterface {
 	 */
 	public static function getAll() {
 		return static::$storage;
+	}
+
+	/**
+	 * @return void
+	 */
+	public static function prune() {
+		static::$storage = [self::IIMPLENTATION_PATH => [], self::FACTORY_PATH => []];
 	}
 }
