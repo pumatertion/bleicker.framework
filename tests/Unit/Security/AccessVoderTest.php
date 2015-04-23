@@ -72,7 +72,7 @@ class AccessVoderTest extends UnitTestCase {
 	 * @test
 	 * @expectedException \Bleicker\Security\Exception\InvalidVoterExceptionException
 	 */
-	public function voteThrowsAccessGrantedException() {
+	public function voteThrowsInvalidVoterExceptionExceptionException() {
 		$accessVoter = new AccessVoter();
 
 		$matchingVote = new Vote(function () {
