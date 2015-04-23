@@ -3,14 +3,15 @@
 namespace Bleicker\Framework\Http;
 
 use Bleicker\Controller\ControllerInterface;
-use Bleicker\Framework\Utility\Arrays;
-use Bleicker\Framework\Utility\ObjectManager;
 use Bleicker\Framework\ApplicationRequest;
 use Bleicker\Framework\ApplicationRequestInterface;
-use Bleicker\Request\HandlerInterface;
 use Bleicker\Framework\Http\Exception\ControllerRouteDataInterfaceRequiredException;
 use Bleicker\Framework\Http\Exception\MethodNotSupportedException;
 use Bleicker\Framework\Http\Exception\NotFoundException;
+use Bleicker\Framework\Security\AccessVoterInterface;
+use Bleicker\Framework\Utility\Arrays;
+use Bleicker\Framework\Utility\ObjectManager;
+use Bleicker\Request\HandlerInterface;
 use Bleicker\Request\MainRequestInterface;
 use Bleicker\Response\ApplicationResponse;
 use Bleicker\Response\Http\Response;
@@ -118,7 +119,7 @@ class Handler implements HandlerInterface {
 		$methodReflection = new \ReflectionMethod($controllerName, $methodName);
 		$availableParameters = $methodReflection->getParameters();
 		/** @var ReflectionParameter $parameter */
-		foreach($availableParameters as $parameter){
+		foreach ($availableParameters as $parameter) {
 			$methodArguments[$parameter->getName()] = Arrays::getValueByPath($arguments, $parameter->getName());
 		}
 		return $methodArguments;
@@ -130,24 +131,27 @@ class Handler implements HandlerInterface {
 	 * @throws ControllerRouteDataInterfaceRequiredException
 	 */
 	public function handle() {
+		/** @var AccessVoterInterface $accessVoter */
+		$accessVoter = ObjectManager::get(AccessVoterInterface::class);
+		return $accessVoter->vote($this->controllerName . '::' . $this->methodName, function () {
+			/** @var ControllerInterface $controller */
+			$controller = new $this->controllerName();
+			$controller
+				->setRequest($this->request)
+				->setResponse($this->response)
+				->resolveFormat($this->methodName)
+				->resolveView($this->methodName);
 
-		/** @var ControllerInterface $controller */
-		$controller = new $this->controllerName();
-		$controller
-			->setRequest($this->request)
-			->setResponse($this->response)
-			->resolveFormat($this->methodName)
-			->resolveView($this->methodName);
+			$content = call_user_func_array(array($controller, $this->methodName), $this->methodArguments);
 
-		$content = call_user_func_array(array($controller, $this->methodName), $this->methodArguments);
+			if (!empty($content)) {
+				/** @var Response $httpResponse */
+				$httpResponse = $this->response->getMainResponse();
+				$httpResponse->setContent($content);
+			}
 
-		if(!empty($content)){
-			/** @var Response $httpResponse */
-			$httpResponse = $this->response->getMainResponse();
-			$httpResponse->setContent($content);
-		}
-
-		return $this;
+			return $this;
+		}, $this->methodArguments);
 	}
 
 	/**
