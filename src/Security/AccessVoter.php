@@ -36,14 +36,14 @@ class AccessVoter implements AccessVoterInterface {
 	 * @throws InvalidVoterExceptionException
 	 */
 	public function vote($for, Closure $onAccessClosure = NULL) {
+		$arguments = array_slice(func_get_args(), 2);
 		$votes = $this->getMatchingVotes($for);
 		/** @var VoteInterface $vote */
-		foreach($votes as $vote){
-			$vote->vote();
+		foreach ($votes as $vote) {
+			$vote->vote($arguments);
 		}
-		if($onAccessClosure !== NULL){
-			$arguments = array_slice(func_get_args(), 2);
-			return call_user_func_array($onAccessClosure, $arguments);
+		if ($onAccessClosure !== NULL) {
+			return $onAccessClosure();
 		}
 		return TRUE;
 	}
