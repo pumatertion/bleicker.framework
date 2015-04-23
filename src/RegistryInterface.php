@@ -3,6 +3,7 @@
 namespace Bleicker\Framework;
 
 use Bleicker\Framework\Utility\Arrays;
+use Bleicker\Security\VoteInterface;
 
 /**
  * Class RegistryInterface
