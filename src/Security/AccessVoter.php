@@ -30,20 +30,20 @@ class AccessVoter implements AccessVoterInterface {
 
 	/**
 	 * @param string $for
-	 * @param callable $successCallback
+	 * @param callable $onAccessClosure
 	 * @return boolean|mixed
 	 * @throws AbstractVoterException
 	 * @throws InvalidVoterExceptionException
 	 */
-	public function vote($for, Closure $successCallback = NULL) {
+	public function vote($for, Closure $onAccessClosure = NULL) {
 		$votes = $this->getMatchingVotes($for);
 		/** @var VoteInterface $vote */
 		foreach($votes as $vote){
 			$vote->vote();
 		}
-		if($successCallback !== NULL){
+		if($onAccessClosure !== NULL){
 			$arguments = array_slice(func_get_args(), 2);
-			return call_user_func_array($successCallback, $arguments);
+			return call_user_func_array($onAccessClosure, $arguments);
 		}
 		return TRUE;
 	}

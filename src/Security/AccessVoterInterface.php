@@ -15,10 +15,10 @@ interface AccessVoterInterface {
 
 	/**
 	 * @param string $for
-	 * @param Closure $successCallback
+	 * @param Closure $onAccessClosure
 	 * @return boolean|mixed
 	 * @throws AbstractVoterException
 	 * @throws InvalidVoterExceptionException
 	 */
-	public function vote($for, Closure $successCallback = NULL);
+	public function vote($for, Closure $onAccessClosure = NULL);
 }
