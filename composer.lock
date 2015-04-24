@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bd58cd784576c556d9eda16cd6260ead",
+    "hash": "131ecb8f333571ca5b768bef3f98b47e",
     "packages": [
         {
             "name": "bleicker/converter",
@@ -295,6 +295,35 @@
                 }
             ],
             "time": "2015-04-23 14:18:26"
+        },
+        {
+            "name": "bleicker/view",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:cbleicker/bleicker-view.git",
+                "reference": "83dedb234e2cb9f37171ea8364c0dcbcaa402ae2"
+            },
+            "require": {
+                "bleicker/objectmanager": "~1.0",
+                "namelesscoder/fluid": "dev-master"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Bleicker\\View\\": "src"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Carsten Bleicker",
+                    "email": "carsten@bleicker.de"
+                }
+            ],
+            "time": "2015-04-24 15:51:13"
         },
         {
             "name": "doctrine/annotations",
@@ -895,6 +924,35 @@
                 "orm"
             ],
             "time": "2015-04-02 20:40:18"
+        },
+        {
+            "name": "namelesscoder/fluid",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/NamelessCoder/TYPO3.Fluid.git",
+                "reference": "517b772587fd5cee80c2656e77e4eedca0cf7e29"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "~1.3.0",
+                "namelesscoder/fluid-schema-generator": "*",
+                "phpunit/phpunit": "4.3.*",
+                "satooshi/php-coveralls": "*"
+            },
+            "bin": [
+                "bin/fluid"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TYPO3\\Fluid\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "The TYPO3 Fluid template rendering engine",
+            "time": "2015-04-20 23:21:01"
         },
         {
             "name": "nikic/fast-route",
@@ -1959,7 +2017,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "namelesscoder/fluid": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
