@@ -27,5 +27,7 @@ class StringTypeConverterTest extends UnitTestCase{
 		$this->assertEquals('123', $converter->convert(123), 'Converts 123');
 		$this->assertEquals('-123', $converter->convert(-123), 'Converts -123');
 		$this->assertEquals('-0.34', $converter->convert(-0.34), 'Converts "-0.34"');
+		$this->assertEquals('', $converter->convert(FALSE), 'Converts FALSE');
+		$this->assertEquals('1', $converter->convert(TRUE), 'Converts TRUE');
 	}
 }

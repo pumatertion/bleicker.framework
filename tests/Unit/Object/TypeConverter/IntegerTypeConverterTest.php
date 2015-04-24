@@ -34,5 +34,7 @@ class IntegerTypeConverterTest extends UnitTestCase{
 		$this->assertEquals(-0, $converter->convert('-0.34'), 'Converts "-0.34"');
 		$this->assertEquals(-1, $converter->convert('-1,34'), 'Converts "-1,34"');
 		$this->assertEquals(0, $converter->convert('-,34'), 'Converts "-,34"');
+		$this->assertEquals(0, $converter->convert(FALSE), 'Converts FALSE');
+		$this->assertEquals(1, $converter->convert(TRUE), 'Converts FALSE');
 	}
 }
