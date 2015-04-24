@@ -22,17 +22,22 @@ interface ConverterInterface {
 	 * @param TypeConverterInterface $typeConverter
 	 * @return void
 	 */
-	public static function registerTypeConverter($alias, TypeConverterInterface $typeConverter);
+	public static function register($alias, TypeConverterInterface $typeConverter);
 
 	/**
 	 * @param string $alias
 	 * @return void
 	 */
-	public static function unregisterTypeConverter($alias);
+	public static function unregister($alias);
 
 	/**
 	 * @param string $alias
 	 * @return TypeConverterInterface|NULL
 	 */
-	public static function getTypeConverter($alias);
+	public static function get($alias);
+
+	/**
+	 * @return void
+	 */
+	public static function prune();
 }

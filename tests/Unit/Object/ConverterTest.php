@@ -19,10 +19,10 @@ class ConverterTest extends UnitTestCase {
 	 */
 	public function registerUnregisterTypeConverterTest() {
 		$alias = TestTypeConverter::class;
-		Converter::registerTypeConverter($alias, new TestTypeConverter());
-		$this->assertInstanceOf(TypeConverterInterface::class, Converter::getTypeConverter($alias), 'TypeConverter is registered');
-		Converter::unregisterTypeConverter($alias);
-		$this->assertNull(Converter::getTypeConverter($alias), 'TypeConverter is not registered');
+		Converter::register($alias, new TestTypeConverter());
+		$this->assertInstanceOf(TypeConverterInterface::class, Converter::get($alias), 'TypeConverter is registered');
+		Converter::unregister($alias);
+		$this->assertNull(Converter::get($alias), 'TypeConverter is not registered');
 	}
 
 	/**
@@ -30,7 +30,7 @@ class ConverterTest extends UnitTestCase {
 	 */
 	public function convertWithTestTypeConverter() {
 		$alias = TestTypeConverter::class;
-		Converter::registerTypeConverter($alias, new TestTypeConverter());
+		Converter::register($alias, new TestTypeConverter());
 		$this->assertEquals('converted', Converter::convert('foo', 'bar'), 'Is converted to expected result');
 	}
 }
