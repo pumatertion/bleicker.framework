@@ -1,13 +1,15 @@
 {
 	"name": "bleicker/framework",
 	"require": {
-		"bleicker/controller": "dev-master",
-		"bleicker/exception": "dev-master",
-		"bleicker/fastrouter": "dev-master",
-		"bleicker/request": "dev-master",
-		"bleicker/response": "dev-master",
-		"bleicker/persistence": "dev-master",
-		"bleicker/security": "dev-master"
+		"bleicker/exception": "~1.0",
+		"bleicker/fastrouter": "~1.0",
+		"bleicker/request": "~1.0",
+		"bleicker/response": "~1.0",
+		"bleicker/persistence": "~1.0",
+		"bleicker/security": "~1.0",
+		"bleicker/converter": "~1.0",
+		"bleicker/objectmanager": "~1.0",
+		"bleicker/registry": "~1.0"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "*"
@@ -27,5 +29,51 @@
 		"psr-4": {
 			"Tests\\Bleicker\\Framework\\": "tests"
 		}
-	}
+	},
+	"repositories": [
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-view.git"
+		},
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-response.git"
+		},
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-request.git"
+		},
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-routing.git"
+		},
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-fastrouter.git"
+		},
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-exception.git"
+		},
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-persistence.git"
+		},
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-security.git"
+		},
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-converter.git"
+		},
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-objectmanager.git"
+		},
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-registry.git"
+		}
+	]
 }
