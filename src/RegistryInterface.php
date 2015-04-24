@@ -26,11 +26,6 @@ interface RegistryInterface {
 	public static function get($path);
 
 	/**
-	 * @return array
-	 */
-	public static function getAll();
-
-	/**
 	 * @return void
 	 */
 	public static function prune();

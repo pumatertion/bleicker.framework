@@ -26,4 +26,22 @@ class RegistryTest extends UnitTestCase {
 		Registry::add('foo', 'bar');
 		$this->assertEquals('bar', Registry::get('foo'));
 	}
+
+	/**
+	 * @test
+	 */
+	public function registryAddByPropertyPath() {
+		Registry::add('foo.bar.baz', 'added');
+		$this->assertEquals('added', Registry::get('foo.bar.baz'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function registryAddMultipleByPropertyPath() {
+		Registry::add('foo.bar.baz', 'added1');
+		Registry::add('bar.baz.foo', 'added2');
+		$this->assertEquals('added1', Registry::get('foo.bar.baz'));
+		$this->assertEquals('added2', Registry::get('bar.baz.foo'));
+	}
 }

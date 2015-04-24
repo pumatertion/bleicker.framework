@@ -2,6 +2,8 @@
 
 namespace Bleicker\Framework;
 
+use Bleicker\Framework\Utility\Arrays;
+
 /**
  * Class Registry
  *
@@ -12,7 +14,7 @@ class Registry implements RegistryInterface {
 	/**
 	 * @var array
 	 */
-	public static $storage = [];
+	protected static $storage = [];
 
 	/**
 	 * @param string $path
@@ -20,7 +22,7 @@ class Registry implements RegistryInterface {
 	 * @return void
 	 */
 	public static function add($path, $value = NULL) {
-		static::$storage[$path] = $value;
+		Arrays::setValueByPath(static::$storage, $path, $value);
 	}
 
 	/**
@@ -28,17 +30,7 @@ class Registry implements RegistryInterface {
 	 * @return mixed
 	 */
 	public static function get($path) {
-		if (array_key_exists($path, static::$storage)) {
-			return static::$storage[$path];
-		}
-		return NULL;
-	}
-
-	/**
-	 * @return array
-	 */
-	public static function getAll() {
-		return static::$storage;
+		return Arrays::getValueByPath(static::$storage, $path);
 	}
 
 	/**
