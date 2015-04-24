@@ -4,7 +4,6 @@ namespace Bleicker\Framework\Utility;
 
 use Bleicker\Framework\Exception\ArgumentsGivenButImplementationIsAlreadyAnObjectException;
 use Bleicker\Framework\Exception\ExistingClassOrInterfaceNameExpectedException;
-use Bleicker\Framework\Registry;
 use Closure;
 
 /**
@@ -14,7 +13,7 @@ use Closure;
  */
 class ObjectManager implements ObjectManagerInterface {
 
-	const REGISTRATION_PATH = 'implementations', SINGLETONS_PATH = 'singletons';
+	protected static $implementations = [], $singletons = [];
 
 	/**
 	 * @param $alias
@@ -58,9 +57,7 @@ class ObjectManager implements ObjectManagerInterface {
 	 * @return void
 	 */
 	public static function register($alias, $implementation) {
-		$implementations = static::getImplementations();
-		$implementations[$alias] = $implementation;
-		Registry::add(static::REGISTRATION_PATH, $implementations);
+		static::$implementations[$alias] = $implementation;
 	}
 
 	/**
@@ -68,11 +65,9 @@ class ObjectManager implements ObjectManagerInterface {
 	 * @return void
 	 */
 	public static function unregister($alias) {
-		$implementations = static::getImplementations();
-		if (array_key_exists($alias, $implementations)) {
-			unset($implementations[$alias]);
+		if (array_key_exists($alias, static::$implementations)) {
+			unset(static::$implementations[$alias]);
 		}
-		Registry::add(static::REGISTRATION_PATH, $implementations);
 	}
 
 	/**
@@ -80,9 +75,7 @@ class ObjectManager implements ObjectManagerInterface {
 	 * @return void
 	 */
 	public static function makeSingleton($alias) {
-		$singletons = static::getSingletons();
-		$singletons[$alias] = TRUE;
-		Registry::add(static::SINGLETONS_PATH, $singletons);
+		static::$singletons[$alias] = TRUE;
 	}
 
 	/**
@@ -90,9 +83,7 @@ class ObjectManager implements ObjectManagerInterface {
 	 * @return void
 	 */
 	public static function makePrototype($alias) {
-		$singletons = static::getSingletons();
-		unset($singletons[$alias]);
-		Registry::add(static::SINGLETONS_PATH, $singletons);
+		unset(static::$singletons[$alias]);
 	}
 
 	/**
@@ -100,8 +91,7 @@ class ObjectManager implements ObjectManagerInterface {
 	 * @return boolean
 	 */
 	public static function isSingleton($alias) {
-		$singletons = static::getSingletons();
-		return array_key_exists($alias, $singletons) ? $singletons[$alias] : FALSE;
+		return array_key_exists($alias, static::$singletons) ? static::$singletons[$alias] : FALSE;
 	}
 
 	/**
@@ -113,35 +103,12 @@ class ObjectManager implements ObjectManagerInterface {
 	}
 
 	/**
-	 * @return array
-	 */
-	protected static function getImplementations() {
-		$implementations = Registry::get(static::REGISTRATION_PATH);
-		if (is_array($implementations)) {
-			return $implementations;
-		}
-		return [];
-	}
-
-	/**
-	 * @return array
-	 */
-	protected static function getSingletons() {
-		$singletons = Registry::get(static::SINGLETONS_PATH);
-		if (is_array($singletons)) {
-			return $singletons;
-		}
-		return [];
-	}
-
-	/**
 	 * @param $alias
 	 * @return mixed
 	 */
 	public static function getImplementation($alias) {
-		$implementations = static::getImplementations();
-		if (array_key_exists($alias, $implementations)) {
-			return $implementations[$alias];
+		if (array_key_exists($alias, static::$implementations)) {
+			return static::$implementations[$alias];
 		}
 		return NULL;
 	}
@@ -168,7 +135,7 @@ class ObjectManager implements ObjectManagerInterface {
 	 * @return void
 	 */
 	public static function prune() {
-		Registry::add(static::SINGLETONS_PATH, []);
-		Registry::add(static::REGISTRATION_PATH, []);
+		static::$implementations = [];
+		static::$singletons = [];
 	}
 }

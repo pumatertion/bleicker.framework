@@ -6,7 +6,6 @@ use Bleicker\Framework\Utility\ObjectManager;
 use Tests\Bleicker\Framework\Unit\Fixtures\SimpleClass;
 use Tests\Bleicker\Framework\Unit\Fixtures\SimpleClassHavingConstructorArgument;
 use Tests\Bleicker\Framework\UnitTestCase;
-use StdClass;
 
 /**
  * Class ObjectManagerTest
