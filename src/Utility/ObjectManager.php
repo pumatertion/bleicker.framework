@@ -15,15 +15,15 @@ use Closure;
 class ObjectManager implements ObjectManagerInterface {
 
 	/**
-	 * @param $objectNameOrInterfaceName
+	 * @param $alias
 	 * @param mixed $argument ...argument
 	 * @return object
 	 * @throws ExistingClassOrInterfaceNameExpectedException
 	 * @throws ArgumentsGivenButImplementationIsAlreadyAnObjectException
 	 */
-	public static function get($objectNameOrInterfaceName, $argument = NULL) {
+	public static function get($alias, $argument = NULL) {
 
-		$implementation = static::getObjectFromRegistryImplementations($objectNameOrInterfaceName);
+		$implementation = static::getObjectFromRegistryImplementations($alias);
 
 		if ($argument !== NULL && is_object($implementation) && !($implementation instanceof Closure)) {
 			throw new ArgumentsGivenButImplementationIsAlreadyAnObjectException('Object already exists as implementation and can not have arguments', 1429683991);
@@ -32,8 +32,8 @@ class ObjectManager implements ObjectManagerInterface {
 		if ($implementation instanceof Closure) {
 			$arguments = array_slice(func_get_args(), 1);
 			$object = call_user_func_array($implementation, $arguments);
-			if (Registry::isSingletonImplementation($objectNameOrInterfaceName)) {
-				Registry::addImplementation($objectNameOrInterfaceName, $object);
+			if (Registry::isSingletonImplementation($alias)) {
+				Registry::addImplementation($alias, $object);
 			}
 			return $object;
 		}
@@ -44,18 +44,18 @@ class ObjectManager implements ObjectManagerInterface {
 
 		if ($argument !== NULL) {
 			$arguments = array_slice(func_get_args(), 1);
-			return static::getObjectWithContructorArguments($objectNameOrInterfaceName, $arguments);
+			return static::getObjectWithContructorArguments($alias, $arguments);
 		}
 
-		return static::getObject($objectNameOrInterfaceName);
+		return static::getObject($alias);
 	}
 
 	/**
-	 * @param $objectNameOrInterfaceName
+	 * @param $alias
 	 * @return mixed
 	 */
-	protected static function getObjectFromRegistryImplementations($objectNameOrInterfaceName) {
-		return Registry::getImplementation($objectNameOrInterfaceName);
+	protected static function getObjectFromRegistryImplementations($alias) {
+		return Registry::getImplementation($alias);
 	}
 
 	/**

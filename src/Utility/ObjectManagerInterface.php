@@ -9,8 +9,8 @@ namespace Bleicker\Framework\Utility;
 interface ObjectManagerInterface {
 
 	/**
-	 * @param $objectNameOrInterfaceName
+	 * @param $alias
 	 * @param $argument ...$argument
 	 */
-	public static function get($objectNameOrInterfaceName, $argument = NULL);
+	public static function get($alias, $argument = NULL);
 }
