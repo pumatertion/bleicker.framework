@@ -2,11 +2,11 @@
 
 namespace Tests\Bleicker\Framework\Unit\Utility;
 
-use Bleicker\Framework\Registry;
 use Bleicker\Framework\Utility\ObjectManager;
 use Tests\Bleicker\Framework\Unit\Fixtures\SimpleClass;
 use Tests\Bleicker\Framework\Unit\Fixtures\SimpleClassHavingConstructorArgument;
 use Tests\Bleicker\Framework\UnitTestCase;
+use StdClass;
 
 /**
  * Class ObjectManagerTest
@@ -17,7 +17,17 @@ class ObjectManagerTest extends UnitTestCase {
 
 	protected function tearDown() {
 		parent::tearDown();
-		Registry::prune();
+		ObjectManager::prune();
+	}
+
+	/**
+	 * @test
+	 */
+	public function pruneTest() {
+		ObjectManager::makeSingleton(SimpleClass::class);
+		$this->assertTrue(ObjectManager::isSingleton(SimpleClass::class));
+		ObjectManager::prune();
+		$this->assertFalse(ObjectManager::isSingleton(SimpleClass::class));
 	}
 
 	/**
@@ -33,7 +43,7 @@ class ObjectManagerTest extends UnitTestCase {
 	 * @expectedException \Bleicker\Framework\Exception\ArgumentsGivenButImplementationIsAlreadyAnObjectException
 	 */
 	public function getClassOrInterfaceThrowsExceptionIfImplementationIsAlreadyAnObjectAndArgumentsGiven() {
-		Registry::addImplementation(SimpleClassHavingConstructorArgument::class, new SimpleClassHavingConstructorArgument('foo'));
+		ObjectManager::register(SimpleClassHavingConstructorArgument::class, new SimpleClassHavingConstructorArgument('foo'));
 		ObjectManager::get(SimpleClassHavingConstructorArgument::class, 'foo');
 	}
 
@@ -41,7 +51,6 @@ class ObjectManagerTest extends UnitTestCase {
 	 * @test
 	 */
 	public function getClassWithoutOneContructorArgumentReturnsInstance() {
-		Registry::prune();
 		$object = ObjectManager::get(SimpleClassHavingConstructorArgument::class, 'foo');
 		$this->assertInstanceOf(SimpleClassHavingConstructorArgument::class, $object);
 		$this->assertEquals('foo', $object->getTitle());
@@ -51,16 +60,16 @@ class ObjectManagerTest extends UnitTestCase {
 	 * @test
 	 */
 	public function getClassFromRegistriesImplementationReturnsRegistryInstance() {
-		Registry::addImplementation(SimpleClass::class, new SimpleClass());
+		ObjectManager::register(SimpleClass::class, new SimpleClass());
 		$object = ObjectManager::get(SimpleClass::class);
-		$this->assertTrue(Registry::getImplementation(SimpleClass::class) === $object);
+		$this->assertTrue(ObjectManager::getImplementation(SimpleClass::class) === $object);
 	}
 
 	/**
 	 * @test
 	 */
 	public function getClassFromRegistriesImplementationReturnsRegistryInstanceIfImplemantationIsAClosure() {
-		Registry::addImplementation(SimpleClassHavingConstructorArgument::class, function ($title) {
+		ObjectManager::register(SimpleClassHavingConstructorArgument::class, function ($title) {
 			return new SimpleClassHavingConstructorArgument($title);
 		});
 		$object = ObjectManager::get(SimpleClassHavingConstructorArgument::class, 'foo');
@@ -72,13 +81,13 @@ class ObjectManagerTest extends UnitTestCase {
 	 * @test
 	 */
 	public function getSingletonClosureIsRegistedAsConcreteImplementation() {
-		Registry::addImplementation(SimpleClassHavingConstructorArgument::class, function ($title) {
+		ObjectManager::register(SimpleClassHavingConstructorArgument::class, function ($title) {
 			return new SimpleClassHavingConstructorArgument($title);
 		});
-		Registry::makeSingletonImplementation(SimpleClassHavingConstructorArgument::class);
+		ObjectManager::makeSingleton(SimpleClassHavingConstructorArgument::class);
 		$object = ObjectManager::get(SimpleClassHavingConstructorArgument::class, 'foo');
 		$this->assertInstanceOf(SimpleClassHavingConstructorArgument::class, $object);
-		$this->assertInstanceOf(SimpleClassHavingConstructorArgument::class, Registry::getImplementation(SimpleClassHavingConstructorArgument::class));
-		$this->assertTrue($object === Registry::getImplementation(SimpleClassHavingConstructorArgument::class));
+		$this->assertInstanceOf(SimpleClassHavingConstructorArgument::class, ObjectManager::getImplementation(SimpleClassHavingConstructorArgument::class));
+		$this->assertTrue($object === ObjectManager::getImplementation(SimpleClassHavingConstructorArgument::class));
 	}
 }
