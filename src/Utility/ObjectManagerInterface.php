@@ -9,7 +9,7 @@ namespace Bleicker\Framework\Utility;
 interface ObjectManagerInterface {
 
 	/**
-	 * @param $alias
+	 * @param string $alias
 	 * @param $argument ...$argument
 	 */
 	public static function get($alias, $argument = NULL);
@@ -40,13 +40,13 @@ interface ObjectManagerInterface {
 	public static function makePrototype($alias);
 
 	/**
-	 * @param $alias
+	 * @param string $alias
 	 * @return boolean
 	 */
 	public static function isSingleton($alias);
 
 	/**
-	 * @param $alias
+	 * @param string $alias
 	 * @return boolean
 	 */
 	public static function isPrototype($alias);
