@@ -52,6 +52,12 @@ interface ObjectManagerInterface {
 	public static function isPrototype($alias);
 
 	/**
+	 * @param string $alias
+	 * @return boolean
+	 */
+	public static function isRegistered($alias);
+
+	/**
 	 * @return void
 	 */
 	public static function prune();

@@ -53,6 +53,14 @@ class ObjectManager implements ObjectManagerInterface {
 
 	/**
 	 * @param string $alias
+	 * @return boolean
+	 */
+	public static function isRegistered($alias) {
+		return array_key_exists($alias, static::$implementations);
+	}
+
+	/**
+	 * @param string $alias
 	 * @param string $implementation
 	 * @return void
 	 */
