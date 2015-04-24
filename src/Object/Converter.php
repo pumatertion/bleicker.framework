@@ -14,7 +14,7 @@ use Closure;
  */
 class Converter implements ConverterInterface {
 
-	protected static $typeConverters = [];
+	public static $typeConverters = [];
 
 	/**
 	 * @param string $alias

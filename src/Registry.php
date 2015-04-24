@@ -14,7 +14,7 @@ class Registry implements RegistryInterface {
 	/**
 	 * @var array
 	 */
-	protected static $storage = [];
+	public static $storage = [];
 
 	/**
 	 * @param string $path

@@ -13,7 +13,7 @@ use Closure;
  */
 class ObjectManager implements ObjectManagerInterface {
 
-	protected static $implementations = [], $singletons = [];
+	public static $implementations = [], $singletons = [];
 
 	/**
 	 * @param $alias
