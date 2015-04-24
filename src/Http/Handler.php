@@ -2,7 +2,7 @@
 
 namespace Bleicker\Framework\Http;
 
-use Bleicker\Controller\ControllerInterface;
+use Bleicker\Framework\Controller\ControllerInterface;
 use Bleicker\Framework\ApplicationRequest;
 use Bleicker\Framework\ApplicationRequestInterface;
 use Bleicker\Framework\Http\Exception\ControllerRouteDataInterfaceRequiredException;
@@ -10,7 +10,7 @@ use Bleicker\Framework\Http\Exception\MethodNotSupportedException;
 use Bleicker\Framework\Http\Exception\NotFoundException;
 use Bleicker\Framework\Security\AccessVoterInterface;
 use Bleicker\Framework\Utility\Arrays;
-use Bleicker\Framework\Utility\ObjectManager;
+use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Request\HandlerInterface;
 use Bleicker\Request\MainRequestInterface;
 use Bleicker\Response\ApplicationResponse;

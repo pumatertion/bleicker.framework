@@ -1,10 +1,10 @@
 <?php
 
 namespace Bleicker\Framework;
-use Bleicker\Framework\Object\Converter;
-use Bleicker\Framework\Object\TypeConverter\FloatTypeConverter;
-use Bleicker\Framework\Object\TypeConverter\IntegerTypeConverter;
-use Bleicker\Framework\Object\TypeConverter\StringTypeConverter;
+use Bleicker\Converter\Converter;
+use Bleicker\Converter\TypeConverter\FloatTypeConverter;
+use Bleicker\Converter\TypeConverter\IntegerTypeConverter;
+use Bleicker\Converter\TypeConverter\StringTypeConverter;
 
 /**
  * Class Kernel

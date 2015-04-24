@@ -8,7 +8,7 @@ use Bleicker\Framework\Http\Handler;
 use Bleicker\Framework\Http\Request;
 use Bleicker\Framework\Security\AccessVoter;
 use Bleicker\Framework\Security\AccessVoterInterface;
-use Bleicker\Framework\Utility\ObjectManager;
+use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Request\HandlerInterface;
 use Bleicker\Request\MainRequestInterface;
 use Bleicker\Response\Http\Response;
