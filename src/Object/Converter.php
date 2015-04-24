@@ -16,8 +16,6 @@ class Converter implements ConverterInterface {
 
 	protected static $typeConverters = [];
 
-	const REGISTRATION_PATH = 'typeConverter';
-
 	/**
 	 * @param string $alias
 	 * @param TypeConverterInterface $typeConverter
