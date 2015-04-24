@@ -10,6 +10,8 @@ use Bleicker\Framework\Object\TypeConverter\TypeConverterInterface;
  */
 interface ConverterInterface {
 
+	const STRING = 'string', INTEGER = 'integer', INT = 'int', FLOAT = 'float', DOUBLE = 'double', BOOLEAN = 'boolean', BOOL = 'boolean';
+
 	/**
 	 * @param mixed $source
 	 * @param string $targetType

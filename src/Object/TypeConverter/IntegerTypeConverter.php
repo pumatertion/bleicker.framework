@@ -2,7 +2,7 @@
 
 namespace Bleicker\Framework\Object\TypeConverter;
 
-use Prophecy\Exception\Exception;
+use Bleicker\Framework\Object\ConverterInterface;
 
 /**
  * Class IntegerTypeConverter
@@ -17,16 +17,10 @@ class IntegerTypeConverter implements TypeConverterInterface {
 	 * @return boolean
 	 */
 	public static function canConvert($source = NULL, $targetType) {
-		if($source === NULL){
-			return FALSE;
-		}
-
-		try {
-			(integer)$source;
+		if ($source !== NULL && in_array($targetType, [ConverterInterface::INT, ConverterInterface::INTEGER]) && (integer)$source) {
 			return TRUE;
-		} catch (Exception $exception) {
-			return FALSE;
 		}
+		return FALSE;
 	}
 
 	/**

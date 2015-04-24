@@ -2,7 +2,7 @@
 
 namespace Bleicker\Framework\Object\TypeConverter;
 
-use Prophecy\Exception\Exception;
+use Bleicker\Framework\Object\ConverterInterface;
 
 /**
  * Class StringTypeConverter
@@ -17,16 +17,10 @@ class StringTypeConverter implements TypeConverterInterface {
 	 * @return boolean
 	 */
 	public static function canConvert($source = NULL, $targetType) {
-		if($source === NULL){
-			return FALSE;
-		}
-
-		try {
-			(string)$source;
+		if ($source !== NULL && $targetType === ConverterInterface::STRING && (string)$source) {
 			return TRUE;
-		} catch (Exception $exception) {
-			return FALSE;
 		}
+		return FALSE;
 	}
 
 	/**

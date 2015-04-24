@@ -2,7 +2,7 @@
 
 namespace Bleicker\Framework\Object\TypeConverter;
 
-use Prophecy\Exception\Exception;
+use Bleicker\Framework\Object\ConverterInterface;
 
 /**
  * Class FloatTypeConverter
@@ -17,16 +17,10 @@ class FloatTypeConverter implements TypeConverterInterface {
 	 * @return boolean
 	 */
 	public static function canConvert($source = NULL, $targetType) {
-		if ($source === NULL) {
-			return FALSE;
-		}
-
-		try {
-			(float)$source;
+		if ($source !== NULL && in_array($targetType, [ConverterInterface::FLOAT, ConverterInterface::DOUBLE]) && (float)$source) {
 			return TRUE;
-		} catch (Exception $exception) {
-			return FALSE;
 		}
+		return FALSE;
 	}
 
 	/**
