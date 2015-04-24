@@ -23,11 +23,11 @@ use Bleicker\Routing\RouterInterface;
 class WebApplication extends AbstractKernel implements ApplicationInterface {
 
 	public function __construct() {
-		Registry::addImplementation(MainRequestInterface::class, Request::createFromGlobals());
-		Registry::addImplementation(MainResponseInterface::class, new Response());
-		Registry::addImplementation(RouterInterface::class, Router::getInstance(ROOT_DIRECTORY . DIRECTORY_SEPARATOR . 'Cache' . DIRECTORY_SEPARATOR . 'route.cache.php', Context::isProduction() ? FALSE : TRUE));
-		Registry::addImplementation(AccessVoterInterface::class, new AccessVoter());
-		Registry::addImplementation(HandlerInterface::class, new Handler());
+		ObjectManager::register(MainRequestInterface::class, Request::createFromGlobals());
+		ObjectManager::register(MainResponseInterface::class, new Response());
+		ObjectManager::register(RouterInterface::class, Router::getInstance(ROOT_DIRECTORY . DIRECTORY_SEPARATOR . 'Cache' . DIRECTORY_SEPARATOR . 'route.cache.php', Context::isProduction() ? FALSE : TRUE));
+		ObjectManager::register(AccessVoterInterface::class, new AccessVoter());
+		ObjectManager::register(HandlerInterface::class, new Handler());
 	}
 
 	/**
