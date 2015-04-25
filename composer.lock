@@ -8,11 +8,11 @@
     "packages": [
         {
             "name": "bleicker/authentication",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:cbleicker/bleicker-authentication.git",
-                "reference": "1006350f43018365bc4dd52666168162a2d3cdec"
+                "reference": "75116b2db6d93836d82786bd558292a187a61669"
             },
             "require": {
                 "bleicker/objectmanager": "~1.0",
@@ -39,7 +39,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-25 15:38:29"
+            "time": "2015-04-25 18:04:27"
         },
         {
             "name": "bleicker/converter",
@@ -303,11 +303,11 @@
         },
         {
             "name": "bleicker/security",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:cbleicker/bleicker-security.git",
-                "reference": "1304721cc01f1c5276a7dbc544d6ac267df5f885"
+                "reference": "206ebdac837d0904efb2c92ec254f1e050bff806"
             },
             "require": {
                 "bleicker/authentication": "~1.0"
@@ -332,7 +332,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-25 16:10:36"
+            "time": "2015-04-25 18:01:41"
         },
         {
             "name": "bleicker/session",
@@ -369,11 +369,11 @@
         },
         {
             "name": "bleicker/token",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:cbleicker/bleicker-token.git",
-                "reference": "4e99f02bfaadcbab3aa56a15c78fc2d6a121721d"
+                "reference": "ac37114eaedd409eed283e657d465270026798a3"
             },
             "require": {
                 "bleicker/objectmanager": "~1.0",
@@ -399,7 +399,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-25 14:50:43"
+            "time": "2015-04-25 17:54:26"
         },
         {
             "name": "bleicker/view",
