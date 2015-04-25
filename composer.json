@@ -79,6 +79,18 @@
 		},
 		{
 			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-authentication.git"
+		},
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-token.git"
+		},
+		{
+			"type": "git",
+			"url": "git@bitbucket.org:cbleicker/bleicker-session.git"
+		},
+		{
+			"type": "git",
 			"url": "https://github.com/NamelessCoder/TYPO3.Fluid.git"
 		}
 	]
