@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "bleicker/authentication",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.authentication.git",
-                "reference": "81cf77d9c0933f92776a0bbc022bcf2b25a92111"
+                "reference": "d36d0b54c28e0914cbd5d1500a43155e2da21645"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.authentication/zipball/81cf77d9c0933f92776a0bbc022bcf2b25a92111",
-                "reference": "81cf77d9c0933f92776a0bbc022bcf2b25a92111",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.authentication/zipball/d36d0b54c28e0914cbd5d1500a43155e2da21645",
+                "reference": "d36d0b54c28e0914cbd5d1500a43155e2da21645",
                 "shasum": ""
             },
             "require": {
@@ -41,7 +41,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-25 18:44:03"
+            "time": "2015-04-25 20:48:40"
         },
         {
             "name": "bleicker/converter",
@@ -353,16 +353,16 @@
         },
         {
             "name": "bleicker/security",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.security.git",
-                "reference": "206ebdac837d0904efb2c92ec254f1e050bff806"
+                "reference": "09566a452c7bc629a341019655df161aa2f97759"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.security/zipball/206ebdac837d0904efb2c92ec254f1e050bff806",
-                "reference": "206ebdac837d0904efb2c92ec254f1e050bff806",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.security/zipball/09566a452c7bc629a341019655df161aa2f97759",
+                "reference": "09566a452c7bc629a341019655df161aa2f97759",
                 "shasum": ""
             },
             "require": {
@@ -384,7 +384,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-25 18:01:41"
+            "time": "2015-04-25 20:51:03"
         },
         {
             "name": "bleicker/session",
