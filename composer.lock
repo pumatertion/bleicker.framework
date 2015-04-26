@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "bleicker/authentication",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.authentication.git",
-                "reference": "d36d0b54c28e0914cbd5d1500a43155e2da21645"
+                "reference": "15f9f73bb7bbfa072a1b1d93acced1b29ff67466"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.authentication/zipball/d36d0b54c28e0914cbd5d1500a43155e2da21645",
-                "reference": "d36d0b54c28e0914cbd5d1500a43155e2da21645",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.authentication/zipball/15f9f73bb7bbfa072a1b1d93acced1b29ff67466",
+                "reference": "15f9f73bb7bbfa072a1b1d93acced1b29ff67466",
                 "shasum": ""
             },
             "require": {
@@ -41,7 +41,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-25 20:48:40"
+            "time": "2015-04-26 13:45:53"
         },
         {
             "name": "bleicker/container",
