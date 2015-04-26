@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9dc380473523e03a28dee2db6e71065f",
+    "hash": "ae5e87362113127305e53c895362105e",
     "packages": [
         {
             "name": "bleicker/authentication",
@@ -387,16 +387,16 @@
         },
         {
             "name": "bleicker/security",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.security.git",
-                "reference": "09566a452c7bc629a341019655df161aa2f97759"
+                "reference": "7ff220fa5e68cedabc9ec8efe535a1df6dec07bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.security/zipball/09566a452c7bc629a341019655df161aa2f97759",
-                "reference": "09566a452c7bc629a341019655df161aa2f97759",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.security/zipball/7ff220fa5e68cedabc9ec8efe535a1df6dec07bc",
+                "reference": "7ff220fa5e68cedabc9ec8efe535a1df6dec07bc",
                 "shasum": ""
             },
             "require": {
@@ -418,7 +418,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-25 20:51:03"
+            "time": "2015-04-26 13:51:15"
         },
         {
             "name": "bleicker/session",
