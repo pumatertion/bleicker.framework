@@ -16,32 +16,27 @@ use Tests\Bleicker\Framework\UnitTestCase;
  */
 class AccessVoderTest extends UnitTestCase {
 
-	/**
-	 * @test
-	 */
-	public function baseTest() {
-		$voter = new AccessVoter();
-		$this->assertInstanceOf(AccessVoter::class, $voter);
+	protected function setUp() {
+		parent::setUp();
+		AccessVoter::prune();
 	}
 
 	/**
 	 * @test
 	 */
 	public function accessVoterFindsOneMathingVote() {
-		$accessVoter = new AccessVoter();
-
 		$matchingVote = new Vote(function () {
 			throw new AccessDeniedException('Access denied because of foo');
 		}, SimpleClassHavingConstructorArgument::class . '::getTitle()');
 
-		$notMathingVote = new Vote(function () {
+		$notMatchingVote = new Vote(function () {
 			throw new AccessDeniedException('Access denied because of foo');
 		}, SimpleClassHavingConstructorArgument::class . '::getTitlE()');
 
-		$matchingVotes = $accessVoter
-			->addVote($matchingVote)
-			->addVote($notMathingVote)
-			->getMatchingVotes(SimpleClassHavingConstructorArgument::class . '::getTitle()');
+		AccessVoter::addVote($matchingVote);
+		AccessVoter::addVote($notMatchingVote);
+
+		$matchingVotes = AccessVoter::getMatchingVotes(SimpleClassHavingConstructorArgument::class . '::getTitle()');
 
 		$this->assertEquals(1, count($matchingVotes));
 	}
@@ -50,20 +45,18 @@ class AccessVoderTest extends UnitTestCase {
 	 * @test
 	 */
 	public function accessVoterFindsTwoMathingVote() {
-		$accessVoter = new AccessVoter();
-
 		$matchingVote = new Vote(function () {
 			throw new AccessDeniedException('Access denied because of foo');
 		}, SimpleClassHavingConstructorArgument::class . '::getTitle()');
 
-		$notMathingVote = new Vote(function () {
+		$notMatchingVote = new Vote(function () {
 			throw new AccessDeniedException('Access denied because of foo');
 		}, SimpleClassHavingConstructorArgument::class . '::getTitlE()', 'i');
 
-		$matchingVotes = $accessVoter
-			->addVote($matchingVote)
-			->addVote($notMathingVote)
-			->getMatchingVotes(SimpleClassHavingConstructorArgument::class . '::getTitle()');
+		AccessVoter::addVote($matchingVote);
+		AccessVoter::addVote($notMatchingVote);
+
+		$matchingVotes = AccessVoter::getMatchingVotes(SimpleClassHavingConstructorArgument::class . '::getTitle()');
 
 		$this->assertEquals(2, count($matchingVotes));
 	}
@@ -73,15 +66,12 @@ class AccessVoderTest extends UnitTestCase {
 	 * @expectedException \Bleicker\Security\Exception\InvalidVoterExceptionException
 	 */
 	public function voteThrowsInvalidVoterExceptionExceptionException() {
-		$accessVoter = new AccessVoter();
-
 		$matchingVote = new Vote(function () {
 			throw new Exception('Throwing an unknown Exception');
 		}, SimpleClassHavingConstructorArgument::class . '::getTitle()');
 
-		$accessVoter
-			->addVote($matchingVote)
-			->vote(SimpleClassHavingConstructorArgument::class . '::getTitle()');
+		AccessVoter::addVote($matchingVote);
+		AccessVoter::vote(SimpleClassHavingConstructorArgument::class . '::getTitle()');
 	}
 
 	/**
@@ -89,29 +79,24 @@ class AccessVoderTest extends UnitTestCase {
 	 * @expectedException \Bleicker\Security\Exception\AccessDeniedException
 	 */
 	public function voteThrowsAccessDeniedException() {
-		$accessVoter = new AccessVoter();
-
 		$matchingVote = new Vote(function () {
 			throw new AccessDeniedException('Access denied because of foo');
 		}, SimpleClassHavingConstructorArgument::class . '::getTitle()');
 
-		$accessVoter
-			->addVote($matchingVote)
-			->vote(SimpleClassHavingConstructorArgument::class . '::getTitle()');
+		AccessVoter::addVote($matchingVote);
+		AccessVoter::vote(SimpleClassHavingConstructorArgument::class . '::getTitle()');
 	}
 
 	/**
 	 * @test
 	 */
 	public function successCallbackTest() {
-		$accessVoter = new AccessVoter();
-
 		$matchingVote = new Vote(function () {
 		});
 
-		$result = $accessVoter
-			->addVote($matchingVote)
-			->vote('whatever', function () {
+		AccessVoter::addVote($matchingVote);
+
+		$result = AccessVoter::vote('whatever', function () {
 				return 'called';
 			});
 
@@ -122,14 +107,12 @@ class AccessVoderTest extends UnitTestCase {
 	 * @test
 	 */
 	public function noSuccessCallbackTest() {
-		$accessVoter = new AccessVoter();
-
 		$matchingVote = new Vote(function () {
 		});
 
-		$result = $accessVoter
-			->addVote($matchingVote)
-			->vote('whatever');
+		AccessVoter::addVote($matchingVote);
+
+		$result = AccessVoter::vote('whatever');
 
 		$this->assertEquals(TRUE, $result);
 	}

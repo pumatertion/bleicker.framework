@@ -16,9 +16,9 @@ interface AccessVoterInterface {
 
 	/**
 	 * @param VoteInterface $vote
-	 * @return $this
+	 * @return void
 	 */
-	public function addVote(VoteInterface $vote);
+	public static function addVote(VoteInterface $vote);
 
 	/**
 	 * @param string $for
@@ -27,5 +27,10 @@ interface AccessVoterInterface {
 	 * @throws AbstractVoterException
 	 * @throws InvalidVoterExceptionException
 	 */
-	public function vote($for, Closure $onAccessClosure = NULL);
+	public static function vote($for, Closure $onAccessClosure = NULL);
+
+	/**
+	 * @return void
+	 */
+	public static function prune();
 }
