@@ -17,15 +17,14 @@ class AccessVoter implements AccessVoterInterface {
 	/**
 	 * @var array
 	 */
-	protected $votes = [];
+	public static $votes = [];
 
 	/**
 	 * @param VoteInterface $vote
-	 * @return $this
+	 * @return void
 	 */
-	public function addVote(VoteInterface $vote) {
-		$this->votes[] = $vote;
-		return $this;
+	public static function addVote(VoteInterface $vote) {
+		static::$votes[] = $vote;
 	}
 
 	/**
@@ -35,9 +34,9 @@ class AccessVoter implements AccessVoterInterface {
 	 * @throws AbstractVoterException
 	 * @throws InvalidVoterExceptionException
 	 */
-	public function vote($for, Closure $onAccessClosure = NULL) {
+	public static function vote($for, Closure $onAccessClosure = NULL) {
 		$arguments = array_slice(func_get_args(), 2);
-		$votes = $this->getMatchingVotes($for);
+		$votes = static::getMatchingVotes($for);
 		/** @var VoteInterface $vote */
 		foreach ($votes as $vote) {
 			$vote->vote($arguments);
@@ -52,17 +51,24 @@ class AccessVoter implements AccessVoterInterface {
 	 * @param string $for
 	 * @return array
 	 */
-	public function getMatchingVotes($for) {
-		return array_filter($this->votes, $this->votesWherePatternMacthingForFilter($for));
+	public static function getMatchingVotes($for) {
+		return array_filter(static::$votes, static::votesWherePatternMacthingForFilter($for));
 	}
 
 	/**
 	 * @param string $for
 	 * @return callable
 	 */
-	protected function votesWherePatternMacthingForFilter($for) {
+	protected static function votesWherePatternMacthingForFilter($for) {
 		return function (VoteInterface $vote) use ($for) {
 			return (boolean)preg_match('<' . addslashes($vote->getPattern()) . '>' . addslashes($vote->getModifier()), $for);
 		};
+	}
+
+	/**
+	 * @return void
+	 */
+	public static function prune() {
+		static::$votes = [];
 	}
 }
