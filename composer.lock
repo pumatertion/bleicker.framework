@@ -44,20 +44,53 @@
             "time": "2015-04-25 20:48:40"
         },
         {
-            "name": "bleicker/converter",
+            "name": "bleicker/container",
             "version": "1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/pumatertion/bleicker.converter.git",
-                "reference": "10fbf8ce434f2a246929c4da06b2c02ff8220ccf"
+                "url": "https://github.com/pumatertion/bleicker.container.git",
+                "reference": "b5d7d75a8a1050c46fadfdf95d94fd7e73668cd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.converter/zipball/10fbf8ce434f2a246929c4da06b2c02ff8220ccf",
-                "reference": "10fbf8ce434f2a246929c4da06b2c02ff8220ccf",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.container/zipball/b5d7d75a8a1050c46fadfdf95d94fd7e73668cd9",
+                "reference": "b5d7d75a8a1050c46fadfdf95d94fd7e73668cd9",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Bleicker\\Container\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Carsten Bleicker",
+                    "email": "carsten@bleicker.de"
+                }
+            ],
+            "time": "2015-04-26 12:38:26"
+        },
+        {
+            "name": "bleicker/converter",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pumatertion/bleicker.converter.git",
+                "reference": "5b836f3c66e85049380fb35ce8326481885eec67"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.converter/zipball/5b836f3c66e85049380fb35ce8326481885eec67",
+                "reference": "5b836f3c66e85049380fb35ce8326481885eec67",
                 "shasum": ""
             },
             "require": {
+                "bleicker/container": "~1.0",
                 "bleicker/exception": "~1.0"
             },
             "require-dev": {
@@ -76,7 +109,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-25 20:45:49"
+            "time": "2015-04-26 13:14:15"
         },
         {
             "name": "bleicker/exception",
@@ -148,19 +181,20 @@
         },
         {
             "name": "bleicker/objectmanager",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.objectmanager.git",
-                "reference": "d3da0cf4e1a0121e53dabdd14bfbc67e54e06c74"
+                "reference": "a424ea93509a880847db038e8f2c6b3716805e53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.objectmanager/zipball/d3da0cf4e1a0121e53dabdd14bfbc67e54e06c74",
-                "reference": "d3da0cf4e1a0121e53dabdd14bfbc67e54e06c74",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.objectmanager/zipball/a424ea93509a880847db038e8f2c6b3716805e53",
+                "reference": "a424ea93509a880847db038e8f2c6b3716805e53",
                 "shasum": ""
             },
             "require": {
+                "bleicker/container": "~1.0",
                 "bleicker/exception": "~1.0"
             },
             "require-dev": {
@@ -179,7 +213,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-25 20:32:11"
+            "time": "2015-04-26 12:56:58"
         },
         {
             "name": "bleicker/persistence",
@@ -219,7 +253,7 @@
         },
         {
             "name": "bleicker/registry",
-            "version": "1.0.1",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.registry.git",
@@ -423,19 +457,20 @@
         },
         {
             "name": "bleicker/token",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.token.git",
-                "reference": "03a87a71cf5c4fd20e1806fe30e9aec0d73b6e6f"
+                "reference": "05cfed15fafbb46fabcefa4c869ae20694b5a015"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.token/zipball/03a87a71cf5c4fd20e1806fe30e9aec0d73b6e6f",
-                "reference": "03a87a71cf5c4fd20e1806fe30e9aec0d73b6e6f",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.token/zipball/05cfed15fafbb46fabcefa4c869ae20694b5a015",
+                "reference": "05cfed15fafbb46fabcefa4c869ae20694b5a015",
                 "shasum": ""
             },
             "require": {
+                "bleicker/container": "~1.0",
                 "bleicker/objectmanager": "~1.0",
                 "bleicker/session": "~1.0"
             },
@@ -455,7 +490,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-25 20:38:11"
+            "time": "2015-04-26 13:43:12"
         },
         {
             "name": "bleicker/view",
@@ -1099,16 +1134,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/NamelessCoder/TYPO3.Fluid.git",
-                "reference": "f19ac82cddb9a59ea891b95d2fcae5b82de68b1d"
+                "reference": "96572954dd9cb799fc7824c79408dc061f1664e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/NamelessCoder/TYPO3.Fluid/zipball/f19ac82cddb9a59ea891b95d2fcae5b82de68b1d",
-                "reference": "f19ac82cddb9a59ea891b95d2fcae5b82de68b1d",
+                "url": "https://api.github.com/repos/NamelessCoder/TYPO3.Fluid/zipball/96572954dd9cb799fc7824c79408dc061f1664e1",
+                "reference": "96572954dd9cb799fc7824c79408dc061f1664e1",
                 "shasum": ""
             },
             "require-dev": {
                 "mikey179/vfsstream": "*",
+                "namelesscoder/fluid-lint": "*",
                 "namelesscoder/fluid-schema-generator": "*",
                 "phpunit/phpunit": "*",
                 "satooshi/php-coveralls": "*"
@@ -1127,7 +1163,7 @@
                 "MIT"
             ],
             "description": "The TYPO3 Fluid template rendering engine",
-            "time": "2015-04-25 12:41:59"
+            "time": "2015-04-26 12:38:28"
         },
         {
             "name": "nikic/fast-route",
