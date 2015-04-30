@@ -9,8 +9,8 @@
 		"bleicker/security": "1.0.*",
 		"bleicker/converter": "1.0.*",
 		"bleicker/objectmanager": "1.0.*",
-		"bleicker/registry": "1.1.*",
-		"bleicker/view": "1.1.*",
+		"bleicker/registry": "1.2.*",
+		"bleicker/view": "1.2.*",
 		"namelesscoder/fluid": "dev-master"
 	},
 	"require-dev": {
