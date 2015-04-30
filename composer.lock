@@ -253,20 +253,20 @@
         },
         {
             "name": "bleicker/registry",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.registry.git",
-                "reference": "393862319596d5d26f25eeb8cd68774037769ac7"
+                "reference": "85706e64cd72c134b1dd20152b2a6f7110582492"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.registry/zipball/393862319596d5d26f25eeb8cd68774037769ac7",
-                "reference": "393862319596d5d26f25eeb8cd68774037769ac7",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.registry/zipball/85706e64cd72c134b1dd20152b2a6f7110582492",
+                "reference": "85706e64cd72c134b1dd20152b2a6f7110582492",
                 "shasum": ""
             },
             "require-dev": {
-                "phpunit/phpunit": "*"
+                "phpunit/phpunit": "4.6.*"
             },
             "type": "library",
             "autoload": {
@@ -281,7 +281,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-26 14:06:49"
+            "time": "2015-04-30 19:22:48"
         },
         {
             "name": "bleicker/request",
