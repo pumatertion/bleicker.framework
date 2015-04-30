@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "16dfda22161673581af54e95d1126a73",
+    "hash": "8bceaa1e24c24dfc2ec88768f5df6aef",
     "packages": [
         {
             "name": "bleicker/authentication",
@@ -253,16 +253,16 @@
         },
         {
             "name": "bleicker/registry",
-            "version": "1.1.2",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.registry.git",
-                "reference": "85706e64cd72c134b1dd20152b2a6f7110582492"
+                "reference": "3328750e7bc8eff68688487b1fa28d3744e5cc68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.registry/zipball/85706e64cd72c134b1dd20152b2a6f7110582492",
-                "reference": "85706e64cd72c134b1dd20152b2a6f7110582492",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.registry/zipball/3328750e7bc8eff68688487b1fa28d3744e5cc68",
+                "reference": "3328750e7bc8eff68688487b1fa28d3744e5cc68",
                 "shasum": ""
             },
             "require-dev": {
@@ -281,7 +281,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-30 19:22:48"
+            "time": "2015-04-30 19:52:37"
         },
         {
             "name": "bleicker/request",
@@ -494,21 +494,21 @@
         },
         {
             "name": "bleicker/view",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.view.git",
-                "reference": "259ac563a4a52bc63e33f4707aa7c819908416a3"
+                "reference": "118bf60b5d3fb7a916d35fd9d603a061c7eaeee4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.view/zipball/259ac563a4a52bc63e33f4707aa7c819908416a3",
-                "reference": "259ac563a4a52bc63e33f4707aa7c819908416a3",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.view/zipball/118bf60b5d3fb7a916d35fd9d603a061c7eaeee4",
+                "reference": "118bf60b5d3fb7a916d35fd9d603a061c7eaeee4",
                 "shasum": ""
             },
             "require": {
                 "bleicker/objectmanager": "1.0.*",
-                "bleicker/registry": "1.1.*",
+                "bleicker/registry": "1.2.*",
                 "namelesscoder/fluid": "dev-master"
             },
             "require-dev": {
@@ -527,7 +527,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-30 17:00:50"
+            "time": "2015-04-30 20:01:44"
         },
         {
             "name": "doctrine/annotations",
