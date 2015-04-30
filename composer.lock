@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ae5e87362113127305e53c895362105e",
+    "hash": "16dfda22161673581af54e95d1126a73",
     "packages": [
         {
             "name": "bleicker/authentication",
@@ -494,24 +494,25 @@
         },
         {
             "name": "bleicker/view",
-            "version": "1.0.3",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.view.git",
-                "reference": "41a4fb4570d1622ee85e4622eba01b510b589b11"
+                "reference": "259ac563a4a52bc63e33f4707aa7c819908416a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.view/zipball/41a4fb4570d1622ee85e4622eba01b510b589b11",
-                "reference": "41a4fb4570d1622ee85e4622eba01b510b589b11",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.view/zipball/259ac563a4a52bc63e33f4707aa7c819908416a3",
+                "reference": "259ac563a4a52bc63e33f4707aa7c819908416a3",
                 "shasum": ""
             },
             "require": {
-                "bleicker/objectmanager": "~1.0",
+                "bleicker/objectmanager": "1.0.*",
+                "bleicker/registry": "1.1.*",
                 "namelesscoder/fluid": "dev-master"
             },
             "require-dev": {
-                "phpunit/phpunit": "*"
+                "phpunit/phpunit": "~4.6"
             },
             "type": "library",
             "autoload": {
@@ -526,7 +527,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-25 20:35:27"
+            "time": "2015-04-30 17:00:50"
         },
         {
             "name": "doctrine/annotations",
