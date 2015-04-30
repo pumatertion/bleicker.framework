@@ -1,16 +1,16 @@
 {
 	"name": "bleicker/framework",
 	"require": {
-		"bleicker/exception": "~1.0",
-		"bleicker/fastrouter": "~1.0",
-		"bleicker/request": "~1.0",
-		"bleicker/response": "~1.0",
-		"bleicker/persistence": "~1.0",
-		"bleicker/security": "~1.0",
-		"bleicker/converter": "~1.0",
-		"bleicker/objectmanager": "~1.0",
-		"bleicker/registry": "~1.1",
-		"bleicker/view": "~1.0",
+		"bleicker/exception": "1.0.*",
+		"bleicker/fastrouter": "1.0.*",
+		"bleicker/request": "1.0.*",
+		"bleicker/response": "1.0.*",
+		"bleicker/persistence": "1.0.*",
+		"bleicker/security": "1.0.*",
+		"bleicker/converter": "1.0.*",
+		"bleicker/objectmanager": "1.0.*",
+		"bleicker/registry": "1.1.*",
+		"bleicker/view": "1.1.*",
 		"namelesscoder/fluid": "dev-master"
 	},
 	"require-dev": {
