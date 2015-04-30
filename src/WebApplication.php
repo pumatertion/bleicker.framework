@@ -28,20 +28,6 @@ use Bleicker\Session\Session;
  */
 class WebApplication extends AbstractKernel implements ApplicationInterface {
 
-	public function __construct() {
-		parent::__construct();
-		ObjectManager::register(SessionInterface::class, new Session());
-		$request = Request::createFromGlobals();
-		$request->setSession(ObjectManager::get(SessionInterface::class));
-		ObjectManager::register(MainRequestInterface::class, $request);
-		ObjectManager::register(MainResponseInterface::class, new Response());
-		ObjectManager::register(TokenManagerInterface::class, new TokenManager());
-		ObjectManager::register(AuthenticationManagerInterface::class, new AuthenticationManager());
-		ObjectManager::register(RouterInterface::class, Router::getInstance(ROOT_DIRECTORY . DIRECTORY_SEPARATOR . 'Cache' . DIRECTORY_SEPARATOR . 'route.cache.php', Context::isProduction() ? FALSE : TRUE));
-		ObjectManager::register(AccessVoterInterface::class, new AccessVoter());
-		ObjectManager::register(HandlerInterface::class, new Handler());
-	}
-
 	/**
 	 * @return void
 	 */
