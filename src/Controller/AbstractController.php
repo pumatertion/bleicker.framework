@@ -2,7 +2,7 @@
 
 namespace Bleicker\Framework\Controller;
 
-use Bleicker\Framework\ApplicationRequest;
+use Bleicker\Framework\HttpApplicationRequest;
 use Bleicker\Framework\ApplicationRequestInterface;
 use Bleicker\Framework\Controller\Exception\AcceptedContentTypeNotSupportedException;
 use Bleicker\ObjectManager\ObjectManager;
@@ -20,7 +20,7 @@ use Bleicker\View\ViewInterface;
 abstract class AbstractController implements ControllerInterface {
 
 	/**
-	 * @var ApplicationRequest
+	 * @var HttpApplicationRequest
 	 */
 	protected $request;
 
