@@ -8,7 +8,7 @@
 		verbose="true"
 		stopOnFailure="false"
 		processIsolation="false"
-		backupGlobals="false"
+		backupGlobals="true"
 		syntaxCheck="true"
 		backupStaticAttributes="false"
 		forceCoversAnnotation="false"
