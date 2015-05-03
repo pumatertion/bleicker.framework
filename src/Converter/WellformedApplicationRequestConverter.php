@@ -31,10 +31,11 @@ class WellformedApplicationRequestConverter implements WellformedApplicationRequ
 		if ($targetType !== ApplicationRequestInterface::class) {
 			return FALSE;
 		}
-		if ($source->getHeaders()->get('CONTENT_TYPE') !== 'application/x-www-form-urlencoded') {
-			return FALSE;
+		$contentType = $source->getHeaders()->get('CONTENT_TYPE');
+		if ($contentType === NULL || $contentType === 'application/x-www-form-urlencoded' || $contentType === 'text/html') {
+			return TRUE;
 		}
-		return TRUE;
+		return FALSE;
 	}
 
 	/**
