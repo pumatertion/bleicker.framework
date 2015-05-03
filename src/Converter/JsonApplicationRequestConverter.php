@@ -31,10 +31,10 @@ class JsonApplicationRequestConverter implements JsonApplicationRequestConverter
 		if ($targetType !== ApplicationRequestInterface::class) {
 			return FALSE;
 		}
-		if ($source->getHeaders()->get('CONTENT_TYPE') !== 'application/json') {
-			return FALSE;
+		if ($source->getHeaders()->get('CONTENT_TYPE') === 'application/json') {
+			return TRUE;
 		}
-		return TRUE;
+		return FALSE;
 	}
 
 	/**
