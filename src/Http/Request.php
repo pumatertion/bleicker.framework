@@ -2,8 +2,10 @@
 
 namespace Bleicker\Framework\Http;
 
-use Bleicker\Request\MainRequestInterface;
 use Bleicker\Request\RequestInterface;
+use Bleicker\Framework\Http\RequestInterface as HttpRequestInterface;
+use Symfony\Component\HttpFoundation\HeaderBag;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
@@ -11,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  *
  * @package Bleicker\Framework\Http
  */
-class Request extends HttpRequest implements MainRequestInterface {
+class Request extends HttpRequest implements RequestInterface, HttpRequestInterface {
 
 	/**
 	 * @var RequestInterface
@@ -53,5 +55,26 @@ class Request extends HttpRequest implements MainRequestInterface {
 	 */
 	public function isMainRequest() {
 		return $this->getMainRequest() === $this;
+	}
+
+	/**
+	 * @return HeaderBag
+	 */
+	public function getHeaders() {
+		return $this->headers;
+	}
+
+	/**
+	 * @return ParameterBag
+	 */
+	public function getParameter() {
+		return $this->query;
+	}
+
+	/**
+	 * @return ParameterBag
+	 */
+	public function getArguments() {
+		return $this->request;
 	}
 }

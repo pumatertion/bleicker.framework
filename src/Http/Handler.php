@@ -3,7 +3,7 @@
 namespace Bleicker\Framework\Http;
 
 use Bleicker\Framework\Controller\ControllerInterface;
-use Bleicker\Framework\ApplicationRequest;
+use Bleicker\Framework\HttpApplicationRequest;
 use Bleicker\Framework\ApplicationRequestInterface;
 use Bleicker\Framework\Http\Exception\ControllerRouteDataInterfaceRequiredException;
 use Bleicker\Framework\Http\Exception\MethodNotSupportedException;
@@ -64,7 +64,7 @@ class Handler implements HandlerInterface {
 	 * @return $this
 	 */
 	public function initialize() {
-		$this->request = new ApplicationRequest(ObjectManager::get(MainRequestInterface::class));
+		$this->request = new HttpApplicationRequest(ObjectManager::get(MainRequestInterface::class));
 		$this->response = new ApplicationResponse(ObjectManager::get(MainResponseInterface::class));
 		$this->router = ObjectManager::get(RouterInterface::class);
 
