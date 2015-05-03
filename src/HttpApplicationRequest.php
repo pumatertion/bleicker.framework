@@ -35,7 +35,7 @@ class HttpApplicationRequest extends AbstractRequest implements ApplicationReque
 		parent::__construct($parentRequest);
 		$this->parameters = [];
 		$this->arguments = [];
-		$this->array = [];
+		$this->headers = [];
 	}
 
 	/**
