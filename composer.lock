@@ -1135,12 +1135,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/NamelessCoder/TYPO3.Fluid.git",
-                "reference": "96572954dd9cb799fc7824c79408dc061f1664e1"
+                "reference": "a957702aa45f7320fa69dcac299322e7cfc6f62d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/NamelessCoder/TYPO3.Fluid/zipball/96572954dd9cb799fc7824c79408dc061f1664e1",
-                "reference": "96572954dd9cb799fc7824c79408dc061f1664e1",
+                "url": "https://api.github.com/repos/NamelessCoder/TYPO3.Fluid/zipball/a957702aa45f7320fa69dcac299322e7cfc6f62d",
+                "reference": "a957702aa45f7320fa69dcac299322e7cfc6f62d",
                 "shasum": ""
             },
             "require-dev": {
@@ -1164,7 +1164,7 @@
                 "MIT"
             ],
             "description": "The TYPO3 Fluid template rendering engine",
-            "time": "2015-04-26 12:38:28"
+            "time": "2015-05-01 13:25:07"
         },
         {
             "name": "nikic/fast-route",
