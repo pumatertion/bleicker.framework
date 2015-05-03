@@ -2,7 +2,6 @@
 
 namespace Bleicker\Framework\Converter;
 
-use Bleicker\Converter\TypeConverter\TypeConverterInterface;
 use Bleicker\Framework\ApplicationRequestInterface;
 use Bleicker\Framework\Http\Request;
 use Bleicker\Framework\Http\RequestInterface;
@@ -13,7 +12,7 @@ use Bleicker\Framework\HttpApplicationRequest;
  *
  * @package Bleicker\Framework\Converter
  */
-class JsonApplicationRequestConverter implements TypeConverterInterface {
+class JsonApplicationRequestConverter implements JsonApplicationRequestConverterInterface {
 
 	/**
 	 * @var ApplicationRequestInterface
