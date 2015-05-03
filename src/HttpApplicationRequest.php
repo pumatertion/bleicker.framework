@@ -26,7 +26,7 @@ class HttpApplicationRequest extends AbstractRequest implements ApplicationReque
 	/**
 	 * @var array
 	 */
-	protected $arguments;
+	protected $contents;
 
 	/**
 	 * @param HttpRequestInterface $parentRequest
@@ -34,7 +34,7 @@ class HttpApplicationRequest extends AbstractRequest implements ApplicationReque
 	public function __construct(HttpRequestInterface $parentRequest = NULL) {
 		parent::__construct($parentRequest);
 		$this->parameters = [];
-		$this->arguments = [];
+		$this->contents = [];
 		$this->headers = [];
 	}
 
@@ -81,15 +81,15 @@ class HttpApplicationRequest extends AbstractRequest implements ApplicationReque
 	 * @return array
 	 */
 	public function getContents() {
-		return $this->arguments;
+		return $this->contents;
 	}
 
 	/**
-	 * @param array $arguments
+	 * @param array $contents
 	 * @return $this
 	 */
-	public function setContents(array $arguments = []) {
-		$this->arguments = $arguments;
+	public function setContents(array $contents = []) {
+		$this->contents = $contents;
 		return $this;
 	}
 

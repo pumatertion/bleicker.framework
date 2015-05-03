@@ -55,10 +55,10 @@ interface ApplicationRequestInterface extends RequestInterface {
 	public function getContents();
 
 	/**
-	 * @param array $arguments
+	 * @param array $contents
 	 * @return $this
 	 */
-	public function setContents(array $arguments = []);
+	public function setContents(array $contents = []);
 
 	/**
 	 * @param string $path
