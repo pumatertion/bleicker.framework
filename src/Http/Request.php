@@ -85,23 +85,4 @@ class Request extends HttpRequest implements RequestInterface, HttpRequestInterf
 	public function getArguments() {
 		return $this->request;
 	}
-
-	/**
-	 * @return string
-	 */
-	public function _getContent() {
-		return $this->content;
-	}
-
-	/**
-	 * @param boolean $asResource Not supported!
-	 * @return string
-	 * @throws Exception
-	 */
-	public function getContent($asResource = FALSE) {
-		if($asResource !== FALSE){
-			throw new Exception('Getting content as resource is not supported', 1430675565);
-		}
-		return $this->content;
-	}
 }
