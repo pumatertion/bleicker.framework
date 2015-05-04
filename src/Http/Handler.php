@@ -5,6 +5,7 @@ namespace Bleicker\Framework\Http;
 use Bleicker\Converter\Converter;
 use Bleicker\Framework\ApplicationRequestInterface;
 use Bleicker\Framework\Controller\ControllerInterface;
+use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Framework\Http\Exception\ControllerRouteDataInterfaceRequiredException;
 use Bleicker\Framework\Http\Exception\MethodNotSupportedException;
 use Bleicker\Framework\Http\Exception\NotFoundException;
@@ -142,13 +143,19 @@ class Handler implements HandlerInterface {
 				->setResponse($this->response)
 				->resolveFormat($this->methodName)
 				->resolveView($this->methodName);
-
-			$content = call_user_func_array(array($controller, $this->methodName), $this->methodArguments);
-
-			if (!empty($content)) {
+			try {
+				$content = call_user_func_array(array($controller, $this->methodName), $this->methodArguments);
+				if (!empty($content)) {
+					/** @var Response $httpResponse */
+					$httpResponse = $this->response->getMainResponse();
+					$httpResponse->setContent($content);
+				}
+			} catch (RedirectException $redirect) {
 				/** @var Response $httpResponse */
 				$httpResponse = $this->response->getMainResponse();
-				$httpResponse->setContent($content);
+				$httpResponse->headers->set('Location', $redirect->getUri());
+				$httpResponse->setStatusCode($redirect->getStatus(), $redirect->getMessage());
+				$httpResponse->send();
 			}
 
 			return $this;

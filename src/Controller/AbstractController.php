@@ -2,6 +2,8 @@
 
 namespace Bleicker\Framework\Controller;
 
+use Bleicker\Framework\Exception\InvalidStatusException;
+use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Framework\HttpApplicationRequest;
 use Bleicker\Framework\ApplicationRequestInterface;
 use Bleicker\Framework\Controller\Exception\AcceptedContentTypeNotSupportedException;
@@ -130,5 +132,15 @@ abstract class AbstractController implements ControllerInterface {
 	 */
 	public function getResponse() {
 		return $this->response;
+	}
+
+	/**
+	 * @param string $uri
+	 * @param integer $statusCode
+	 * @param string $statusMessage
+	 * @throws RedirectException
+	 */
+	public function redirect($uri, $statusCode = 307, $statusMessage = '') {
+		throw new RedirectException($uri, $statusCode, $statusMessage, 1430730267);
 	}
 }

@@ -3,6 +3,7 @@
 namespace Bleicker\Framework\Controller;
 
 use Bleicker\Framework\ApplicationRequestInterface;
+use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
 use Bleicker\View\ViewInterface;
 
@@ -56,4 +57,12 @@ interface ControllerInterface {
 	 * @return ApplicationResponseInterface
 	 */
 	public function getResponse();
+
+	/**
+	 * @param string $uri
+	 * @param integer $statusCode
+	 * @param string $statusMessage
+	 * @throws RedirectException
+	 */
+	public function redirect($uri, $statusCode, $statusMessage);
 }
