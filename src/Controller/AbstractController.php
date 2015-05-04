@@ -139,8 +139,9 @@ abstract class AbstractController implements ControllerInterface {
 	 * @param integer $statusCode
 	 * @param string $statusMessage
 	 * @throws RedirectException
+	 * @see http://de.wikipedia.org/wiki/HTTP-Statuscode#3xx_.E2.80.93_Umleitung If you want to use the original request method use 307 status code.
 	 */
-	public function redirect($uri, $statusCode = 307, $statusMessage = '') {
+	public function redirect($uri, $statusCode = 303, $statusMessage = '') {
 		throw new RedirectException($uri, $statusCode, $statusMessage, 1430730267);
 	}
 }
