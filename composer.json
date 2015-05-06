@@ -7,7 +7,7 @@
 		"bleicker/response": "1.0.*",
 		"bleicker/persistence": "1.0.*",
 		"bleicker/security": "1.0.*",
-		"bleicker/converter": "1.0.*",
+		"bleicker/converter": "2.0.*",
 		"bleicker/objectmanager": "1.0.*",
 		"bleicker/registry": "1.2.*",
 		"bleicker/view": "1.2.*",

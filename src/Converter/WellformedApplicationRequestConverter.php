@@ -2,6 +2,7 @@
 
 namespace Bleicker\Framework\Converter;
 
+use Bleicker\Converter\AbstractTypeConverter;
 use Bleicker\Framework\ApplicationRequestInterface;
 use Bleicker\Framework\Http\Request;
 use Bleicker\Framework\Http\RequestInterface;
@@ -12,7 +13,7 @@ use Bleicker\Framework\HttpApplicationRequest;
  *
  * @package Bleicker\Framework\Converter
  */
-class WellformedApplicationRequestConverter implements WellformedApplicationRequestConverterInterface {
+class WellformedApplicationRequestConverter extends AbstractTypeConverter implements WellformedApplicationRequestConverterInterface {
 
 	/**
 	 * @var ApplicationRequestInterface
