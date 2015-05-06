@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8bceaa1e24c24dfc2ec88768f5df6aef",
+    "hash": "d4bfc67c85ca940aaa900a182c99fd92",
     "packages": [
         {
             "name": "bleicker/authentication",
@@ -77,21 +77,22 @@
         },
         {
             "name": "bleicker/converter",
-            "version": "1.0.2",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.converter.git",
-                "reference": "5b836f3c66e85049380fb35ce8326481885eec67"
+                "reference": "92fde5a4752fdb3cbfa32c3ba00175f1f7a13a40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.converter/zipball/5b836f3c66e85049380fb35ce8326481885eec67",
-                "reference": "5b836f3c66e85049380fb35ce8326481885eec67",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.converter/zipball/92fde5a4752fdb3cbfa32c3ba00175f1f7a13a40",
+                "reference": "92fde5a4752fdb3cbfa32c3ba00175f1f7a13a40",
                 "shasum": ""
             },
             "require": {
-                "bleicker/container": "~1.0",
-                "bleicker/exception": "~1.0"
+                "bleicker/container": "1.0.*",
+                "bleicker/exception": "1.0.*",
+                "bleicker/objectmanager": "1.0.*"
             },
             "require-dev": {
                 "phpunit/phpunit": "*"
@@ -109,7 +110,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-26 13:14:15"
+            "time": "2015-05-06 15:50:23"
         },
         {
             "name": "bleicker/exception",
