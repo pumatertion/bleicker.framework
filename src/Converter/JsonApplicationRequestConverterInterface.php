@@ -1,7 +1,7 @@
 <?php
 namespace Bleicker\Framework\Converter;
 
-use Bleicker\Converter\TypeConverter\TypeConverterInterface;
+use Bleicker\Converter\TypeConverterInterface;
 
 /**
  * Class JsonApplicationRequestConverter
