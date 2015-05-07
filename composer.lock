@@ -45,17 +45,20 @@
         },
         {
             "name": "bleicker/container",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.container.git",
-                "reference": "b5d7d75a8a1050c46fadfdf95d94fd7e73668cd9"
+                "reference": "293dc151833a6cf4175e2dfeb8733408875852a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.container/zipball/b5d7d75a8a1050c46fadfdf95d94fd7e73668cd9",
-                "reference": "b5d7d75a8a1050c46fadfdf95d94fd7e73668cd9",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.container/zipball/293dc151833a6cf4175e2dfeb8733408875852a5",
+                "reference": "293dc151833a6cf4175e2dfeb8733408875852a5",
                 "shasum": ""
+            },
+            "require": {
+                "bleicker/exception": "*"
             },
             "require-dev": {
                 "phpunit/phpunit": "*"
@@ -73,20 +76,20 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-26 12:38:26"
+            "time": "2015-05-07 12:32:09"
         },
         {
             "name": "bleicker/converter",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.converter.git",
-                "reference": "92fde5a4752fdb3cbfa32c3ba00175f1f7a13a40"
+                "reference": "0519c0b5c60c6475352c1c467805fd7d00271e31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.converter/zipball/92fde5a4752fdb3cbfa32c3ba00175f1f7a13a40",
-                "reference": "92fde5a4752fdb3cbfa32c3ba00175f1f7a13a40",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.converter/zipball/0519c0b5c60c6475352c1c467805fd7d00271e31",
+                "reference": "0519c0b5c60c6475352c1c467805fd7d00271e31",
                 "shasum": ""
             },
             "require": {
@@ -110,7 +113,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-05-06 15:50:23"
+            "time": "2015-05-07 12:45:58"
         },
         {
             "name": "bleicker/exception",
