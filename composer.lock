@@ -149,16 +149,16 @@
         },
         {
             "name": "bleicker/fastrouter",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.fastrouter.git",
-                "reference": "56b3e5bef7c566c6804d7d88f07b21966f4f5c7f"
+                "reference": "6f6998906397d3956d96335ee43292dba9f6fd1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.fastrouter/zipball/56b3e5bef7c566c6804d7d88f07b21966f4f5c7f",
-                "reference": "56b3e5bef7c566c6804d7d88f07b21966f4f5c7f",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.fastrouter/zipball/6f6998906397d3956d96335ee43292dba9f6fd1f",
+                "reference": "6f6998906397d3956d96335ee43292dba9f6fd1f",
                 "shasum": ""
             },
             "require": {
@@ -181,7 +181,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-25 20:41:23"
+            "time": "2015-05-07 18:40:20"
         },
         {
             "name": "bleicker/objectmanager",
@@ -359,16 +359,16 @@
         },
         {
             "name": "bleicker/routing",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pumatertion/bleicker.routing.git",
-                "reference": "a6435bf9c579b964e4e9c1629250bb3efc9dd87e"
+                "reference": "6554d9c4eca9dfaa96212cb64addcfbd8abdfcdf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pumatertion/bleicker.routing/zipball/a6435bf9c579b964e4e9c1629250bb3efc9dd87e",
-                "reference": "a6435bf9c579b964e4e9c1629250bb3efc9dd87e",
+                "url": "https://api.github.com/repos/pumatertion/bleicker.routing/zipball/6554d9c4eca9dfaa96212cb64addcfbd8abdfcdf",
+                "reference": "6554d9c4eca9dfaa96212cb64addcfbd8abdfcdf",
                 "shasum": ""
             },
             "require-dev": {
@@ -387,7 +387,7 @@
                     "email": "carsten@bleicker.de"
                 }
             ],
-            "time": "2015-04-24 15:00:31"
+            "time": "2015-05-07 18:35:36"
         },
         {
             "name": "bleicker/security",
