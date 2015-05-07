@@ -4,6 +4,7 @@
 		"bleicker/exception": "1.0.*",
 		"bleicker/fastrouter": "1.0.*",
 		"bleicker/request": "1.0.*",
+		"bleicker/translation": "0.2.*",
 		"bleicker/response": "1.0.*",
 		"bleicker/persistence": "1.0.*",
 		"bleicker/security": "1.0.*",

@@ -8,7 +8,9 @@ use Bleicker\Framework\Controller\ControllerInterface;
 use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Framework\Http\Exception\ControllerRouteDataInterfaceRequiredException;
 use Bleicker\Framework\Http\Exception\MethodNotSupportedException;
+use Bleicker\Framework\Http\Exception\NoLocaleDefinedException;
 use Bleicker\Framework\Http\Exception\NotFoundException;
+use Bleicker\Framework\Http\Exception\RequestedLocaleNotDefinedException;
 use Bleicker\Framework\Security\AccessVoterInterface;
 use Bleicker\Framework\Utility\Arrays;
 use Bleicker\ObjectManager\ObjectManager;
@@ -21,6 +23,12 @@ use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
 use Bleicker\Routing\ControllerRouteDataInterface;
 use Bleicker\Routing\RouteInterface;
 use Bleicker\Routing\RouterInterface;
+use Bleicker\Translation\Locale;
+use Bleicker\Translation\LocaleInterface;
+use Bleicker\Translation\Locales;
+use Bleicker\Translation\LocalesInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use ReflectionMethod;
 use ReflectionParameter;
 
@@ -30,6 +38,8 @@ use ReflectionParameter;
  * @package Bleicker\Framework\Http
  */
 class Handler implements HandlerInterface {
+
+	const SYSTEM_LOCALE_NAME = 'systemLocale';
 
 	/**
 	 * @var ApplicationRequestInterface
@@ -62,20 +72,76 @@ class Handler implements HandlerInterface {
 	protected $methodArguments;
 
 	/**
+	 * @var LocalesInterface $locales
+	 */
+	protected $locales;
+
+	/**
 	 * @return $this
 	 */
 	public function initialize() {
-
 		$this->request = Converter::convert(ObjectManager::get(MainRequestInterface::class), ApplicationRequestInterface::class);
 		$this->response = new ApplicationResponse(ObjectManager::get(MainResponseInterface::class));
 		$this->router = ObjectManager::get(RouterInterface::class);
+		$this->locales = ObjectManager::get(LocalesInterface::class) === NULL ? ObjectManager::get(Locales::class) : ObjectManager::get(LocalesInterface::class);
 
 		$routerInformation = $this->invokeRouter();
 		$this->controllerName = $this->getControllerNameByRoute($routerInformation[1]);
 		$this->methodName = $this->getMethodNameByRoute($routerInformation[1]);
 		$this->methodArguments = $this->getMethodArgumentsByRouterInformation($this->controllerName, $this->methodName, $routerInformation[2]);
-
+		$systemLocale = $this->getSystemLocaleByRoute($routerInformation[2]);
+		$this->locales->setSystemLocale($systemLocale);
+		setlocale(LC_ALL, (string)$systemLocale);
 		return $this;
+	}
+
+	/**
+	 * @param array $routeData
+	 * @return LocaleInterface
+	 * @throws NoLocaleDefinedException
+	 * @throws RequestedLocaleNotDefinedException
+	 */
+	protected function getSystemLocaleByRoute(array $routeData = array()) {
+		$systemLocale = Arrays::getValueByPath($routeData, static::SYSTEM_LOCALE_NAME);
+		$availableLocales = new ArrayCollection($this->locales->storage());
+
+		if ($availableLocales->count() === 0) {
+			throw new NoLocaleDefinedException('No locales defined. Please Register at least one Locale with \Bleicker\Translation\Locale::register(...)', 1431028712);
+		}
+
+		if ($systemLocale !== NULL) {
+			$partitions = explode(LocaleInterface::LOCALE_SEPARATOR, $systemLocale);
+
+			$language = Arrays::getValueByPath($partitions, '0');
+			$region = Arrays::getValueByPath($partitions, '1');
+			$expr = Criteria::expr();
+			$criteria = Criteria::create();
+
+			if ($region === NULL) {
+				$criteria->andWhere(
+					$expr->andX(
+						$expr->eq('language', $language)
+					)
+				);
+			} else {
+				$criteria->andWhere(
+					$expr->andX(
+						$expr->eq('language', strtolower($language)),
+						$expr->eq('region', strtoupper($region))
+					)
+				);
+			}
+
+			$matchingTranslations = $availableLocales->matching($criteria);
+
+			if ($matchingTranslations->count() === 0) {
+				throw new RequestedLocaleNotDefinedException('Requested locale "' . $systemLocale . '" is not defined', 1431030043);
+			}
+
+			return $matchingTranslations->first();
+		}
+
+		return $this->locales->getDefault();
 	}
 
 	/**
