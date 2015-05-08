@@ -10,9 +10,9 @@ use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManagerInterface;
 use Bleicker\Response\ApplicationResponse;
 use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
+use Bleicker\Translation\LocalesInterface;
 use Bleicker\View\Template\View;
 use Bleicker\View\ViewInterface;
-use Bleicker\Translation\LocalesInterface;
 
 /**
  * Class AbstractController
@@ -144,10 +144,12 @@ abstract class AbstractController implements ControllerInterface {
 	 * @param string $uri
 	 * @param integer $statusCode
 	 * @param string $statusMessage
+	 * @param boolean $prefixSystemLocale
 	 * @throws RedirectException
 	 * @see http://de.wikipedia.org/wiki/HTTP-Statuscode#3xx_.E2.80.93_Umleitung If you want to use the original request method use 307 status code.
 	 */
-	public function redirect($uri, $statusCode = 303, $statusMessage = '') {
+	public function redirect($uri, $statusCode = 303, $statusMessage = '', $prefixSystemLocale = TRUE) {
+		$uri = $prefixSystemLocale ? DIRECTORY_SEPARATOR . (string)$this->locales->getSystemLocale() . $uri : $uri;
 		throw new RedirectException($uri, $statusCode, $statusMessage, 1430730267);
 	}
 }
