@@ -2,17 +2,17 @@
 
 namespace Bleicker\Framework\Controller;
 
-use Bleicker\Framework\Exception\InvalidStatusException;
-use Bleicker\Framework\Exception\RedirectException;
-use Bleicker\Framework\HttpApplicationRequest;
 use Bleicker\Framework\ApplicationRequestInterface;
 use Bleicker\Framework\Controller\Exception\AcceptedContentTypeNotSupportedException;
+use Bleicker\Framework\Exception\RedirectException;
+use Bleicker\Framework\HttpApplicationRequest;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManagerInterface;
 use Bleicker\Response\ApplicationResponse;
 use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
 use Bleicker\View\Template\View;
 use Bleicker\View\ViewInterface;
+use Bleicker\Translation\LocalesInterface;
 
 /**
  * Class AbstractController
@@ -46,8 +46,14 @@ abstract class AbstractController implements ControllerInterface {
 	 */
 	protected $entityManager;
 
+	/**
+	 * @var LocalesInterface
+	 */
+	protected $locales;
+
 	public function __construct() {
 		$this->entityManager = ObjectManager::get(EntityManagerInterface::class);
+		$this->locales = ObjectManager::get(LocalesInterface::class);
 	}
 
 	/**
