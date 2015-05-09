@@ -4,6 +4,8 @@ namespace Bleicker\Framework\Http;
 
 use Bleicker\Converter\Converter;
 use Bleicker\Framework\ApplicationRequestInterface;
+use Bleicker\Framework\Context\Context;
+use Bleicker\Framework\Context\ContextInterface;
 use Bleicker\Framework\Controller\ControllerInterface;
 use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Framework\Http\Exception\ControllerRouteDataInterfaceRequiredException;
@@ -76,6 +78,11 @@ class Handler implements HandlerInterface {
 	protected $locales;
 
 	/**
+	 * @var ContextInterface $context
+	 */
+	protected $context;
+
+	/**
 	 * @return $this
 	 */
 	public function initialize() {
@@ -83,6 +90,7 @@ class Handler implements HandlerInterface {
 		$this->response = new ApplicationResponse(ObjectManager::get(MainResponseInterface::class));
 		$this->router = ObjectManager::get(RouterInterface::class);
 		$this->locales = ObjectManager::get(LocalesInterface::class, Locales::class);
+		$this->context = ObjectManager::get(ContextInterface::class, Context::class);
 
 		$routerInformation = $this->invokeRouter();
 		$this->controllerName = $this->getControllerNameByRoute($routerInformation[1]);
