@@ -94,7 +94,6 @@ class Handler implements HandlerInterface {
 		/** @var RequestInterface $httpRequest */
 		$httpRequest = ObjectManager::get(MainRequestInterface::class, function () {
 			$request = RequestFactory::getInstance();
-			ObjectManager::add(MainRequestInterface::class, $request);
 			return $request;
 		});
 
