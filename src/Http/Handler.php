@@ -23,7 +23,6 @@ use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
 use Bleicker\Routing\ControllerRouteDataInterface;
 use Bleicker\Routing\RouteInterface;
 use Bleicker\Routing\RouterInterface;
-use Bleicker\Translation\Locale;
 use Bleicker\Translation\LocaleInterface;
 use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
