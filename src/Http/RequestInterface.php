@@ -14,6 +14,12 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 interface RequestInterface extends MainRequestInterface, \Bleicker\Request\RequestInterface {
 
 	/**
+	 * @param SessionInterface $session
+	 * @return mixed
+	 */
+	public function setSession(SessionInterface $session);
+
+	/**
 	 * Returns the host name.
 	 * This method can read the client port from the "X-Forwarded-Host" header
 	 * when trusted proxies were set via "setTrustedProxies()".
