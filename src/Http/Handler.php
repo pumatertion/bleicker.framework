@@ -14,6 +14,7 @@ use Bleicker\Framework\Http\Exception\MethodNotSupportedException;
 use Bleicker\Framework\Http\Exception\NoLocaleDefinedException;
 use Bleicker\Framework\Http\Exception\NotFoundException;
 use Bleicker\Framework\Http\Exception\RequestedLocaleNotDefinedException;
+use Bleicker\Framework\Security\AccessVoter;
 use Bleicker\Framework\Security\AccessVoterInterface;
 use Bleicker\Framework\Utility\Arrays;
 use Bleicker\ObjectManager\ObjectManager;
@@ -210,7 +211,7 @@ class Handler implements HandlerInterface {
 	 */
 	public function handle() {
 		/** @var AccessVoterInterface $accessVoter */
-		$accessVoter = ObjectManager::get(AccessVoterInterface::class);
+		$accessVoter = ObjectManager::get(AccessVoterInterface::class, AccessVoter::class);
 		return $accessVoter->vote($this->controllerName . '::' . $this->methodName, function () {
 			/** @var ControllerInterface $controller */
 			$controller = new $this->controllerName();
