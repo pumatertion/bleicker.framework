@@ -3,6 +3,7 @@
 namespace Bleicker\Framework\Http;
 
 use Bleicker\Converter\Converter;
+use Bleicker\Converter\ConverterInterface;
 use Bleicker\FastRouter\Router;
 use Bleicker\Framework\ApplicationRequestInterface;
 use Bleicker\Framework\Context\Context;
@@ -117,15 +118,20 @@ class Handler implements HandlerInterface {
 			return $response;
 		});
 
-		$this->request = ObjectManager::get(ApplicationRequestInterface::class, function() {
-			$httpRequest = ObjectManager::get(MainRequestInterface::class);
-			$applicationRequest = Converter::convert($httpRequest, ApplicationRequestInterface::class);
+		/** @var ConverterInterface $converter */
+		$converter = ObjectManager::get(ConverterInterface::class, function(){
+			$converter = new Converter();
+			ObjectManager::add(ConverterInterface::class, $converter, TRUE);
+			return $converter;
+		});
+
+		$this->request = ObjectManager::get(ApplicationRequestInterface::class, function() use($converter, $httpRequest){
+			$applicationRequest = $converter->convert($httpRequest, ApplicationRequestInterface::class);
 			ObjectManager::add(ApplicationRequestInterface::class, $applicationRequest, TRUE);
 		});
 
 		$this->response = new ApplicationResponse($httpResponse);
-		$this->response = ObjectManager::get(ApplicationResponseInterface::class, function(){
-			$httpResponse = ObjectManager::get(MainResponseInterface::class);
+		$this->response = ObjectManager::get(ApplicationResponseInterface::class, function() use ($httpResponse){
 			$applicationResponse = new ApplicationResponse($httpResponse);
 			ObjectManager::add(ApplicationResponseInterface::class, $applicationResponse, TRUE);
 		});
