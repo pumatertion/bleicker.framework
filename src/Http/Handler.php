@@ -34,6 +34,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use ReflectionMethod;
 use ReflectionParameter;
+use Bleicker\Session\Session;
+use Bleicker\Session\SessionInterface;
 
 /**
  * Class Handler
@@ -88,8 +90,23 @@ class Handler implements HandlerInterface {
 	 * @return $this
 	 */
 	public function initialize() {
-		$this->request = Converter::convert(ObjectManager::get(MainRequestInterface::class), ApplicationRequestInterface::class);
-		$this->response = new ApplicationResponse(ObjectManager::get(MainResponseInterface::class));
+
+		/** @var RequestInterface $httpRequest */
+		$httpRequest = ObjectManager::get(MainRequestInterface::class, function () {
+			$request = RequestFactory::getInstance();
+			ObjectManager::add(MainRequestInterface::class, $request);
+			return $request;
+		});
+
+		/** @var SessionInterface $session */
+		$session = ObjectManager::get(SessionInterface::class, Session::class);
+		$httpRequest->setSession($session);
+
+		/** @var MainResponseInterface $httpResponse */
+		$httpResponse = ObjectManager::get(MainResponseInterface::class, Response::class);
+
+		$this->request = Converter::convert($httpRequest, ApplicationRequestInterface::class);
+		$this->response = new ApplicationResponse($httpResponse);
 		$this->router = ObjectManager::get(RouterInterface::class, function () {
 			return Router::getInstance(__DIR__ . '/../route.cache.php', $this->context->isProduction() ? FALSE : TRUE);
 		});
