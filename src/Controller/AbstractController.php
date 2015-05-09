@@ -10,6 +10,7 @@ use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManagerInterface;
 use Bleicker\Response\ApplicationResponse;
 use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
+use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
 use Bleicker\View\Template\View;
 use Bleicker\View\ViewInterface;
@@ -53,7 +54,7 @@ abstract class AbstractController implements ControllerInterface {
 
 	public function __construct() {
 		$this->entityManager = ObjectManager::get(EntityManagerInterface::class);
-		$this->locales = ObjectManager::get(LocalesInterface::class);
+		$this->locales = ObjectManager::get(LocalesInterface::class, Locales::class);
 	}
 
 	/**

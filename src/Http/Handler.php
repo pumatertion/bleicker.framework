@@ -3,7 +3,10 @@
 namespace Bleicker\Framework\Http;
 
 use Bleicker\Converter\Converter;
+use Bleicker\FastRouter\Router;
 use Bleicker\Framework\ApplicationRequestInterface;
+use Bleicker\Framework\Context\Context;
+use Bleicker\Framework\Context\ContextInterface;
 use Bleicker\Framework\Controller\ControllerInterface;
 use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Framework\Http\Exception\ControllerRouteDataInterfaceRequiredException;
@@ -23,7 +26,6 @@ use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
 use Bleicker\Routing\ControllerRouteDataInterface;
 use Bleicker\Routing\RouteInterface;
 use Bleicker\Routing\RouterInterface;
-use Bleicker\Translation\Locale;
 use Bleicker\Translation\LocaleInterface;
 use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
@@ -77,13 +79,21 @@ class Handler implements HandlerInterface {
 	protected $locales;
 
 	/**
+	 * @var ContextInterface $context
+	 */
+	protected $context;
+
+	/**
 	 * @return $this
 	 */
 	public function initialize() {
 		$this->request = Converter::convert(ObjectManager::get(MainRequestInterface::class), ApplicationRequestInterface::class);
 		$this->response = new ApplicationResponse(ObjectManager::get(MainResponseInterface::class));
-		$this->router = ObjectManager::get(RouterInterface::class);
-		$this->locales = ObjectManager::get(LocalesInterface::class) === NULL ? ObjectManager::get(Locales::class) : ObjectManager::get(LocalesInterface::class);
+		$this->router = ObjectManager::get(RouterInterface::class, function () {
+			return Router::getInstance(__DIR__ . '/../route.cache.php', $this->context->isProduction() ? FALSE : TRUE);
+		});
+		$this->locales = ObjectManager::get(LocalesInterface::class, Locales::class);
+		$this->context = ObjectManager::get(ContextInterface::class, Context::class);
 
 		$routerInformation = $this->invokeRouter();
 		$this->controllerName = $this->getControllerNameByRoute($routerInformation[1]);
