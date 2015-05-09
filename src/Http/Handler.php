@@ -83,7 +83,7 @@ class Handler implements HandlerInterface {
 		$this->request = Converter::convert(ObjectManager::get(MainRequestInterface::class), ApplicationRequestInterface::class);
 		$this->response = new ApplicationResponse(ObjectManager::get(MainResponseInterface::class));
 		$this->router = ObjectManager::get(RouterInterface::class);
-		$this->locales = ObjectManager::get(LocalesInterface::class) === NULL ? ObjectManager::get(Locales::class) : ObjectManager::get(LocalesInterface::class);
+		$this->locales = ObjectManager::get(LocalesInterface::class, Locales::class);
 
 		$routerInformation = $this->invokeRouter();
 		$this->controllerName = $this->getControllerNameByRoute($routerInformation[1]);
