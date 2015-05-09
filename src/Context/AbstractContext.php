@@ -7,14 +7,14 @@ namespace Bleicker\Framework\Context;
  *
  * @package Bleicker\Framework\Context
  */
-abstract class AbstractContext implements ContextInterface{
+abstract class AbstractContext implements ContextInterface {
 
 	const ENV_VAR = 'CONTEXT', PRODUCTION = 'production', DEVELOPMENT = FALSE, TESTING = 'testing';
 
 	/**
 	 * @return boolean
 	 */
-	public static function isDevelopment(){
+	public static function isDevelopment() {
 		return getenv(static::ENV_VAR) === static::DEVELOPMENT;
 	}
 
