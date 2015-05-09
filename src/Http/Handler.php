@@ -135,7 +135,7 @@ class Handler implements HandlerInterface {
 		$this->response = ObjectManager::get(ApplicationResponseInterface::class, function() use ($httpResponse){
 			$applicationResponse = new ApplicationResponse($httpResponse);
 			ObjectManager::add(ApplicationResponseInterface::class, $applicationResponse, TRUE);
-			return $applicationResponse:
+			return $applicationResponse;
 		});
 
 		$this->router = ObjectManager::get(RouterInterface::class, function () {
