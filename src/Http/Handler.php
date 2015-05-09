@@ -89,28 +89,64 @@ class Handler implements HandlerInterface {
 	/**
 	 * @return $this
 	 */
+	/**
+	 * @return $this
+	 */
 	public function initialize() {
 
 		/** @var RequestInterface $httpRequest */
 		$httpRequest = ObjectManager::get(MainRequestInterface::class, function () {
 			$request = RequestFactory::getInstance();
+			ObjectManager::add(MainRequestInterface::class, $request, TRUE);
 			return $request;
 		});
 
 		/** @var SessionInterface $session */
-		$session = ObjectManager::get(SessionInterface::class, Session::class);
+		$session = ObjectManager::get(SessionInterface::class, function(){
+			$session = new Session();
+			ObjectManager::add(SessionInterface::class, $session, TRUE);
+			return $session;
+		});
+
 		$httpRequest->setSession($session);
 
 		/** @var MainResponseInterface $httpResponse */
-		$httpResponse = ObjectManager::get(MainResponseInterface::class, Response::class);
-
-		$this->request = Converter::convert($httpRequest, ApplicationRequestInterface::class);
-		$this->response = new ApplicationResponse($httpResponse);
-		$this->router = ObjectManager::get(RouterInterface::class, function () {
-			return Router::getInstance(__DIR__ . '/../route.cache.php', $this->context->isProduction() ? FALSE : TRUE);
+		$httpResponse = ObjectManager::get(MainResponseInterface::class, function(){
+			$response = new Response();
+			ObjectManager::add(MainResponseInterface::class, $response, TRUE);
+			return $response;
 		});
-		$this->locales = ObjectManager::get(LocalesInterface::class, Locales::class);
-		$this->context = ObjectManager::get(ContextInterface::class, Context::class);
+
+		$this->request = ObjectManager::get(ApplicationRequestInterface::class, function() {
+			$httpRequest = ObjectManager::get(MainRequestInterface::class);
+			$applicationRequest = Converter::convert($httpRequest, ApplicationRequestInterface::class);
+			ObjectManager::add(ApplicationRequestInterface::class, $applicationRequest, TRUE);
+		});
+
+		$this->response = new ApplicationResponse($httpResponse);
+		$this->response = ObjectManager::get(ApplicationResponseInterface::class, function(){
+			$httpResponse = ObjectManager::get(MainResponseInterface::class);
+			$applicationResponse = new ApplicationResponse($httpResponse);
+			ObjectManager::add(ApplicationResponseInterface::class, $applicationResponse, TRUE);
+		});
+
+		$this->router = ObjectManager::get(RouterInterface::class, function () {
+			$router = Router::getInstance(__DIR__ . '/../route.cache.php', $this->context->isProduction() ? FALSE : TRUE);
+			ObjectManager::add(RouterInterface::class, $router, TRUE);
+			return $router;
+		});
+
+		$this->locales = ObjectManager::get(LocalesInterface::class, function(){
+			$locales = new Locales();
+			ObjectManager::add(LocalesInterface::class, $locales, TRUE);
+			return $locales;
+		});
+
+		$this->context = ObjectManager::get(ContextInterface::class, function(){
+			$context = new Context();
+			ObjectManager::add(ContextInterface::class, $context, TRUE);
+			return $context;
+		});
 
 		$routerInformation = $this->invokeRouter();
 		$this->controllerName = $this->getControllerNameByRoute($routerInformation[1]);
@@ -227,7 +263,12 @@ class Handler implements HandlerInterface {
 	 */
 	public function handle() {
 		/** @var AccessVoterInterface $accessVoter */
-		$accessVoter = ObjectManager::get(AccessVoterInterface::class, AccessVoter::class);
+		$accessVoter = ObjectManager::get(AccessVoterInterface::class, function(){
+			$accessVoter = new AccessVoter();
+			ObjectManager::add(AccessVoterInterface::class, $accessVoter, TRUE);
+			return $accessVoter;
+		});
+
 		return $accessVoter->vote($this->controllerName . '::' . $this->methodName, function () {
 			/** @var ControllerInterface $controller */
 			$controller = new $this->controllerName();
