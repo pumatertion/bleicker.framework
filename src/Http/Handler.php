@@ -285,10 +285,12 @@ class Handler implements HandlerInterface {
 			/** @var AbstractVoteException $firstVoteException */
 			$firstVoteException = $this->securityManager->getResults()->first();
 			if ($firstVoteException instanceof ControllerInvokationExceptionInterface) {
-				/** @var ControllerInvokationExceptionInterface $firstVoteException*/
-				$this->methodArguments[ControllerInvokationExceptionInterface::ORIGIN_CONTROLLER_NAME] = $this->controllerName;
-				$this->methodArguments[ControllerInvokationExceptionInterface::ORIGIN_METHOD_NAME] = $this->methodName;
-				$this->methodArguments[ControllerInvokationExceptionInterface::ORIGIN_EXCEPTION_NAME] = $firstVoteException;
+				/** @var ControllerInvokationExceptionInterface $firstVoteException */
+				$this->methodArguments = [
+					ControllerInvokationExceptionInterface::ORIGIN_CONTROLLER_NAME => $this->controllerName,
+					ControllerInvokationExceptionInterface::ORIGIN_METHOD_NAME => $this->methodName,
+					ControllerInvokationExceptionInterface::ORIGIN_EXCEPTION_NAME => $firstVoteException
+				];
 				$this->controllerName = $firstVoteException->getControllerName();
 				$this->methodName = $firstVoteException->getMethodName();
 			} else {
