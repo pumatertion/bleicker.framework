@@ -138,6 +138,12 @@ class Handler implements HandlerInterface {
 			return $applicationResponse;
 		});
 
+		$this->context = ObjectManager::get(ContextInterface::class, function(){
+			$context = new Context();
+			ObjectManager::add(ContextInterface::class, $context, TRUE);
+			return $context;
+		});
+
 		$this->router = ObjectManager::get(RouterInterface::class, function () {
 			$router = Router::getInstance(__DIR__ . '/../route.cache.php', $this->context->isProduction() ? FALSE : TRUE);
 			ObjectManager::add(RouterInterface::class, $router, TRUE);
@@ -148,12 +154,6 @@ class Handler implements HandlerInterface {
 			$locales = new Locales();
 			ObjectManager::add(LocalesInterface::class, $locales, TRUE);
 			return $locales;
-		});
-
-		$this->context = ObjectManager::get(ContextInterface::class, function(){
-			$context = new Context();
-			ObjectManager::add(ContextInterface::class, $context, TRUE);
-			return $context;
 		});
 
 		$routerInformation = $this->invokeRouter();
