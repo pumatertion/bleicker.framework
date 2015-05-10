@@ -1,2 +1,4 @@
 /vendor
 /composer.lock
+db.sqlite
+route.cache.php

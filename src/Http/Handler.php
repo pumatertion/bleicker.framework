@@ -28,6 +28,11 @@ use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
 use Bleicker\Routing\ControllerRouteDataInterface;
 use Bleicker\Routing\RouteInterface;
 use Bleicker\Routing\RouterInterface;
+use Bleicker\Security\Exception\AbstractVoteException;
+use Bleicker\Security\SecurityManager;
+use Bleicker\Security\SecurityManagerInterface;
+use Bleicker\Session\Session;
+use Bleicker\Session\SessionInterface;
 use Bleicker\Translation\LocaleInterface;
 use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
@@ -35,8 +40,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use ReflectionMethod;
 use ReflectionParameter;
-use Bleicker\Session\Session;
-use Bleicker\Session\SessionInterface;
 
 /**
  * Class Handler
@@ -88,8 +91,10 @@ class Handler implements HandlerInterface {
 	protected $context;
 
 	/**
-	 * @return $this
+	 * @var SecurityManagerInterface
 	 */
+	protected $securityManager;
+
 	/**
 	 * @return $this
 	 */
@@ -103,7 +108,7 @@ class Handler implements HandlerInterface {
 		});
 
 		/** @var SessionInterface $session */
-		$session = ObjectManager::get(SessionInterface::class, function(){
+		$session = ObjectManager::get(SessionInterface::class, function () {
 			$session = new Session();
 			ObjectManager::add(SessionInterface::class, $session, TRUE);
 			return $session;
@@ -112,30 +117,36 @@ class Handler implements HandlerInterface {
 		$httpRequest->setSession($session);
 
 		/** @var MainResponseInterface $httpResponse */
-		$httpResponse = ObjectManager::get(MainResponseInterface::class, function(){
+		$httpResponse = ObjectManager::get(MainResponseInterface::class, function () {
 			$response = new Response();
 			ObjectManager::add(MainResponseInterface::class, $response, TRUE);
 			return $response;
 		});
 
 		/** @var ConverterInterface $converter */
-		$converter = ObjectManager::get(ConverterInterface::class, function(){
+		$converter = ObjectManager::get(ConverterInterface::class, function () {
 			$converter = new Converter();
 			ObjectManager::add(ConverterInterface::class, $converter, TRUE);
 			return $converter;
 		});
 
-		$this->request = ObjectManager::get(ApplicationRequestInterface::class, function() use($converter, $httpRequest){
+		$this->request = ObjectManager::get(ApplicationRequestInterface::class, function () use ($converter, $httpRequest) {
 			$applicationRequest = $converter->convert($httpRequest, ApplicationRequestInterface::class);
 			ObjectManager::add(ApplicationRequestInterface::class, $applicationRequest, TRUE);
 			return $applicationRequest;
 		});
 
 		$this->response = new ApplicationResponse($httpResponse);
-		$this->response = ObjectManager::get(ApplicationResponseInterface::class, function() use ($httpResponse){
+		$this->response = ObjectManager::get(ApplicationResponseInterface::class, function () use ($httpResponse) {
 			$applicationResponse = new ApplicationResponse($httpResponse);
 			ObjectManager::add(ApplicationResponseInterface::class, $applicationResponse, TRUE);
 			return $applicationResponse;
+		});
+
+		$this->context = ObjectManager::get(ContextInterface::class, function () {
+			$context = new Context();
+			ObjectManager::add(ContextInterface::class, $context, TRUE);
+			return $context;
 		});
 
 		$this->router = ObjectManager::get(RouterInterface::class, function () {
@@ -144,16 +155,16 @@ class Handler implements HandlerInterface {
 			return $router;
 		});
 
-		$this->locales = ObjectManager::get(LocalesInterface::class, function(){
+		$this->locales = ObjectManager::get(LocalesInterface::class, function () {
 			$locales = new Locales();
 			ObjectManager::add(LocalesInterface::class, $locales, TRUE);
 			return $locales;
 		});
 
-		$this->context = ObjectManager::get(ContextInterface::class, function(){
-			$context = new Context();
-			ObjectManager::add(ContextInterface::class, $context, TRUE);
-			return $context;
+		$this->securityManager = ObjectManager::get(SecurityManagerInterface::class, function () {
+			$securityManager = new SecurityManager();
+			ObjectManager::add(LocalesInterface::class, $securityManager, TRUE);
+			return $securityManager;
 		});
 
 		$routerInformation = $this->invokeRouter();
@@ -265,43 +276,38 @@ class Handler implements HandlerInterface {
 	}
 
 	/**
-	 * @todo mapping to objects here?
 	 * @return $this
-	 * @throws ControllerRouteDataInterfaceRequiredException
+	 * @throws AbstractVoteException
 	 */
 	public function handle() {
-		/** @var AccessVoterInterface $accessVoter */
-		$accessVoter = ObjectManager::get(AccessVoterInterface::class, function(){
-			$accessVoter = new AccessVoter();
-			ObjectManager::add(AccessVoterInterface::class, $accessVoter, TRUE);
-			return $accessVoter;
-		});
+		if ($this->securityManager->vote($this->controllerName . '::' . $this->methodName)->getResults()->count()) {
+			/** @var AbstractVoteException $firstVoteException */
+			$firstVoteException = $this->securityManager->getResults()->first();
+			throw $firstVoteException;
+		}
 
-		return $accessVoter->vote($this->controllerName . '::' . $this->methodName, function () {
-			/** @var ControllerInterface $controller */
-			$controller = new $this->controllerName();
-			$controller
-				->setRequest($this->request)
-				->setResponse($this->response)
-				->resolveFormat($this->methodName)
-				->resolveView($this->methodName);
-			try {
-				$content = call_user_func_array(array($controller, $this->methodName), $this->methodArguments);
-				if (!empty($content)) {
-					/** @var Response $httpResponse */
-					$httpResponse = $this->response->getMainResponse();
-					$httpResponse->setContent($content);
-				}
-			} catch (RedirectException $redirect) {
+		/** @var ControllerInterface $controller */
+		$controller = new $this->controllerName();
+		$controller
+			->setRequest($this->request)
+			->setResponse($this->response)
+			->resolveFormat($this->methodName)
+			->resolveView($this->methodName);
+		try {
+			$content = call_user_func_array(array($controller, $this->methodName), $this->methodArguments);
+			if (!empty($content)) {
 				/** @var Response $httpResponse */
 				$httpResponse = $this->response->getMainResponse();
-				$httpResponse->headers->set('Location', $redirect->getUri());
-				$httpResponse->setStatusCode($redirect->getStatus(), $redirect->getMessage());
-				$httpResponse->send();
+				$httpResponse->setContent($content);
 			}
-
-			return $this;
-		}, $this->methodArguments);
+		} catch (RedirectException $redirect) {
+			/** @var Response $httpResponse */
+			$httpResponse = $this->response->getMainResponse();
+			$httpResponse->headers->set('Location', $redirect->getUri());
+			$httpResponse->setStatusCode($redirect->getStatus(), $redirect->getMessage());
+			$httpResponse->send();
+		}
+		return $this;
 	}
 
 	/**
