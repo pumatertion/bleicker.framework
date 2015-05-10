@@ -11,8 +11,6 @@ use Bleicker\Security\Exception\AbstractVoteException;
  */
 abstract class AbstractControllerInvokationException extends AbstractVoteException implements ControllerInvokationExceptionInterface {
 
-	const CONTROLLER_NAME = NULL, METHOD_NAME = NULL;
-
 	/**
 	 * @return string
 	 */
