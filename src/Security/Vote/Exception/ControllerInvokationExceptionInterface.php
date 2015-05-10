@@ -8,6 +8,8 @@ namespace Bleicker\Framework\Security\Vote\Exception;
  */
 interface ControllerInvokationExceptionInterface {
 
+	const CONTROLLER_NAME = NULL, METHOD_NAME = NULL;
+
 	const ORIGIN_CONTROLLER_NAME = 'originControllerName', ORIGIN_METHOD_NAME = 'originMethodName', ORIGIN_EXCEPTION_NAME = 'invokedException';
 
 	/**
