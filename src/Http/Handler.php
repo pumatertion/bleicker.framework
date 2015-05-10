@@ -163,7 +163,7 @@ class Handler implements HandlerInterface {
 
 		$this->securityManager = ObjectManager::get(SecurityManagerInterface::class, function () {
 			$securityManager = new SecurityManager();
-			ObjectManager::add(LocalesInterface::class, $securityManager, TRUE);
+			ObjectManager::add(SecurityManagerInterface::class, $securityManager, TRUE);
 			return $securityManager;
 		});
 
