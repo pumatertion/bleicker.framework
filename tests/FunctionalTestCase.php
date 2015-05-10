@@ -2,12 +2,14 @@
 
 namespace Tests\Bleicker\Framework;
 
+use Bleicker\Converter\Converter;
 use Bleicker\FastRouter\Router;
 use Bleicker\Framework\Converter\WellformedApplicationRequestConverter;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManager;
 use Bleicker\Persistence\EntityManagerInterface;
 use Bleicker\Routing\RouterInterface;
+use Bleicker\Security\Votes;
 use Bleicker\Translation\Locale;
 use Bleicker\Translation\Locales;
 use Doctrine\ORM\Tools\Setup;
@@ -39,5 +41,7 @@ class FunctionalTestCase extends UnitTestCase {
 		parent::tearDown();
 		Locales::prune();
 		ObjectManager::prune();
+		Votes::prune();
+		Converter::prune();
 	}
 }

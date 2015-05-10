@@ -7,9 +7,9 @@ use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Routing\ControllerRouteData;
 use Bleicker\Routing\RouterInterface;
 use Bleicker\Security\Vote;
-use Tests\Bleicker\Framework\FunctionalTestCase;
 use Tests\Bleicker\Framework\Functional\Fixtures\Exception\AccessDeniedException;
 use Tests\Bleicker\Framework\Functional\Fixtures\SecuredController;
+use Tests\Bleicker\Framework\FunctionalTestCase;
 
 /**
  * Class ControllerSecurityTest
@@ -36,5 +36,28 @@ class ControllerSecurityTest extends FunctionalTestCase {
 
 		$webApplication = new WebApplication();
 		$webApplication->run();
+	}
+
+	/**
+	 * @test
+	 */
+	public function unsecuredControllerTest() {
+		$_SERVER['REQUEST_URI'] = '/open';
+		$_SERVER['REQUEST_METHOD'] = 'get';
+
+		/** @var RouterInterface $router */
+		$router = ObjectManager::get(RouterInterface::class);
+		$router->addRoute('/open', 'get', new ControllerRouteData(SecuredController::class, 'indexAction'));
+
+		Vote::register('SecuredController', function () {
+			$this->assertTrue(TRUE);
+		}, SecuredController::class . '::indexAction');
+
+		ob_start();
+		$webApplication = new WebApplication();
+		$webApplication->run();
+		$result = ob_get_contents();
+		ob_end_clean();
+		$this->assertEquals('foo', $result);
 	}
 }
