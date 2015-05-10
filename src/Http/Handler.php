@@ -17,6 +17,7 @@ use Bleicker\Framework\Http\Exception\NotFoundException;
 use Bleicker\Framework\Http\Exception\RequestedLocaleNotDefinedException;
 use Bleicker\Framework\Security\AccessVoter;
 use Bleicker\Framework\Security\AccessVoterInterface;
+use Bleicker\Framework\Security\Vote\Exception\ControllerInvokationExceptionInterface;
 use Bleicker\Framework\Utility\Arrays;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Request\HandlerInterface;
@@ -283,7 +284,16 @@ class Handler implements HandlerInterface {
 		if ($this->securityManager->vote($this->controllerName . '::' . $this->methodName)->getResults()->count()) {
 			/** @var AbstractVoteException $firstVoteException */
 			$firstVoteException = $this->securityManager->getResults()->first();
-			throw $firstVoteException;
+			if ($firstVoteException instanceof ControllerInvokationExceptionInterface) {
+				/** @var ControllerInvokationExceptionInterface $firstVoteException*/
+				$this->methodArguments[ControllerInvokationExceptionInterface::ORIGIN_CONTROLLER_NAME] = $this->controllerName;
+				$this->methodArguments[ControllerInvokationExceptionInterface::ORIGIN_METHOD_NAME] = $this->methodName;
+				$this->methodArguments[ControllerInvokationExceptionInterface::ORIGIN_EXCEPTION_NAME] = $firstVoteException;
+				$this->controllerName = $firstVoteException->getControllerName();
+				$this->methodName = $firstVoteException->getMethodName();
+			} else {
+				throw $firstVoteException;
+			}
 		}
 
 		/** @var ControllerInterface $controller */
