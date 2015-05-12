@@ -23,5 +23,4 @@ interface ContextInterface {
 	 * @return boolean
 	 */
 	public static function isTesting();
-
 }

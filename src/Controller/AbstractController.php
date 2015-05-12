@@ -2,14 +2,13 @@
 
 namespace Bleicker\Framework\Controller;
 
-use Bleicker\Framework\ApplicationRequestInterface;
+use Bleicker\Framework\ApplicationResponseInterface;
 use Bleicker\Framework\Controller\Exception\AcceptedContentTypeNotSupportedException;
 use Bleicker\Framework\Exception\RedirectException;
-use Bleicker\Framework\HttpApplicationRequest;
+use Bleicker\Framework\HttpApplicationRequestInterface;
+use Bleicker\Framework\HttpApplicationResponseInterface;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManagerInterface;
-use Bleicker\Response\ApplicationResponse;
-use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
 use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
 use Bleicker\View\Template\View;
@@ -23,12 +22,12 @@ use Bleicker\View\ViewInterface;
 abstract class AbstractController implements ControllerInterface {
 
 	/**
-	 * @var HttpApplicationRequest
+	 * @var HttpApplicationRequestInterface
 	 */
 	protected $request;
 
 	/**
-	 * @var ApplicationResponse
+	 * @var HttpApplicationResponseInterface
 	 */
 	protected $response;
 
@@ -72,7 +71,7 @@ abstract class AbstractController implements ControllerInterface {
 	 * @throws AcceptedContentTypeNotSupportedException
 	 */
 	public function resolveFormat($method) {
-		switch ($this->request->getMainRequest()->getAcceptableContentTypes()[0]) {
+		switch ($this->request->getParentRequest()->getAcceptableContentTypes()[0]) {
 			case 'application/json':
 				$this->format = 'json';
 				break;
@@ -110,26 +109,26 @@ abstract class AbstractController implements ControllerInterface {
 	}
 
 	/**
-	 * @param ApplicationRequestInterface $request
+	 * @param HttpApplicationRequestInterface $request
 	 * @return $this
 	 */
-	public function setRequest(ApplicationRequestInterface $request) {
+	public function setRequest(HttpApplicationRequestInterface $request) {
 		$this->request = $request;
 		return $this;
 	}
 
 	/**
-	 * @return ApplicationRequestInterface
+	 * @return HttpApplicationRequestInterface
 	 */
 	public function getRequest() {
 		return $this->request;
 	}
 
 	/**
-	 * @param ApplicationResponseInterface $response
+	 * @param HttpApplicationResponseInterface $response
 	 * @return $this
 	 */
-	public function setResponse(ApplicationResponseInterface $response) {
+	public function setResponse(HttpApplicationResponseInterface $response) {
 		$this->response = $response;
 		return $this;
 	}

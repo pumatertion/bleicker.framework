@@ -5,11 +5,10 @@ namespace Bleicker\Framework\Http\Exception;
 use Bleicker\Exception\ThrowableException as Exception;
 
 /**
- * Class NotFoundException
+ * Class IsNotInitializedException
  *
  * @package Bleicker\Framework\Http\Exception
  */
-class NotFoundException extends Exception {
+class IsNotInitializedException extends Exception {
 
-	const STATUS = 404;
 }

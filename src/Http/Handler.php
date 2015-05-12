@@ -2,40 +2,26 @@
 
 namespace Bleicker\Framework\Http;
 
-use Bleicker\Converter\Converter;
-use Bleicker\Converter\ConverterInterface;
-use Bleicker\FastRouter\Router;
-use Bleicker\Framework\ApplicationRequestInterface;
-use Bleicker\Framework\Context\Context;
 use Bleicker\Framework\Context\ContextInterface;
 use Bleicker\Framework\Controller\ControllerInterface;
 use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Framework\Http\Exception\ControllerRouteDataInterfaceRequiredException;
+use Bleicker\Framework\Http\Exception\IsNotInitializedException;
 use Bleicker\Framework\Http\Exception\MethodNotSupportedException;
 use Bleicker\Framework\Http\Exception\NoLocaleDefinedException;
 use Bleicker\Framework\Http\Exception\NotFoundException;
 use Bleicker\Framework\Http\Exception\RequestedLocaleNotDefinedException;
-use Bleicker\Framework\Security\AccessVoter;
-use Bleicker\Framework\Security\AccessVoterInterface;
+use Bleicker\Framework\HttpApplicationRequestInterface;
+use Bleicker\Framework\HttpApplicationResponseInterface;
+use Bleicker\Framework\RequestHandlerInterface;
 use Bleicker\Framework\Security\Vote\Exception\ControllerInvokationExceptionInterface;
 use Bleicker\Framework\Utility\Arrays;
-use Bleicker\ObjectManager\ObjectManager;
-use Bleicker\Request\HandlerInterface;
-use Bleicker\Request\MainRequestInterface;
-use Bleicker\Response\ApplicationResponse;
-use Bleicker\Response\Http\Response;
-use Bleicker\Response\MainResponseInterface;
-use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
 use Bleicker\Routing\ControllerRouteDataInterface;
 use Bleicker\Routing\RouteInterface;
 use Bleicker\Routing\RouterInterface;
 use Bleicker\Security\Exception\AbstractVoteException;
-use Bleicker\Security\SecurityManager;
 use Bleicker\Security\SecurityManagerInterface;
-use Bleicker\Session\Session;
-use Bleicker\Session\SessionInterface;
 use Bleicker\Translation\LocaleInterface;
-use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -47,19 +33,19 @@ use ReflectionParameter;
  *
  * @package Bleicker\Framework\Http
  */
-class Handler implements HandlerInterface {
+class Handler implements RequestHandlerInterface {
 
 	const SYSTEM_LOCALE_NAME = 'systemLocale';
 
 	/**
-	 * @var ApplicationRequestInterface
+	 * @var HttpApplicationRequestInterface
 	 */
-	protected $request;
+	protected $httpApplicationRequest;
 
 	/**
-	 * @var ApplicationResponseInterface
+	 * @var HttpApplicationResponseInterface
 	 */
-	protected $response;
+	protected $httpApplicationResponse;
 
 	/**
 	 * @var RouterInterface
@@ -97,77 +83,39 @@ class Handler implements HandlerInterface {
 	protected $securityManager;
 
 	/**
+	 * @var boolean
+	 */
+	protected $isInitialized = FALSE;
+
+	/**
+	 * @param ContextInterface $context
+	 * @param HttpApplicationRequestInterface $httpApplicationRequest
+	 * @param HttpApplicationResponseInterface $httpApplicationResponse
+	 * @param LocalesInterface $locales
+	 * @param RouterInterface $router
+	 * @param SecurityManagerInterface $securityManager
+	 */
+	public function __construct(ContextInterface $context, HttpApplicationRequestInterface $httpApplicationRequest, HttpApplicationResponseInterface $httpApplicationResponse, LocalesInterface $locales, RouterInterface $router, SecurityManagerInterface $securityManager) {
+		$this->context = $context;
+		$this->httpApplicationRequest = $httpApplicationRequest;
+		$this->httpApplicationResponse = $httpApplicationResponse;
+		$this->locales = $locales;
+		$this->router = $router;
+		$this->securityManager = $securityManager;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isInitialized() {
+		return $this->isInitialized;
+	}
+
+	/**
 	 * @return $this
 	 */
 	public function initialize() {
-
-		/** @var RequestInterface $httpRequest */
-		$httpRequest = ObjectManager::get(MainRequestInterface::class, function () {
-			$request = RequestFactory::getInstance();
-			ObjectManager::add(MainRequestInterface::class, $request, TRUE);
-			return $request;
-		});
-
-		/** @var SessionInterface $session */
-		$session = ObjectManager::get(SessionInterface::class, function () {
-			$session = new Session();
-			ObjectManager::add(SessionInterface::class, $session, TRUE);
-			return $session;
-		});
-
-		$httpRequest->setSession($session);
-
-		/** @var MainResponseInterface $httpResponse */
-		$httpResponse = ObjectManager::get(MainResponseInterface::class, function () {
-			$response = new Response();
-			ObjectManager::add(MainResponseInterface::class, $response, TRUE);
-			return $response;
-		});
-
-		/** @var ConverterInterface $converter */
-		$converter = ObjectManager::get(ConverterInterface::class, function () {
-			$converter = new Converter();
-			ObjectManager::add(ConverterInterface::class, $converter, TRUE);
-			return $converter;
-		});
-
-		$this->request = ObjectManager::get(ApplicationRequestInterface::class, function () use ($converter, $httpRequest) {
-			$applicationRequest = $converter->convert($httpRequest, ApplicationRequestInterface::class);
-			ObjectManager::add(ApplicationRequestInterface::class, $applicationRequest, TRUE);
-			return $applicationRequest;
-		});
-
-		$this->response = new ApplicationResponse($httpResponse);
-		$this->response = ObjectManager::get(ApplicationResponseInterface::class, function () use ($httpResponse) {
-			$applicationResponse = new ApplicationResponse($httpResponse);
-			ObjectManager::add(ApplicationResponseInterface::class, $applicationResponse, TRUE);
-			return $applicationResponse;
-		});
-
-		$this->context = ObjectManager::get(ContextInterface::class, function () {
-			$context = new Context();
-			ObjectManager::add(ContextInterface::class, $context, TRUE);
-			return $context;
-		});
-
-		$this->router = ObjectManager::get(RouterInterface::class, function () {
-			$router = Router::getInstance(__DIR__ . '/../route.cache.php', $this->context->isProduction() ? FALSE : TRUE);
-			ObjectManager::add(RouterInterface::class, $router, TRUE);
-			return $router;
-		});
-
-		$this->locales = ObjectManager::get(LocalesInterface::class, function () {
-			$locales = new Locales();
-			ObjectManager::add(LocalesInterface::class, $locales, TRUE);
-			return $locales;
-		});
-
-		$this->securityManager = ObjectManager::get(SecurityManagerInterface::class, function () {
-			$securityManager = new SecurityManager();
-			ObjectManager::add(SecurityManagerInterface::class, $securityManager, TRUE);
-			return $securityManager;
-		});
-
+		$this->isInitialized = TRUE;
 		$routerInformation = $this->invokeRouter();
 		$this->controllerName = $this->getControllerNameByRoute($routerInformation[1]);
 		$this->methodName = $this->getMethodNameByRoute($routerInformation[1]);
@@ -175,6 +123,67 @@ class Handler implements HandlerInterface {
 		$systemLocale = $this->getSystemLocaleByRoute($routerInformation[2]);
 		$this->locales->setSystemLocale($systemLocale);
 		setlocale(LC_ALL, (string)$systemLocale);
+		return $this;
+	}
+
+	/**
+	 * @return HttpApplicationRequestInterface
+	 */
+	public function getApplicationRequest() {
+		return $this->httpApplicationRequest;
+	}
+
+	/**
+	 * @return HttpApplicationResponseInterface
+	 */
+	public function getApplicationResponse() {
+		return $this->httpApplicationResponse;
+	}
+
+	/**
+	 * @return $this
+	 * @throws IsNotInitializedException
+	 * @throws AbstractVoteException
+	 */
+	public function run() {
+		if (!$this->isInitialized()) {
+			$this->initialize();
+		}
+		if ($this->securityManager->vote($this->controllerName . '::' . $this->methodName)->getResults()->count()) {
+			$firstVoteException = $this->securityManager->getResults()->first();
+			if ($firstVoteException instanceof ControllerInvokationExceptionInterface) {
+				$this->methodArguments = [
+					ControllerInvokationExceptionInterface::ORIGIN_CONTROLLER_NAME => $this->controllerName,
+					ControllerInvokationExceptionInterface::ORIGIN_METHOD_NAME => $this->methodName,
+					ControllerInvokationExceptionInterface::ORIGIN_EXCEPTION_NAME => $firstVoteException
+				];
+				$this->controllerName = $firstVoteException->getControllerName();
+				$this->methodName = $firstVoteException->getMethodName();
+			} else {
+				/** @var AbstractVoteException $firstVoteException */
+				throw $firstVoteException;
+			}
+		}
+
+		/** @var ControllerInterface $controller */
+		$controller = new $this->controllerName();
+		$controller
+			->setRequest($this->httpApplicationRequest)
+			->setResponse($this->httpApplicationResponse)
+			->resolveFormat($this->methodName)
+			->resolveView($this->methodName);
+		try {
+			$content = call_user_func_array(array($controller, $this->methodName), $this->methodArguments);
+			if (!empty($content)) {
+				$this->httpApplicationResponse->getParentResponse()->setContent($content);
+			}
+		} catch (RedirectException $redirect) {
+			/** @var Response $httpResponse */
+			$httpResponse = $this->httpApplicationResponse->getParentResponse();
+			$httpResponse->headers->set('Location', $redirect->getUri());
+			$httpResponse->setStatusCode($redirect->getStatus(), $redirect->getMessage());
+			$httpResponse->send();
+		}
 		return $this;
 	}
 
@@ -277,58 +286,12 @@ class Handler implements HandlerInterface {
 	}
 
 	/**
-	 * @return $this
-	 * @throws AbstractVoteException
-	 */
-	public function handle() {
-		if ($this->securityManager->vote($this->controllerName . '::' . $this->methodName)->getResults()->count()) {
-			/** @var AbstractVoteException $firstVoteException */
-			$firstVoteException = $this->securityManager->getResults()->first();
-			if ($firstVoteException instanceof ControllerInvokationExceptionInterface) {
-				/** @var ControllerInvokationExceptionInterface $firstVoteException */
-				$this->methodArguments = [
-					ControllerInvokationExceptionInterface::ORIGIN_CONTROLLER_NAME => $this->controllerName,
-					ControllerInvokationExceptionInterface::ORIGIN_METHOD_NAME => $this->methodName,
-					ControllerInvokationExceptionInterface::ORIGIN_EXCEPTION_NAME => $firstVoteException
-				];
-				$this->controllerName = $firstVoteException->getControllerName();
-				$this->methodName = $firstVoteException->getMethodName();
-			} else {
-				throw $firstVoteException;
-			}
-		}
-
-		/** @var ControllerInterface $controller */
-		$controller = new $this->controllerName();
-		$controller
-			->setRequest($this->request)
-			->setResponse($this->response)
-			->resolveFormat($this->methodName)
-			->resolveView($this->methodName);
-		try {
-			$content = call_user_func_array(array($controller, $this->methodName), $this->methodArguments);
-			if (!empty($content)) {
-				/** @var Response $httpResponse */
-				$httpResponse = $this->response->getMainResponse();
-				$httpResponse->setContent($content);
-			}
-		} catch (RedirectException $redirect) {
-			/** @var Response $httpResponse */
-			$httpResponse = $this->response->getMainResponse();
-			$httpResponse->headers->set('Location', $redirect->getUri());
-			$httpResponse->setStatusCode($redirect->getStatus(), $redirect->getMessage());
-			$httpResponse->send();
-		}
-		return $this;
-	}
-
-	/**
 	 * @return array
 	 * @throws Exception\NotFoundException
 	 * @throws Exception\MethodNotSupportedException
 	 */
 	protected function invokeRouter() {
-		$routeResult = $this->router->dispatch($this->request->getMainRequest()->getPathInfo(), $this->request->getMainRequest()->getMethod());
+		$routeResult = $this->router->dispatch($this->httpApplicationRequest->getParentRequest()->getPathInfo(), $this->httpApplicationRequest->getParentRequest()->getMethod());
 		switch ($routeResult[0]) {
 			case RouterInterface::NOT_FOUND:
 				throw new NotFoundException('Not Found', 1429187150);
