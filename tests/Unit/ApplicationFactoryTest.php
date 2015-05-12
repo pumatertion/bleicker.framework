@@ -6,6 +6,7 @@ use Bleicker\Converter\Converter;
 use Bleicker\Converter\ConverterInterface;
 use Bleicker\Framework\ApplicationFactory;
 use Bleicker\Framework\Context\ContextInterface;
+use Bleicker\Framework\Http\JsonResponse;
 use Bleicker\Framework\Http\Request;
 use Bleicker\Framework\Http\Response;
 use Bleicker\Framework\HttpApplicationInterface;
@@ -139,7 +140,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 
 		/** @var JsonResponse $parentResponse */
 		$parentResponse = $response->getParentResponse();
-		$this->assertEquals('application/json', $response->getParentResponse()->headers->get('CONTENT_TYPE'));
+		$this->assertEquals('application/json', $parentResponse->headers->get('CONTENT_TYPE'));
 		$this->assertEquals('["Hello world"]', ob_get_contents());
 		ob_end_clean();
 	}
