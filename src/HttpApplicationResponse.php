@@ -3,33 +3,46 @@
 namespace Bleicker\Framework;
 
 use Bleicker\Framework\Http\ResponseInterface;
-use Bleicker\Response\AbstractResponse;
 
 /**
  * Class HttpApplicationResponse
  *
  * @package Bleicker\Framework
  */
-class HttpApplicationResponse extends AbstractResponse implements HttpApplicationResponseInterface {
+class HttpApplicationResponse implements HttpApplicationResponseInterface {
 
 	/**
-	 * @return string
+	 * @var ResponseInterface
 	 */
-	public function send() {
-		$this->getMainResponse()->send();
+	protected $parentResponse;
+
+	/**
+	 * @param ResponseInterface $parentResponse
+	 */
+	public function __construct(ResponseInterface $parentResponse) {
+		$this->parentResponse = $parentResponse;
 	}
 
 	/**
 	 * @return ResponseInterface
 	 */
 	public function getParentResponse() {
-		return parent::getParentResponse();
+		return $this->parentResponse;
 	}
 
 	/**
-	 * @return ResponseInterface
+	 * @param ResponseInterface $parentResponse
+	 * @return $this
 	 */
-	public function getMainResponse() {
-		return parent::getMainResponse();
+	public function setParentResponse(ResponseInterface $parentResponse) {
+		$this->parentResponse = $parentResponse;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function send() {
+		$this->getParentResponse()->send();
 	}
 }

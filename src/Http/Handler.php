@@ -5,7 +5,6 @@ namespace Bleicker\Framework\Http;
 use Bleicker\Converter\Converter;
 use Bleicker\Converter\ConverterInterface;
 use Bleicker\FastRouter\Router;
-use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\Context\Context;
 use Bleicker\Framework\Context\ContextInterface;
 use Bleicker\Framework\Controller\ControllerInterface;
@@ -15,14 +14,13 @@ use Bleicker\Framework\Http\Exception\MethodNotSupportedException;
 use Bleicker\Framework\Http\Exception\NoLocaleDefinedException;
 use Bleicker\Framework\Http\Exception\NotFoundException;
 use Bleicker\Framework\Http\Exception\RequestedLocaleNotDefinedException;
+use Bleicker\Framework\HttpApplicationRequestInterface;
+use Bleicker\Framework\HttpApplicationResponse;
+use Bleicker\Framework\HttpApplicationResponseInterface;
+use Bleicker\Framework\RequestHandlerInterface;
 use Bleicker\Framework\Security\Vote\Exception\ControllerInvokationExceptionInterface;
 use Bleicker\Framework\Utility\Arrays;
 use Bleicker\ObjectManager\ObjectManager;
-use Bleicker\Request\HandlerInterface;
-use Bleicker\Request\MainRequestInterface;
-use Bleicker\Response\ApplicationResponse;
-use Bleicker\Response\MainResponseInterface;
-use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
 use Bleicker\Routing\ControllerRouteDataInterface;
 use Bleicker\Routing\RouteInterface;
 use Bleicker\Routing\RouterInterface;
@@ -42,19 +40,19 @@ use ReflectionParameter;
  *
  * @package Bleicker\Framework\Http
  */
-class Handler implements HandlerInterface {
+class Handler implements RequestHandlerInterface {
 
 	const SYSTEM_LOCALE_NAME = 'systemLocale';
 
 	/**
 	 * @var HttpApplicationRequestInterface
 	 */
-	protected $request;
+	protected $httpApplicationRequest;
 
 	/**
-	 * @var ApplicationResponseInterface
+	 * @var HttpApplicationResponseInterface
 	 */
-	protected $response;
+	protected $httpApplicationResponse;
 
 	/**
 	 * @var RouterInterface
@@ -96,53 +94,44 @@ class Handler implements HandlerInterface {
 	 */
 	public function initialize() {
 
-		/** @var RequestInterface $httpRequest */
-		$httpRequest = ObjectManager::get(MainRequestInterface::class, function () {
-			$request = RequestFactory::getInstance();
-			ObjectManager::add(MainRequestInterface::class, $request, TRUE);
-			return $request;
+		$this->context = ObjectManager::get(ContextInterface::class, function () {
+			$context = new Context();
+			ObjectManager::add(ContextInterface::class, $context, TRUE);
+			return $context;
 		});
 
-		/** @var SessionInterface $session */
-		$session = ObjectManager::get(SessionInterface::class, function () {
-			$session = new Session();
-			ObjectManager::add(SessionInterface::class, $session, TRUE);
-			return $session;
-		});
-
-		$httpRequest->setSession($session);
-
-		/** @var MainResponseInterface $httpResponse */
-		$httpResponse = ObjectManager::get(MainResponseInterface::class, function () {
-			$response = new Response();
-			ObjectManager::add(MainResponseInterface::class, $response, TRUE);
-			return $response;
-		});
-
-		/** @var ConverterInterface $converter */
-		$converter = ObjectManager::get(ConverterInterface::class, function () {
-			$converter = new Converter();
-			ObjectManager::add(ConverterInterface::class, $converter, TRUE);
-			return $converter;
-		});
-
-		$this->request = ObjectManager::get(HttpApplicationRequestInterface::class, function () use ($converter, $httpRequest) {
+		$this->httpApplicationRequest = ObjectManager::get(HttpApplicationRequestInterface::class, function () {
+			/** @var RequestInterface $httpRequest */
+			$httpRequest = ObjectManager::get(RequestInterface::class, function () {
+				$request = RequestFactory::getInstance();
+				ObjectManager::add(RequestInterface::class, $request, TRUE);
+				return $request;
+			});
+			/** @var ConverterInterface $converter */
+			$converter = ObjectManager::get(ConverterInterface::class, function () {
+				$converter = new Converter();
+				ObjectManager::add(ConverterInterface::class, $converter, TRUE);
+				return $converter;
+			});
 			$applicationRequest = $converter->convert($httpRequest, HttpApplicationRequestInterface::class);
 			ObjectManager::add(HttpApplicationRequestInterface::class, $applicationRequest, TRUE);
 			return $applicationRequest;
 		});
 
-		$this->response = new ApplicationResponse($httpResponse);
-		$this->response = ObjectManager::get(ApplicationResponseInterface::class, function () use ($httpResponse) {
-			$applicationResponse = new ApplicationResponse($httpResponse);
-			ObjectManager::add(ApplicationResponseInterface::class, $applicationResponse, TRUE);
+		/**
+		 * @todo ResponseFactory
+		 * @todo Converter from httprequest to httpapplicationresponse
+		 */
+		$this->httpApplicationResponse = ObjectManager::get(HttpApplicationResponseInterface::class, function () use ($httpResponse) {
+			/** @var ResponseInterface $httpResponse */
+			$httpResponse = ObjectManager::get(ResponseInterface::class, function () {
+				$response = new Response();
+				ObjectManager::add(ResponseInterface::class, $response, TRUE);
+				return $response;
+			});
+			$applicationResponse = new HttpApplicationResponse($httpResponse);
+			ObjectManager::add(HttpApplicationResponseInterface::class, $applicationResponse, TRUE);
 			return $applicationResponse;
-		});
-
-		$this->context = ObjectManager::get(ContextInterface::class, function () {
-			$context = new Context();
-			ObjectManager::add(ContextInterface::class, $context, TRUE);
-			return $context;
 		});
 
 		$this->router = ObjectManager::get(RouterInterface::class, function () {
@@ -296,20 +285,18 @@ class Handler implements HandlerInterface {
 		/** @var ControllerInterface $controller */
 		$controller = new $this->controllerName();
 		$controller
-			->setRequest($this->request)
-			->setResponse($this->response)
+			->setRequest($this->httpApplicationRequest)
+			->setResponse($this->httpApplicationResponse)
 			->resolveFormat($this->methodName)
 			->resolveView($this->methodName);
 		try {
 			$content = call_user_func_array(array($controller, $this->methodName), $this->methodArguments);
 			if (!empty($content)) {
-				/** @var Response $httpResponse */
-				$httpResponse = $this->response->getMainResponse();
-				$httpResponse->setContent($content);
+				$this->httpApplicationResponse->getParentResponse()->setContent($content);
 			}
 		} catch (RedirectException $redirect) {
 			/** @var Response $httpResponse */
-			$httpResponse = $this->response->getMainResponse();
+			$httpResponse = $this->httpApplicationResponse->getParentResponse();
 			$httpResponse->headers->set('Location', $redirect->getUri());
 			$httpResponse->setStatusCode($redirect->getStatus(), $redirect->getMessage());
 			$httpResponse->send();
@@ -323,7 +310,7 @@ class Handler implements HandlerInterface {
 	 * @throws Exception\MethodNotSupportedException
 	 */
 	protected function invokeRouter() {
-		$routeResult = $this->router->dispatch($this->request->getMainRequest()->getPathInfo(), $this->request->getMainRequest()->getMethod());
+		$routeResult = $this->router->dispatch($this->httpApplicationRequest->getParentRequest()->getPathInfo(), $this->httpApplicationRequest->getParentRequest()->getMethod());
 		switch ($routeResult[0]) {
 			case RouterInterface::NOT_FOUND:
 				throw new NotFoundException('Not Found', 1429187150);

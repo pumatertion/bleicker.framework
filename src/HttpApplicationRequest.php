@@ -11,45 +11,49 @@ use Bleicker\Request\AbstractRequest;
  *
  * @package Bleicker\Framework
  */
-class HttpApplicationRequest extends AbstractRequest implements HttpApplicationRequestInterface {
+class HttpApplicationRequest implements HttpApplicationRequestInterface {
 
 	/**
 	 * @var array
 	 */
-	protected $headers;
+	protected $headers = [];
 
 	/**
 	 * @var array
 	 */
-	protected $parameters;
+	protected $parameters = [];
 
 	/**
 	 * @var array
 	 */
-	protected $contents;
+	protected $contents = [];
+
+	/**
+	 * @var RequestInterface
+	 */
+	protected $parentRequest;
 
 	/**
 	 * @param RequestInterface $parentRequest
 	 */
-	public function __construct(RequestInterface $parentRequest = NULL) {
-		parent::__construct($parentRequest);
-		$this->parameters = [];
-		$this->contents = [];
-		$this->headers = [];
+	public function __construct(RequestInterface $parentRequest) {
+		$this->parentRequest = $parentRequest;
 	}
 
 	/**
 	 * @return RequestInterface
 	 */
 	public function getParentRequest() {
-		return parent::getParentRequest();
+		return $this->parentRequest;
 	}
 
 	/**
-	 * @return RequestInterface
+	 * @param RequestInterface $parentRequest
+	 * @return $this
 	 */
-	public function getMainRequest() {
-		return parent::getMainRequest();
+	public function setParentRequest(RequestInterface $parentRequest) {
+		$this->parentRequest = $parentRequest;
+		return $this;
 	}
 
 	/**
