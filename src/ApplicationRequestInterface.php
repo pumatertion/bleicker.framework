@@ -17,12 +17,6 @@ interface ApplicationRequestInterface extends RequestInterface {
 	public function getParentRequest();
 
 	/**
-	 * @param RequestInterface $parentRequest
-	 * @return $this
-	 */
-	public function setParentRequest(RequestInterface $parentRequest);
-
-	/**
 	 * @return HttpRequestInterface
 	 */
 	public function getMainRequest();
