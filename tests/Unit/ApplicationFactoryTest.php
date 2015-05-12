@@ -104,14 +104,16 @@ class ApplicationFactoryTest extends UnitTestCase {
 	public function callControllerTest() {
 		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/foo?bar=baz');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
+
 		ApplicationFactory::http();
+
 		/** @var RouterInterface $router */
 		$router = ObjectManager::get(RouterInterface::class);
 		$router->addRoute('/foo', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
+
 		ob_start();
 		ApplicationFactory::http()->run();
-		$responseContent = ob_get_contents();
+		$this->assertEquals('Hello world', ob_get_contents());
 		ob_end_clean();
-		$this->assertEquals('Hello world', $responseContent);
 	}
 }
