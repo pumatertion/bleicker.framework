@@ -18,9 +18,12 @@ use Bleicker\Persistence\EntityManagerInterface;
 use Bleicker\Routing\ControllerRouteData;
 use Bleicker\Routing\RouterInterface;
 use Bleicker\Security\SecurityManagerInterface;
+use Bleicker\Security\Vote;
+use Bleicker\Security\Votes;
 use Bleicker\Translation\Locale;
 use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
+use Tests\Bleicker\Framework\Unit\Fixtures\Exception\AccessDeniedException;
 use Tests\Bleicker\Framework\Unit\Fixtures\EntityManager;
 use Tests\Bleicker\Framework\Unit\Fixtures\SimpleController;
 use Tests\Bleicker\Framework\UnitTestCase;
@@ -45,6 +48,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 		ObjectManager::prune();
 		Converter::prune();
 		Locales::prune();
+		Votes::prune();
 	}
 
 	/**
@@ -70,6 +74,27 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 * @expectedException \Bleicker\Framework\Http\Exception\NotFoundException
 	 */
 	public function runApplicationTest() {
+		ApplicationFactory::http()->run();
+	}
+
+	/**
+	 * @test
+	 * @expectedException \Tests\Bleicker\Framework\Unit\Fixtures\Exception\AccessDeniedException
+	 */
+	public function callSecuredControllerTest() {
+		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/secure?bar=baz');
+		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
+
+		ApplicationFactory::http();
+
+		/** @var RouterInterface $router */
+		$router = ObjectManager::get(RouterInterface::class);
+		$router->addRoute('/secure', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
+
+		Vote::register('securedController', function(){
+			throw new AccessDeniedException();
+		}, SimpleController::class .'::.*');
+
 		ApplicationFactory::http()->run();
 	}
 
