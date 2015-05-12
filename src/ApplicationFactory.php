@@ -8,12 +8,10 @@ use Bleicker\FastRouter\Router;
 use Bleicker\Framework\Context\Context;
 use Bleicker\Framework\Context\ContextInterface;
 use Bleicker\Framework\Converter\JsonApplicationRequestConverter;
-use Bleicker\Framework\Converter\JsonApplicationRequestConverterInterface;
 use Bleicker\Framework\Converter\WellformedApplicationRequestConverter;
-use Bleicker\Framework\Converter\WellformedApplicationRequestConverterInterface;
 use Bleicker\Framework\Http\Handler;
-use Bleicker\Framework\Http\RequestFactory;
 use Bleicker\Framework\Http\Request;
+use Bleicker\Framework\Http\RequestFactory;
 use Bleicker\Framework\Http\Response;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Routing\RouterInterface;
@@ -77,22 +75,10 @@ class ApplicationFactory {
 				$converter = ObjectManager::get(ConverterInterface::class, function () {
 					$converter = new Converter();
 					ObjectManager::add(ConverterInterface::class, $converter, TRUE);
+					WellformedApplicationRequestConverter::register();
+					JsonApplicationRequestConverter::register();
 					return $converter;
 				});
-
-				/**
-				 * Register implementation of WellformedApplicationRequestConverterInterface if it is not registered
-				 */
-				if (!$converter->has(WellformedApplicationRequestConverterInterface::class)) {
-					WellformedApplicationRequestConverter::register();
-				}
-
-				/**
-				 * Register implementation of WellformedApplicationRequestConverterInterface if it is not registered
-				 */
-				if (!$converter->has(JsonApplicationRequestConverterInterface::class)) {
-					JsonApplicationRequestConverter::register();
-				}
 
 				/**
 				 * Using converter to get ApplicationRequest by Request and register it as singleton implementation
@@ -194,7 +180,7 @@ class ApplicationFactory {
 		$application = new HttpApplication($requestHandler);
 
 		/** Register HttpApplication implementation as singleton */
-		ObjectManager::add(HttpApplicationInterface::class, $application);
+		ObjectManager::add(HttpApplicationInterface::class, $application, TRUE);
 
 		return $application;
 	}
