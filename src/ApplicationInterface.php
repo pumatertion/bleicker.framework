@@ -9,4 +9,8 @@ namespace Bleicker\Framework;
  */
 interface ApplicationInterface {
 
+	/**
+	 * @return void
+	 */
+	public function run();
 }
