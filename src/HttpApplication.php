@@ -18,12 +18,12 @@ class HttpApplication implements HttpApplicationInterface {
 	 * @return void
 	 */
 	public function run() {
-		/** @var HandlerInterface $httpHandler */
-		$httpHandler = ObjectManager::get(HandlerInterface::class, Handler::class);
+		/** @var RequestHandlerInterface $httpHandler */
+		$httpHandler = ObjectManager::get(RequestHandlerInterface::class, Handler::class);
 		$httpHandler->initialize()->handle();
 
 		/** @var ResponseInterface $response */
-		$response = ObjectManager::get(MainResponseInterface::class, Response::class);
+		$response = ObjectManager::get(ResponseInterface::class, Response::class);
 		$response->send();
 	}
 }
