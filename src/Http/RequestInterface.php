@@ -635,5 +635,4 @@ interface RequestInterface extends MainRequestInterface, \Bleicker\Request\Reque
 	 * @return ParameterBag
 	 */
 	public function getParameter();
-
 }
