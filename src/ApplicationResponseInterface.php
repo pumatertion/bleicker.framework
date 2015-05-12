@@ -26,9 +26,4 @@ interface ApplicationResponseInterface extends ResponseInterface {
 	 * @return HttpResponseInterface
 	 */
 	public function getMainResponse();
-
-	/**
-	 * @return boolean
-	 */
-	public function isMainResponse();
 }

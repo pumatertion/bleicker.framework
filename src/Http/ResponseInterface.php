@@ -1,15 +1,17 @@
 <?php
 namespace Bleicker\Framework\Http;
 
-use Symfony\Component\HttpFoundation\Response;
+use Bleicker\Response\MainResponseInterface;
+use Bleicker\Response\ResponseInterface as ResponseInterfaceOrigin;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class Response
  *
  * @package Bleicker\Framework\Http
  */
-interface ResponseInterface {
+interface ResponseInterface extends MainResponseInterface, ResponseInterfaceOrigin {
 
 	/**
 	 * Sets the Expires HTTP header with a DateTime instance.
@@ -207,12 +209,6 @@ interface ResponseInterface {
 	 * @api
 	 */
 	public function getCharset();
-
-	/**
-	 * @param \Bleicker\Response\ResponseInterface $parentResponse
-	 * @return \Bleicker\Response\ResponseInterface
-	 */
-	public function setParentResponse(\Bleicker\Response\ResponseInterface $parentResponse);
 
 	/**
 	 * Marks the response as "public".
@@ -422,11 +418,6 @@ interface ResponseInterface {
 	public function getLastModified();
 
 	/**
-	 * @return \Bleicker\Response\ResponseInterface
-	 */
-	public function getParentResponse();
-
-	/**
 	 * Is there a client error?
 	 *
 	 * @return bool
@@ -464,11 +455,6 @@ interface ResponseInterface {
 	 * @api
 	 */
 	public function setMaxAge($value);
-
-	/**
-	 * @return \Bleicker\Response\ResponseInterface
-	 */
-	public function getMainResponse();
 
 	/**
 	 * Sets the Date header.
