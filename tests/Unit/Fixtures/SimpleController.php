@@ -24,4 +24,11 @@ class SimpleController extends AbstractController {
 	public function jsonAction() {
 		return json_encode(['Hello world']);
 	}
+
+	/**
+	 * @return string
+	 */
+	public function loginAction() {
+		return 'Login';
+	}
 }

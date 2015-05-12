@@ -24,6 +24,7 @@ use Bleicker\Security\Votes;
 use Bleicker\Translation\Locale;
 use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
+use Tests\Bleicker\Framework\Unit\Fixtures\Exception\WebLoginException;
 use Tests\Bleicker\Framework\Unit\Fixtures\EntityManager;
 use Tests\Bleicker\Framework\Unit\Fixtures\Exception\AccessDeniedException;
 use Tests\Bleicker\Framework\Unit\Fixtures\SimpleController;
@@ -142,6 +143,29 @@ class ApplicationFactoryTest extends UnitTestCase {
 		$parentResponse = $response->getParentResponse();
 		$this->assertEquals('application/json', $parentResponse->headers->get('CONTENT_TYPE'));
 		$this->assertEquals('["Hello world"]', ob_get_contents());
+		ob_end_clean();
+	}
+
+	/**
+	 * @test
+	 */
+	public function loginControllerTest() {
+		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/secured_with_loginbox_redirect?bar=baz');
+		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
+
+		ApplicationFactory::http();
+
+		/** @var RouterInterface $router */
+		$router = ObjectManager::get(RouterInterface::class);
+		$router->addRoute('/secured_with_loginbox_redirect', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
+
+		Vote::register('securedController', function () {
+			throw new WebLoginException();
+		}, SimpleController::class . '::.*');
+
+		ob_start();
+		ApplicationFactory::http()->run();
+		$this->assertEquals('Login', ob_get_contents());
 		ob_end_clean();
 	}
 }
