@@ -2,8 +2,8 @@
 
 namespace Bleicker\Framework\Http;
 
-use Bleicker\Response\MainResponseInterface;
 use Bleicker\Response\ResponseInterface;
+use Bleicker\Framework\Http\ResponseInterface as HttpResponseInterface;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  *
  * @package Bleicker\Framework\Http
  */
-class Response extends HttpResponse implements MainResponseInterface {
+class Response extends HttpResponse implements ResponseInterface, HttpResponseInterface {
 
 	/**
 	 * @var ResponseInterface
