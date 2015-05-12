@@ -2,7 +2,7 @@
 
 namespace Bleicker\Framework;
 
-use Bleicker\Framework\Http\Response;
+use Bleicker\Framework\Http\ResponseInterface;
 
 /**
  * Interface HttpApplicationResponseInterface
@@ -12,13 +12,13 @@ use Bleicker\Framework\Http\Response;
 interface HttpApplicationResponseInterface extends ApplicationResponseInterface {
 
 	/**
-	 * @return Response
+	 * @return ResponseInterface
 	 */
 	public function getParentResponse();
 
 	/**
-	 * @param Response $parentResponse
+	 * @param ResponseInterface $parentResponse
 	 * @return $this
 	 */
-	public function setParentResponse(Response $parentResponse);
+	public function setParentResponse(ResponseInterface $parentResponse);
 }

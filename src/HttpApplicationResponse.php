@@ -3,6 +3,8 @@
 namespace Bleicker\Framework;
 
 use Bleicker\Framework\Http\Response;
+use Bleicker\Framework\Http\JsonResponse;
+use Bleicker\Framework\Http\ResponseInterface;
 
 /**
  * Class HttpApplicationResponse
@@ -12,29 +14,29 @@ use Bleicker\Framework\Http\Response;
 class HttpApplicationResponse implements HttpApplicationResponseInterface {
 
 	/**
-	 * @var Response
+	 * @var ResponseInterface
 	 */
 	protected $parentResponse;
 
 	/**
-	 * @param Response $parentResponse
+	 * @param ResponseInterface $parentResponse
 	 */
-	public function __construct(Response $parentResponse) {
+	public function __construct(ResponseInterface $parentResponse) {
 		$this->parentResponse = $parentResponse;
 	}
 
 	/**
-	 * @return Response
+	 * @return ResponseInterface
 	 */
 	public function getParentResponse() {
 		return $this->parentResponse;
 	}
 
 	/**
-	 * @param Response $parentResponse
+	 * @param ResponseInterface $parentResponse
 	 * @return $this
 	 */
-	public function setParentResponse(Response $parentResponse) {
+	public function setParentResponse(ResponseInterface $parentResponse) {
 		$this->parentResponse = $parentResponse;
 		return $this;
 	}

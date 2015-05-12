@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  *
  * @package Bleicker\Framework\Http
  */
-class Request extends HttpRequest {
+class Request extends HttpRequest implements RequestInterface {
 
 	/**
 	 * @var Request

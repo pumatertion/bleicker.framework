@@ -116,4 +116,31 @@ class ApplicationFactoryTest extends UnitTestCase {
 		$this->assertEquals('Hello world', ob_get_contents());
 		ob_end_clean();
 	}
+
+	/**
+	 * @test
+	 */
+	public function jsonControllerTest() {
+		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/json?bar=baz');
+		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
+		Arrays::setValueByPath($_SERVER, 'CONTENT_TYPE', 'application/json');
+
+		ApplicationFactory::http();
+
+		/** @var RouterInterface $router */
+		$router = ObjectManager::get(RouterInterface::class);
+		$router->addRoute('/json', 'get', new ControllerRouteData(SimpleController::class, 'jsonAction'));
+
+		ob_start();
+		ApplicationFactory::http()->run();
+
+		/** @var HttpApplicationResponseInterface $response */
+		$response = ObjectManager::get(HttpApplicationResponseInterface::class);
+
+		/** @var JsonResponse $parentResponse */
+		$parentResponse = $response->getParentResponse();
+		$this->assertEquals('application/json', $response->getParentResponse()->headers->get('CONTENT_TYPE'));
+		$this->assertEquals('["Hello world"]', ob_get_contents());
+		ob_end_clean();
+	}
 }

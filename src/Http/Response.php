@@ -9,6 +9,6 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  *
  * @package Bleicker\Framework\Http
  */
-class Response extends HttpResponse {
+class Response extends HttpResponse implements ResponseInterface {
 
 }

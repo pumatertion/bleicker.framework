@@ -47,7 +47,7 @@ interface HttpApplicationRequestInterface extends ApplicationRequestInterface {
 	 * @param array $contents
 	 * @return $this
 	 */
-	public function setContents(array $contents = []);
+	public function setContents(array $contents = NULL);
 
 	/**
 	 * @param string $path

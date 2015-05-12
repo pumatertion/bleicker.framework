@@ -25,7 +25,7 @@ class HttpApplicationRequest implements HttpApplicationRequestInterface {
 	/**
 	 * @var array
 	 */
-	protected $contents = [];
+	protected $contents;
 
 	/**
 	 * @var Request
@@ -91,7 +91,7 @@ class HttpApplicationRequest implements HttpApplicationRequestInterface {
 	 * @param array $contents
 	 * @return $this
 	 */
-	public function setContents(array $contents = []) {
+	public function setContents(array $contents = NULL) {
 		$this->contents = $contents;
 		return $this;
 	}

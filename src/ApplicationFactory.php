@@ -13,6 +13,7 @@ use Bleicker\Framework\Http\Handler;
 use Bleicker\Framework\Http\Request;
 use Bleicker\Framework\Http\RequestFactory;
 use Bleicker\Framework\Http\Response;
+use Bleicker\Framework\Http\ResponseFactory;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Routing\RouterInterface;
 use Bleicker\Security\SecurityManager;
@@ -116,7 +117,7 @@ class ApplicationFactory {
 						return $request;
 					});
 
-					$response = Response::create();
+					$response = ResponseFactory::getInstance($httpRequest);
 					$response->prepare($httpRequest);
 
 					ObjectManager::add(Response::class, $response, TRUE);
