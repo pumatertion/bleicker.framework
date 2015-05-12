@@ -2,7 +2,7 @@
 
 namespace Bleicker\Framework;
 
-use Bleicker\Framework\Http\RequestInterface as HttpRequestInterface;
+use Bleicker\Framework\Http\RequestInterface;
 use Bleicker\Registry\Utility\Arrays;
 use Bleicker\Request\AbstractRequest;
 
@@ -29,9 +29,9 @@ class HttpApplicationRequest extends AbstractRequest implements ApplicationReque
 	protected $contents;
 
 	/**
-	 * @param HttpRequestInterface $parentRequest
+	 * @param RequestInterface $parentRequest
 	 */
-	public function __construct(HttpRequestInterface $parentRequest = NULL) {
+	public function __construct(RequestInterface $parentRequest = NULL) {
 		parent::__construct($parentRequest);
 		$this->parameters = [];
 		$this->contents = [];
@@ -39,14 +39,14 @@ class HttpApplicationRequest extends AbstractRequest implements ApplicationReque
 	}
 
 	/**
-	 * @return HttpRequestInterface
+	 * @return RequestInterface
 	 */
 	public function getParentRequest() {
 		return parent::getParentRequest();
 	}
 
 	/**
-	 * @return HttpRequestInterface
+	 * @return RequestInterface
 	 */
 	public function getMainRequest() {
 		return parent::getMainRequest();

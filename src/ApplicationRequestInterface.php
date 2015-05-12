@@ -22,11 +22,6 @@ interface ApplicationRequestInterface extends RequestInterface {
 	public function getMainRequest();
 
 	/**
-	 * @return boolean
-	 */
-	public function isMainRequest();
-
-	/**
 	 * @return array
 	 */
 	public function getParameters();
