@@ -23,8 +23,8 @@ use Bleicker\Security\Votes;
 use Bleicker\Translation\Locale;
 use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
-use Tests\Bleicker\Framework\Unit\Fixtures\Exception\AccessDeniedException;
 use Tests\Bleicker\Framework\Unit\Fixtures\EntityManager;
+use Tests\Bleicker\Framework\Unit\Fixtures\Exception\AccessDeniedException;
 use Tests\Bleicker\Framework\Unit\Fixtures\SimpleController;
 use Tests\Bleicker\Framework\UnitTestCase;
 
@@ -91,9 +91,9 @@ class ApplicationFactoryTest extends UnitTestCase {
 		$router = ObjectManager::get(RouterInterface::class);
 		$router->addRoute('/secure', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
 
-		Vote::register('securedController', function(){
+		Vote::register('securedController', function () {
 			throw new AccessDeniedException();
-		}, SimpleController::class .'::.*');
+		}, SimpleController::class . '::.*');
 
 		ApplicationFactory::http()->run();
 	}

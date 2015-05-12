@@ -2,8 +2,6 @@
 
 namespace Bleicker\Framework;
 
-use Bleicker\Framework\Http\Response;
-use Bleicker\Framework\Http\JsonResponse;
 use Bleicker\Framework\Http\ResponseInterface;
 
 /**

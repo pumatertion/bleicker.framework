@@ -2,8 +2,8 @@
 
 namespace Bleicker\Framework\Http;
 
-use Bleicker\Registry\Utility\Arrays;
 use Bleicker\ObjectManager\ObjectManager;
+use Bleicker\Registry\Utility\Arrays;
 
 /**
  * Class RequestFactory
@@ -36,7 +36,7 @@ class RequestFactory {
 	 * @return string
 	 */
 	protected static function getContent() {
-		if(!static::supportsContent()){
+		if (!static::supportsContent()) {
 			return NULL;
 		}
 		return file_get_contents('php://input');

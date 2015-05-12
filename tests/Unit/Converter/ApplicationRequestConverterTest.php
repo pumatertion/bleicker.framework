@@ -3,10 +3,10 @@
 namespace Tests\Bleicker\Framework\Unit\Converter;
 
 use Bleicker\Converter\Converter;
-use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\Converter\JsonApplicationRequestConverter;
 use Bleicker\Framework\Converter\WellformedApplicationRequestConverter;
 use Bleicker\Framework\Http\Request;
+use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Registry\Utility\Arrays;
 use Tests\Bleicker\Framework\UnitTestCase;
 

@@ -12,5 +12,4 @@ use Bleicker\Exception\ThrowableException as Exception;
 class NotFoundException extends Exception {
 
 	const STATUS = 404;
-
 }

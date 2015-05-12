@@ -9,6 +9,6 @@ use Symfony\Component\HttpFoundation\JsonResponse as JsonResponseOrigin;
  *
  * @package Bleicker\Framework\Http
  */
-class JsonResponse extends JsonResponseOrigin implements ResponseInterface{
+class JsonResponse extends JsonResponseOrigin implements ResponseInterface {
 
 }

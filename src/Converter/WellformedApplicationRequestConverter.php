@@ -3,9 +3,9 @@
 namespace Bleicker\Framework\Converter;
 
 use Bleicker\Converter\AbstractTypeConverter;
+use Bleicker\Framework\Http\Request;
 use Bleicker\Framework\HttpApplicationRequest;
 use Bleicker\Framework\HttpApplicationRequestInterface;
-use Bleicker\Framework\Http\Request;
 
 /**
  * Class WellformedApplicationRequestConverter

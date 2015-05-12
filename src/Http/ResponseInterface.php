@@ -14,5 +14,4 @@ interface ResponseInterface {
 	 * @return ResponseInterface
 	 */
 	public function send();
-
 }

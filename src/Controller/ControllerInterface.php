@@ -2,8 +2,8 @@
 
 namespace Bleicker\Framework\Controller;
 
-use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\Exception\RedirectException;
+use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\HttpApplicationResponseInterface;
 use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
 use Bleicker\View\ViewInterface;
