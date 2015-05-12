@@ -1,8 +1,6 @@
 <?php
 namespace Bleicker\Framework\Http;
 
-use Bleicker\Response\MainResponseInterface;
-use Bleicker\Response\ResponseInterface as ResponseInterfaceOrigin;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @package Bleicker\Framework\Http
  */
-interface ResponseInterface extends MainResponseInterface, ResponseInterfaceOrigin {
+interface ResponseInterface {
 
 	/**
 	 * Sets the Expires HTTP header with a DateTime instance.

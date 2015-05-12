@@ -3,7 +3,7 @@
 namespace Tests\Bleicker\Framework\Unit\Converter;
 
 use Bleicker\Converter\Converter;
-use Bleicker\Framework\ApplicationRequestInterface;
+use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\Converter\JsonApplicationRequestConverter;
 use Bleicker\Framework\Converter\WellformedApplicationRequestConverter;
 use Bleicker\Framework\Http\Request;
@@ -38,10 +38,10 @@ class ApplicationRequestConverterTest extends UnitTestCase {
 
 		$httpRequest = Request::create('http://example.com/foo', 'get', [], [], [], $server, NULL);
 
-		/** @var ApplicationRequestInterface $applicationRequest */
-		$applicationRequest = Converter::convert($httpRequest, ApplicationRequestInterface::class);
+		/** @var HttpApplicationRequestInterface $applicationRequest */
+		$applicationRequest = Converter::convert($httpRequest, HttpApplicationRequestInterface::class);
 
-		$this->assertInstanceOf(ApplicationRequestInterface::class, $applicationRequest);
+		$this->assertInstanceOf(HttpApplicationRequestInterface::class, $applicationRequest);
 	}
 
 	/**
@@ -53,8 +53,8 @@ class ApplicationRequestConverterTest extends UnitTestCase {
 
 		$httpRequest = Request::create('http://example.com/foo?foo[bar]=baz', 'get', [], [], [], $server, NULL);
 
-		/** @var ApplicationRequestInterface $applicationRequest */
-		$applicationRequest = Converter::convert($httpRequest, ApplicationRequestInterface::class);
+		/** @var HttpApplicationRequestInterface $applicationRequest */
+		$applicationRequest = Converter::convert($httpRequest, HttpApplicationRequestInterface::class);
 
 		$this->assertTrue(is_array($applicationRequest->getParameters()));
 		$this->assertEquals('baz', $applicationRequest->getParameter('foo.bar'));
@@ -71,8 +71,8 @@ class ApplicationRequestConverterTest extends UnitTestCase {
 
 		$httpRequest = Request::create('http://example.com/foo', 'post', [], [], [], $server, $content);
 
-		/** @var ApplicationRequestInterface $applicationRequest */
-		$applicationRequest = Converter::convert($httpRequest, ApplicationRequestInterface::class);
+		/** @var HttpApplicationRequestInterface $applicationRequest */
+		$applicationRequest = Converter::convert($httpRequest, HttpApplicationRequestInterface::class);
 
 		$this->assertTrue(is_array($applicationRequest->getContents()));
 		$this->assertEquals('baz', $applicationRequest->getContent('foo.bar'));
@@ -89,8 +89,8 @@ class ApplicationRequestConverterTest extends UnitTestCase {
 
 		$httpRequest = Request::create('http://example.com/foo?foo[bar]=baz', 'post', [], [], [], $server, $content);
 
-		/** @var ApplicationRequestInterface $applicationRequest */
-		$applicationRequest = Converter::convert($httpRequest, ApplicationRequestInterface::class);
+		/** @var HttpApplicationRequestInterface $applicationRequest */
+		$applicationRequest = Converter::convert($httpRequest, HttpApplicationRequestInterface::class);
 
 		$this->assertTrue(is_array($applicationRequest->getParameters()));
 		$this->assertTrue(is_array($applicationRequest->getContents()));
@@ -109,8 +109,8 @@ class ApplicationRequestConverterTest extends UnitTestCase {
 
 		$httpRequest = Request::create('http://example.com/foo?foo[bar]=baz', 'post', [], [], [], $server, $content);
 
-		/** @var ApplicationRequestInterface $applicationRequest */
-		$applicationRequest = Converter::convert($httpRequest, ApplicationRequestInterface::class);
+		/** @var HttpApplicationRequestInterface $applicationRequest */
+		$applicationRequest = Converter::convert($httpRequest, HttpApplicationRequestInterface::class);
 
 		$this->assertTrue(is_array($applicationRequest->getContents()));
 		$this->assertEquals('baz', $applicationRequest->getContent('foo.bar'));

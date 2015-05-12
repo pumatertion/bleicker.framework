@@ -5,7 +5,7 @@ namespace Bleicker\Framework\Http;
 use Bleicker\Converter\Converter;
 use Bleicker\Converter\ConverterInterface;
 use Bleicker\FastRouter\Router;
-use Bleicker\Framework\ApplicationRequestInterface;
+use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\Context\Context;
 use Bleicker\Framework\Context\ContextInterface;
 use Bleicker\Framework\Controller\ControllerInterface;
@@ -15,15 +15,12 @@ use Bleicker\Framework\Http\Exception\MethodNotSupportedException;
 use Bleicker\Framework\Http\Exception\NoLocaleDefinedException;
 use Bleicker\Framework\Http\Exception\NotFoundException;
 use Bleicker\Framework\Http\Exception\RequestedLocaleNotDefinedException;
-use Bleicker\Framework\Security\AccessVoter;
-use Bleicker\Framework\Security\AccessVoterInterface;
 use Bleicker\Framework\Security\Vote\Exception\ControllerInvokationExceptionInterface;
 use Bleicker\Framework\Utility\Arrays;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Request\HandlerInterface;
 use Bleicker\Request\MainRequestInterface;
 use Bleicker\Response\ApplicationResponse;
-use Bleicker\Response\Http\Response;
 use Bleicker\Response\MainResponseInterface;
 use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
 use Bleicker\Routing\ControllerRouteDataInterface;
@@ -32,8 +29,6 @@ use Bleicker\Routing\RouterInterface;
 use Bleicker\Security\Exception\AbstractVoteException;
 use Bleicker\Security\SecurityManager;
 use Bleicker\Security\SecurityManagerInterface;
-use Bleicker\Session\Session;
-use Bleicker\Session\SessionInterface;
 use Bleicker\Translation\LocaleInterface;
 use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
@@ -52,7 +47,7 @@ class Handler implements HandlerInterface {
 	const SYSTEM_LOCALE_NAME = 'systemLocale';
 
 	/**
-	 * @var ApplicationRequestInterface
+	 * @var HttpApplicationRequestInterface
 	 */
 	protected $request;
 
@@ -131,9 +126,9 @@ class Handler implements HandlerInterface {
 			return $converter;
 		});
 
-		$this->request = ObjectManager::get(ApplicationRequestInterface::class, function () use ($converter, $httpRequest) {
-			$applicationRequest = $converter->convert($httpRequest, ApplicationRequestInterface::class);
-			ObjectManager::add(ApplicationRequestInterface::class, $applicationRequest, TRUE);
+		$this->request = ObjectManager::get(HttpApplicationRequestInterface::class, function () use ($converter, $httpRequest) {
+			$applicationRequest = $converter->convert($httpRequest, HttpApplicationRequestInterface::class);
+			ObjectManager::add(HttpApplicationRequestInterface::class, $applicationRequest, TRUE);
 			return $applicationRequest;
 		});
 

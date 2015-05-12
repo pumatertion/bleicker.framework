@@ -4,8 +4,6 @@
 	"require": {
 		"bleicker/exception": "1.0.*",
 		"bleicker/fastrouter": "1.0.*",
-		"bleicker/request": "1.0.*",
-		"bleicker/response": "1.2.*",
 		"symfony/http-foundation": "2.6.*",
 		"bleicker/translation": "0.2.*",
 		"bleicker/persistence": "1.0.*",

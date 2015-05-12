@@ -7,11 +7,11 @@ use Bleicker\Registry\Utility\Arrays;
 use Bleicker\Request\AbstractRequest;
 
 /**
- * Class ApplicationRequest
+ * Class HttpApplicationRequest
  *
  * @package Bleicker\Framework
  */
-class HttpApplicationRequest extends AbstractRequest implements ApplicationRequestInterface {
+class HttpApplicationRequest extends AbstractRequest implements HttpApplicationRequestInterface {
 
 	/**
 	 * @var array

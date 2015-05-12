@@ -2,14 +2,15 @@
 
 namespace Bleicker\Framework;
 
-use Bleicker\Response\AbstractResponse;
 use Bleicker\Framework\Http\ResponseInterface;
+use Bleicker\Response\AbstractResponse;
+
 /**
  * Class HttpApplicationResponse
  *
  * @package Bleicker\Framework
  */
-class HttpApplicationResponse extends AbstractResponse implements ApplicationResponseInterface {
+class HttpApplicationResponse extends AbstractResponse implements HttpApplicationResponseInterface {
 
 	/**
 	 * @return string

@@ -2,10 +2,10 @@
 
 namespace Bleicker\Framework\Controller;
 
-use Bleicker\Framework\ApplicationRequestInterface;
+use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\Controller\Exception\AcceptedContentTypeNotSupportedException;
 use Bleicker\Framework\Exception\RedirectException;
-use Bleicker\Framework\HttpApplicationRequest;
+use Bleicker\Framework\HttpHttpApplicationRequest;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManagerInterface;
 use Bleicker\Response\ApplicationResponse;
@@ -23,7 +23,7 @@ use Bleicker\View\ViewInterface;
 abstract class AbstractController implements ControllerInterface {
 
 	/**
-	 * @var HttpApplicationRequest
+	 * @var HttpHttpApplicationRequest
 	 */
 	protected $request;
 
@@ -110,16 +110,16 @@ abstract class AbstractController implements ControllerInterface {
 	}
 
 	/**
-	 * @param ApplicationRequestInterface $request
+	 * @param HttpApplicationRequestInterface $request
 	 * @return $this
 	 */
-	public function setRequest(ApplicationRequestInterface $request) {
+	public function setRequest(HttpApplicationRequestInterface $request) {
 		$this->request = $request;
 		return $this;
 	}
 
 	/**
-	 * @return ApplicationRequestInterface
+	 * @return HttpApplicationRequestInterface
 	 */
 	public function getRequest() {
 		return $this->request;

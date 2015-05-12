@@ -1,25 +1,25 @@
 <?php
 namespace Bleicker\Framework;
 
-use Bleicker\Framework\Http\RequestInterface as HttpRequestInterface;
-use Bleicker\Request\RequestInterface;
+use Bleicker\Framework\Http\RequestInterface;
 
 /**
  * Class ApplicationRequest
  *
  * @package Bleicker\Framework
  */
-interface ApplicationRequestInterface extends RequestInterface {
+interface HttpApplicationRequestInterface {
 
 	/**
-	 * @return HttpRequestInterface
+	 * @return RequestInterface
 	 */
 	public function getParentRequest();
 
 	/**
-	 * @return HttpRequestInterface
+	 * @param RequestInterface $parentRequest
+	 * @return $this
 	 */
-	public function getMainRequest();
+	public function setParentRequest(RequestInterface $parentRequest);
 
 	/**
 	 * @return array

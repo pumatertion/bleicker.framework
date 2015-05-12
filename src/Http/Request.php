@@ -2,8 +2,6 @@
 
 namespace Bleicker\Framework\Http;
 
-use Bleicker\Framework\Http\RequestInterface as HttpRequestInterface;
-use Bleicker\Request\RequestInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -14,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  *
  * @package Bleicker\Framework\Http
  */
-class Request extends HttpRequest implements RequestInterface, HttpRequestInterface {
+class Request extends HttpRequest implements RequestInterface {
 
 	/**
 	 * @var RequestInterface
