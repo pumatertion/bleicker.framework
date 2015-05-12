@@ -2,6 +2,8 @@
 
 namespace Bleicker\Framework;
 
+use Bleicker\Authentication\AuthenticationManager;
+use Bleicker\Authentication\AuthenticationManagerInterface;
 use Bleicker\Converter\Converter;
 use Bleicker\Converter\ConverterInterface;
 use Bleicker\FastRouter\Router;
@@ -173,7 +175,18 @@ class ApplicationFactory {
 				return $securityManager;
 			});
 
-			$requestHandler = new Handler($context, $applicationRequest, $applicationResponse, $locales, $router, $securityManager);
+			/**
+			 * Get implementation of AuthenticationManagerInterface and if not exists use fallback function and register it as singleton
+			 *
+			 * @var AuthenticationManagerInterface $authenticationManager
+			 */
+			$authenticationManager = ObjectManager::get(AuthenticationManagerInterface::class, function () {
+				$authenticationManager = new AuthenticationManager();
+				ObjectManager::add(AuthenticationManagerInterface::class, $authenticationManager, TRUE);
+				return $authenticationManager;
+			});
+
+			$requestHandler = new Handler($context, $applicationRequest, $applicationResponse, $locales, $router, $securityManager, $authenticationManager);
 			ObjectManager::add(RequestHandlerInterface::class, $requestHandler, TRUE);
 			return $requestHandler;
 		});
