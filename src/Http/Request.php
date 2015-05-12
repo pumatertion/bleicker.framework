@@ -12,10 +12,10 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  *
  * @package Bleicker\Framework\Http
  */
-class Request extends HttpRequest implements RequestInterface {
+class Request extends HttpRequest {
 
 	/**
-	 * @var RequestInterface
+	 * @var Request
 	 */
 	protected $parentRequest;
 
@@ -27,40 +27,19 @@ class Request extends HttpRequest implements RequestInterface {
 	}
 
 	/**
-	 * @return RequestInterface
+	 * @return Request
 	 */
 	public function getParentRequest() {
 		return $this->parentRequest;
 	}
 
 	/**
-	 * @param RequestInterface $parentRequest
+	 * @param Request $parentRequest
 	 * @return $this
 	 */
-	public function setParentRequest(RequestInterface $parentRequest) {
+	public function setParentRequest(Request $parentRequest) {
 		$this->parentRequest = $parentRequest;
 		return $this;
-	}
-
-	/**
-	 * @return RequestInterface
-	 */
-	public function getMainRequest() {
-		$parentRequest = $this->getParentRequest();
-		if ($parentRequest === NULL) {
-			return $this;
-		}
-		if ($parentRequest->getParentRequest() instanceof RequestInterface) {
-			return $parentRequest->getParentRequest();
-		}
-		return $parentRequest;
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public function isMainRequest() {
-		return $this->getMainRequest() === $this;
 	}
 
 	/**

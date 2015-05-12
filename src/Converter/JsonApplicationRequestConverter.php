@@ -3,10 +3,9 @@
 namespace Bleicker\Framework\Converter;
 
 use Bleicker\Converter\AbstractTypeConverter;
+use Bleicker\Framework\HttpApplicationRequest;
 use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\Http\Request;
-use Bleicker\Framework\Http\RequestInterface;
-use Bleicker\Framework\HttpHttpApplicationRequest;
 
 /**
  * Class JsonApplicationRequestConverter
@@ -21,12 +20,12 @@ class JsonApplicationRequestConverter extends AbstractTypeConverter implements J
 	protected $applicationRequest;
 
 	/**
-	 * @param RequestInterface $source
+	 * @param Request $source
 	 * @param string $targetType
 	 * @return boolean
 	 */
 	public static function canConvert($source = NULL, $targetType) {
-		if (!($source instanceof RequestInterface)) {
+		if (!($source instanceof Request)) {
 			return FALSE;
 		}
 		if ($targetType !== HttpApplicationRequestInterface::class) {
@@ -40,10 +39,10 @@ class JsonApplicationRequestConverter extends AbstractTypeConverter implements J
 
 	/**
 	 * @param Request $source
-	 * @return HttpHttpApplicationRequest
+	 * @return HttpApplicationRequest
 	 */
 	public function convert($source) {
-		$this->applicationRequest = new HttpHttpApplicationRequest($source);
+		$this->applicationRequest = new HttpApplicationRequest($source);
 		$this->applicationRequest
 			->setHeaders($source->getHeaders()->all())
 			->setParameters($source->getParameter()->all())
