@@ -6,15 +6,13 @@ use Bleicker\Framework\Http\Handler;
 use Bleicker\Framework\Http\Response;
 use Bleicker\Framework\Http\ResponseInterface;
 use Bleicker\ObjectManager\ObjectManager;
-use Bleicker\Request\HandlerInterface;
-use Bleicker\Response\MainResponseInterface;
 
 /**
- * Class WebApplication
+ * Class HttpApplication
  *
  * @package Bleicker\Framework
  */
-class WebApplication extends AbstractKernel implements ApplicationInterface {
+class HttpApplication extends AbstractKernel implements ApplicationInterface {
 
 	/**
 	 * @return void

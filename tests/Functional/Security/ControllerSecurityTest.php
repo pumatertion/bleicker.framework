@@ -2,7 +2,7 @@
 
 namespace Tests\Bleicker\Framework\Functional\Security;
 
-use Bleicker\Framework\WebApplication;
+use Bleicker\Framework\HttpApplication;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Routing\ControllerRouteData;
 use Bleicker\Routing\RouterInterface;
@@ -35,7 +35,7 @@ class ControllerSecurityTest extends FunctionalTestCase {
 			throw new AccessDeniedException;
 		}, SecuredController::class . '::indexAction');
 
-		$webApplication = new WebApplication();
+		$webApplication = new HttpApplication();
 		$webApplication->run();
 	}
 
@@ -55,7 +55,7 @@ class ControllerSecurityTest extends FunctionalTestCase {
 		}, SecuredController::class . '::indexAction');
 
 		ob_start();
-		$webApplication = new WebApplication();
+		$webApplication = new HttpApplication();
 		$webApplication->run();
 		$result = ob_get_contents();
 		ob_end_clean();
@@ -78,7 +78,7 @@ class ControllerSecurityTest extends FunctionalTestCase {
 		}, SecuredController::class . '::indexAction');
 
 		ob_start();
-		$webApplication = new WebApplication();
+		$webApplication = new HttpApplication();
 		$webApplication->run();
 		$result = ob_get_contents();
 		ob_end_clean();
