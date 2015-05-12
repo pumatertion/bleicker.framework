@@ -2,6 +2,7 @@
 
 namespace Bleicker\Framework\Http;
 
+use Bleicker\Authentication\AuthenticationManagerInterface;
 use Bleicker\Framework\Context\ContextInterface;
 use Bleicker\Framework\Controller\ControllerInterface;
 use Bleicker\Framework\Exception\RedirectException;
@@ -83,6 +84,11 @@ class Handler implements RequestHandlerInterface {
 	protected $securityManager;
 
 	/**
+	 * @var AuthenticationManagerInterface
+	 */
+	protected $authenticationManager;
+
+	/**
 	 * @var boolean
 	 */
 	protected $isInitialized = FALSE;
@@ -94,14 +100,16 @@ class Handler implements RequestHandlerInterface {
 	 * @param LocalesInterface $locales
 	 * @param RouterInterface $router
 	 * @param SecurityManagerInterface $securityManager
+	 * @param AuthenticationManagerInterface $authenticationManager
 	 */
-	public function __construct(ContextInterface $context, HttpApplicationRequestInterface $httpApplicationRequest, HttpApplicationResponseInterface $httpApplicationResponse, LocalesInterface $locales, RouterInterface $router, SecurityManagerInterface $securityManager) {
+	public function __construct(ContextInterface $context, HttpApplicationRequestInterface $httpApplicationRequest, HttpApplicationResponseInterface $httpApplicationResponse, LocalesInterface $locales, RouterInterface $router, SecurityManagerInterface $securityManager, AuthenticationManagerInterface $authenticationManager) {
 		$this->context = $context;
 		$this->httpApplicationRequest = $httpApplicationRequest;
 		$this->httpApplicationResponse = $httpApplicationResponse;
 		$this->locales = $locales;
 		$this->router = $router;
 		$this->securityManager = $securityManager;
+		$this->authenticationManager = $authenticationManager;
 	}
 
 	/**
@@ -149,6 +157,9 @@ class Handler implements RequestHandlerInterface {
 		if (!$this->isInitialized()) {
 			$this->initialize();
 		}
+
+		$this->authenticationManager->run();
+
 		if ($this->securityManager->vote($this->controllerName . '::' . $this->methodName)->getResults()->count()) {
 			$firstVoteException = $this->securityManager->getResults()->first();
 			if ($firstVoteException instanceof ControllerInvokationExceptionInterface) {
