@@ -2,6 +2,7 @@
 
 namespace Tests\Bleicker\Framework\Unit;
 
+use Bleicker\Authentication\AuthenticationManagerInterface;
 use Bleicker\Converter\Converter;
 use Bleicker\Converter\ConverterInterface;
 use Bleicker\Framework\ApplicationFactory;
@@ -21,9 +22,11 @@ use Bleicker\Routing\RouterInterface;
 use Bleicker\Security\SecurityManagerInterface;
 use Bleicker\Security\Vote;
 use Bleicker\Security\Votes;
+use Bleicker\Token\Tokens;
 use Bleicker\Translation\Locale;
 use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
+use Tests\Bleicker\Framework\Unit\Fixtures\AuthKeyToken;
 use Tests\Bleicker\Framework\Unit\Fixtures\Exception\WebLoginException;
 use Tests\Bleicker\Framework\Unit\Fixtures\EntityManager;
 use Tests\Bleicker\Framework\Unit\Fixtures\Exception\AccessDeniedException;
@@ -39,8 +42,6 @@ class ApplicationFactoryTest extends UnitTestCase {
 
 	protected function setUp() {
 		parent::setUp();
-		ObjectManager::prune();
-		Converter::prune();
 		Locale::register('German', 'de', 'DE');
 		ObjectManager::add(EntityManagerInterface::class, EntityManager::class);
 	}
@@ -51,6 +52,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 		Converter::prune();
 		Locales::prune();
 		Votes::prune();
+		Tokens::prune();
 	}
 
 	/**
@@ -166,6 +168,56 @@ class ApplicationFactoryTest extends UnitTestCase {
 		ob_start();
 		ApplicationFactory::http()->run();
 		$this->assertEquals('Login', ob_get_contents());
+		ob_end_clean();
+	}
+
+	/**
+	 * @test
+	 * @expectedException \Tests\Bleicker\Framework\Unit\Fixtures\Exception\AccessDeniedException
+	 */
+	public function invalidAuthKeyControllerTest() {
+		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/deny?authKey=-987654321');
+		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
+		AuthKeyToken::register();
+
+		ApplicationFactory::http();
+
+		/** @var RouterInterface $router */
+		$router = ObjectManager::get(RouterInterface::class);
+		$router->addRoute('/deny', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
+
+		Vote::register('securedController', function () {
+			if (!ObjectManager::get(AuthenticationManagerInterface::class)->hasRole('Guest')) {
+				throw new AccessDeniedException('Wrong auth key.', 1431290565);
+			}
+		}, SimpleController::class . '::.*');
+
+		ApplicationFactory::http()->run();
+	}
+
+	/**
+	 * @test
+	 */
+	public function validAuthKeyControllerTest() {
+		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/grant?authKey=123456789');
+		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
+		AuthKeyToken::register();
+
+		ApplicationFactory::http();
+
+		/** @var RouterInterface $router */
+		$router = ObjectManager::get(RouterInterface::class);
+		$router->addRoute('/grant', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
+
+		Vote::register('securedController', function () {
+			if (!ObjectManager::get(AuthenticationManagerInterface::class)->hasRole('Guest')) {
+				throw new AccessDeniedException('Wrong auth key.', 1431290565);
+			}
+		}, SimpleController::class . '::.*');
+
+		ob_start();
+		ApplicationFactory::http()->run();
+		$this->assertEquals('Hello world', ob_get_contents());
 		ob_end_clean();
 	}
 }
