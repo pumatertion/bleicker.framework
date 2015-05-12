@@ -12,7 +12,7 @@ use Bleicker\ObjectManager\ObjectManager;
  *
  * @package Bleicker\Framework
  */
-class HttpApplication extends AbstractKernel implements ApplicationInterface {
+class HttpApplication implements HttpApplicationInterface {
 
 	/**
 	 * @return void

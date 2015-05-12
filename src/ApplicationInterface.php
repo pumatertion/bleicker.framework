@@ -7,6 +7,6 @@ namespace Bleicker\Framework;
  *
  * @package Framework
  */
-interface ApplicationInterface extends KernelInterface {
+interface ApplicationInterface {
 
 }
