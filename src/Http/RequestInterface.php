@@ -3,6 +3,7 @@ namespace Bleicker\Framework\Http;
 
 use Bleicker\Request\MainRequestInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Bleicker\Request\RequestInterface as RequestInterfaceOrigin;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
  *
  * @package Bleicker\Framework\Http
  */
-interface RequestInterface extends MainRequestInterface, \Bleicker\Request\RequestInterface {
+interface RequestInterface extends MainRequestInterface, RequestInterfaceOrigin {
 
 	/**
 	 * Returns the host name.
