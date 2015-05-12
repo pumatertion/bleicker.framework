@@ -2,6 +2,7 @@
 
 namespace Bleicker\Framework\Http;
 
+use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Registry\Utility\Arrays;
 
 /**
@@ -20,14 +21,22 @@ class RequestFactory {
 	 * @return Request
 	 */
 	public static function getInstance() {
-		return Request::create(static::getUri(), static::getMethod(), [], [], [], static::getServer(), static::getContent());
+		$request = Request::create(static::getUri(), static::getMethod(), [], [], [], static::getServer(), static::getContent());
+		/** @var SessionInterface $session */
+		$session = ObjectManager::get(SessionInterface::class, function () {
+			$session = new Session();
+			ObjectManager::add(SessionInterface::class, $session, TRUE);
+			return $session;
+		});
+		$request->setSession($session);
+		return $request;
 	}
 
 	/**
 	 * @return string
 	 */
 	protected static function getContent() {
-		if(!static::supportsContent()){
+		if (!static::supportsContent()) {
 			return NULL;
 		}
 		return file_get_contents('php://input');

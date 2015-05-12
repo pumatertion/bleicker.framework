@@ -2,8 +2,9 @@
 
 namespace Bleicker\Framework\Controller;
 
-use Bleicker\Framework\ApplicationRequestInterface;
 use Bleicker\Framework\Exception\RedirectException;
+use Bleicker\Framework\HttpApplicationRequestInterface;
+use Bleicker\Framework\HttpApplicationResponseInterface;
 use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
 use Bleicker\View\ViewInterface;
 
@@ -37,24 +38,24 @@ interface ControllerInterface {
 	public function getView();
 
 	/**
-	 * @param ApplicationRequestInterface $request
+	 * @param HttpApplicationRequestInterface $request
 	 * @return $this
 	 */
-	public function setRequest(ApplicationRequestInterface $request);
+	public function setRequest(HttpApplicationRequestInterface $request);
 
 	/**
-	 * @return ApplicationRequestInterface
+	 * @return HttpApplicationRequestInterface
 	 */
 	public function getRequest();
 
 	/**
-	 * @param ApplicationResponseInterface $response
+	 * @param HttpApplicationResponseInterface $response
 	 * @return $this
 	 */
-	public function setResponse(ApplicationResponseInterface $response);
+	public function setResponse(HttpApplicationResponseInterface $response);
 
 	/**
-	 * @return ApplicationResponseInterface
+	 * @return HttpApplicationResponseInterface
 	 */
 	public function getResponse();
 

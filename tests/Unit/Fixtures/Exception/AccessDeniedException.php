@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Bleicker\Framework\Functional\Fixtures\Exception;
+namespace Tests\Bleicker\Framework\Unit\Fixtures\Exception;
 
 use Bleicker\Security\Exception\AbstractVoteException;
 

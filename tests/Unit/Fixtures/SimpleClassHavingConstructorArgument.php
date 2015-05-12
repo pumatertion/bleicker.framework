@@ -24,5 +24,4 @@ class SimpleClassHavingConstructorArgument {
 	public function getTitle() {
 		return $this->title;
 	}
-
 }

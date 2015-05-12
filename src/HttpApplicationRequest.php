@@ -2,26 +2,25 @@
 
 namespace Bleicker\Framework;
 
-use Bleicker\Framework\Http\RequestInterface as HttpRequestInterface;
+use Bleicker\Framework\Http\Request;
 use Bleicker\Registry\Utility\Arrays;
-use Bleicker\Request\AbstractRequest;
 
 /**
- * Class ApplicationRequest
+ * Class HttpApplicationRequest
  *
  * @package Bleicker\Framework
  */
-class HttpApplicationRequest extends AbstractRequest implements ApplicationRequestInterface {
+class HttpApplicationRequest implements HttpApplicationRequestInterface {
 
 	/**
 	 * @var array
 	 */
-	protected $headers;
+	protected $headers = [];
 
 	/**
 	 * @var array
 	 */
-	protected $parameters;
+	protected $parameters = [];
 
 	/**
 	 * @var array
@@ -29,27 +28,31 @@ class HttpApplicationRequest extends AbstractRequest implements ApplicationReque
 	protected $contents;
 
 	/**
-	 * @param HttpRequestInterface $parentRequest
+	 * @var Request
 	 */
-	public function __construct(HttpRequestInterface $parentRequest = NULL) {
-		parent::__construct($parentRequest);
-		$this->parameters = [];
-		$this->contents = [];
-		$this->headers = [];
+	protected $parentRequest;
+
+	/**
+	 * @param Request $parentRequest
+	 */
+	public function __construct(Request $parentRequest) {
+		$this->parentRequest = $parentRequest;
 	}
 
 	/**
-	 * @return HttpRequestInterface
+	 * @return Request
 	 */
 	public function getParentRequest() {
-		return parent::getParentRequest();
+		return $this->parentRequest;
 	}
 
 	/**
-	 * @return HttpRequestInterface
+	 * @param Request $parentRequest
+	 * @return $this
 	 */
-	public function getMainRequest() {
-		return parent::getMainRequest();
+	public function setParentRequest(Request $parentRequest) {
+		$this->parentRequest = $parentRequest;
+		return $this;
 	}
 
 	/**
@@ -88,7 +91,7 @@ class HttpApplicationRequest extends AbstractRequest implements ApplicationReque
 	 * @param array $contents
 	 * @return $this
 	 */
-	public function setContents(array $contents = []) {
+	public function setContents(array $contents = NULL) {
 		$this->contents = $contents;
 		return $this;
 	}
