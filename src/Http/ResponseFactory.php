@@ -1,6 +1,7 @@
 <?php
 
 namespace Bleicker\Framework\Http;
+use Bleicker\Framework\Utility\Arrays;
 
 /**
  * Class ResponseFactory
@@ -14,7 +15,8 @@ class ResponseFactory {
 	 * @return Response|JsonResponse
 	 */
 	public static function getInstance(Request $request) {
-		if ($request->getHeaders()->get('CONTENT-TYPE') === 'application/json') {
+		$acceptableContentTypes = $request->getAcceptableContentTypes();
+		if (Arrays::getValueByPath($acceptableContentTypes, '0') === 'application/json') {
 			return static::getJsonResponse();
 		}
 		return static::getResponse();
