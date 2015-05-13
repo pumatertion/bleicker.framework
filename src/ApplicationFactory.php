@@ -23,6 +23,7 @@ use Bleicker\Security\SecurityManagerInterface;
 use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
 use Exception;
+use Closure;
 
 /**
  * Class ApplicationFactory
@@ -32,9 +33,10 @@ use Exception;
 class ApplicationFactory {
 
 	/**
+	 * @param Closure $additionalConfiguration
 	 * @return HttpApplicationInterface
 	 */
-	public static function http() {
+	public static function http(Closure $additionalConfiguration = NULL) {
 		/**
 		 * Get implementation of ContextInterface and if not exists use fallback function and register it as singleton
 		 */
