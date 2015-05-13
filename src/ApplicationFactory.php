@@ -22,8 +22,8 @@ use Bleicker\Security\SecurityManager;
 use Bleicker\Security\SecurityManagerInterface;
 use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
-use Exception;
 use Closure;
+use Exception;
 
 /**
  * Class ApplicationFactory
@@ -33,15 +33,24 @@ use Closure;
 class ApplicationFactory {
 
 	/**
-	 * @param Closure $additionalConfiguration
+	 * @param Closure $before
+	 * @param Closure $after
 	 * @return HttpApplicationInterface
 	 */
-	public static function http(Closure $additionalConfiguration = NULL) {
+	public static function http(Closure $before = NULL, Closure $after = NULL) {
+
+		/**
+		 * Invoke before configuration
+		 */
+		if ($before !== NULL) {
+			$instance = new static;
+			call_user_func_array($before, [$instance]);
+		}
+
 		/**
 		 * Get implementation of ContextInterface and if not exists use fallback function and register it as singleton
 		 */
-		ObjectManager::get(RequestHandlerInterface::class, function () {
-
+		ObjectManager::get(RequestHandlerInterface::class, function () use ($before, $after) {
 			/**
 			 * Get implementation of ContextInterface and if not exists use fallback function and register it as singleton
 			 */
@@ -49,6 +58,53 @@ class ApplicationFactory {
 				$context = new Context();
 				ObjectManager::add(ContextInterface::class, $context, TRUE);
 				return $context;
+			});
+
+			/**
+			 * Get implementation of RouterInterface and if not exists use fallback function and register it as singleton
+			 */
+			ObjectManager::get(RouterInterface::class, function () {
+				/**
+				 * Get implementation of ContextInterface and if not exists use fallback function and register it as singleton
+				 *
+				 * @var ContextInterface $context
+				 */
+				$context = ObjectManager::get(ContextInterface::class, function () {
+					$context = new Context();
+					ObjectManager::add(ContextInterface::class, $context, TRUE);
+					return $context;
+				});
+
+				$router = Router::getInstance(__DIR__ . '/../route.cache.php', !$context->isProduction());
+				ObjectManager::add(RouterInterface::class, $router, TRUE);
+				return $router;
+			});
+
+			/**
+			 * Get implementation of LocalesInterface and if not exists use fallback function and register it as singleton
+			 */
+			ObjectManager::get(LocalesInterface::class, function () {
+				$locales = new Locales();
+				ObjectManager::add(LocalesInterface::class, $locales, TRUE);
+				return $locales;
+			});
+
+			/**
+			 * Get implementation of SecurityManagerInterface and if not exists use fallback function and register it as singleton
+			 */
+			ObjectManager::get(SecurityManagerInterface::class, function () {
+				$securityManager = new SecurityManager();
+				ObjectManager::add(SecurityManagerInterface::class, $securityManager, TRUE);
+				return $securityManager;
+			});
+
+			/**
+			 * Get implementation of AuthenticationManagerInterface and if not exists use fallback function and register it as singleton
+			 */
+			ObjectManager::get(AuthenticationManagerInterface::class, function () {
+				$authenticationManager = new AuthenticationManager();
+				ObjectManager::add(AuthenticationManagerInterface::class, $authenticationManager, TRUE);
+				return $authenticationManager;
 			});
 
 			/**
@@ -123,68 +179,24 @@ class ApplicationFactory {
 				return $applicationResponse;
 			});
 
-			/**
-			 * Get implementation of RouterInterface and if not exists use fallback function and register it as singleton
-			 */
-			ObjectManager::get(RouterInterface::class, function () {
-				/**
-				 * Get implementation of ContextInterface and if not exists use fallback function and register it as singleton
-				 *
-				 * @var ContextInterface $context
-				 */
-				$context = ObjectManager::get(ContextInterface::class, function () {
-					$context = new Context();
-					ObjectManager::add(ContextInterface::class, $context, TRUE);
-					return $context;
-				});
-
-				$router = Router::getInstance(__DIR__ . '/../route.cache.php', !$context->isProduction());
-				ObjectManager::add(RouterInterface::class, $router, TRUE);
-				return $router;
-			});
-
-			/**
-			 * Get implementation of LocalesInterface and if not exists use fallback function and register it as singleton
-			 */
-			ObjectManager::get(LocalesInterface::class, function () {
-				$locales = new Locales();
-				ObjectManager::add(LocalesInterface::class, $locales, TRUE);
-				return $locales;
-			});
-
-			/**
-			 * Get implementation of SecurityManagerInterface and if not exists use fallback function and register it as singleton
-			 */
-			ObjectManager::get(SecurityManagerInterface::class, function () {
-				$securityManager = new SecurityManager();
-				ObjectManager::add(SecurityManagerInterface::class, $securityManager, TRUE);
-				return $securityManager;
-			});
-
-			/**
-			 * Get implementation of AuthenticationManagerInterface and if not exists use fallback function and register it as singleton
-			 */
-			ObjectManager::get(AuthenticationManagerInterface::class, function () {
-				$authenticationManager = new AuthenticationManager();
-				ObjectManager::add(AuthenticationManagerInterface::class, $authenticationManager, TRUE);
-				return $authenticationManager;
-			});
-
 			$requestHandler = new Handler();
 			ObjectManager::add(RequestHandlerInterface::class, $requestHandler, TRUE);
 			return $requestHandler;
 		});
 
-		if($additionalConfiguration !== NULL){
-			$instance = new static;
-			call_user_func_array($additionalConfiguration, [$instance]);
-		}
-
-		$application = ObjectManager::get(HttpApplicationInterface::class, function(){
+		$application = ObjectManager::get(HttpApplicationInterface::class, function () {
 			$httpApplication = new HttpApplication();
 			ObjectManager::add(HttpApplicationInterface::class, $httpApplication, TRUE);
 			return $httpApplication;
 		});
+
+		/**
+		 * Invoke after configuration
+		 */
+		if ($after !== NULL) {
+			$instance = new static;
+			call_user_func_array($after, [$instance]);
+		}
 
 		return $application;
 	}
