@@ -87,7 +87,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 * @expectedException \Tests\Bleicker\Framework\Unit\Fixtures\Exception\AccessDeniedException
 	 */
 	public function callSecuredControllerTest() {
-		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/secure');
+		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/secure');
 		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
 
@@ -108,7 +108,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 * @test
 	 */
 	public function callControllerTest() {
-		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/foo');
+		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/foo');
 		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
 
@@ -128,7 +128,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 * @test
 	 */
 	public function jsonControllerTest() {
-		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/json');
+		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/json');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
 		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 		Arrays::setValueByPath($_SERVER, 'CONTENT_TYPE', 'application/json');
@@ -157,7 +157,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 * @test
 	 */
 	public function loginControllerTest() {
-		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/secured_with_loginbox_redirect');
+		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/secured_with_loginbox_redirect');
 		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
 
@@ -182,7 +182,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 * @expectedException \Tests\Bleicker\Framework\Unit\Fixtures\Exception\AccessDeniedException
 	 */
 	public function invalidAuthKeyControllerTest() {
-		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/deny?authKey=-987654321');
+		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/deny');
 		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
 		Arrays::setValueByPath($_GET, 'authKey', '987654321');
@@ -207,7 +207,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 * @test
 	 */
 	public function validAuthKeyControllerTest() {
-		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/grant?authKey=123456789');
+		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/grant');
 		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
 		Arrays::setValueByPath($_GET, 'authKey', '123456789');
@@ -235,7 +235,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 * @test
 	 */
 	public function additionalConfigurationTest() {
-		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/conf');
+		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/conf');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
 		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 

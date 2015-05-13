@@ -2,6 +2,7 @@
 
 namespace Bleicker\Framework\Http;
 
+use Exception;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
@@ -17,6 +18,13 @@ class Request extends HttpRequest implements RequestInterface {
 	 * @var Request
 	 */
 	protected $parentRequest;
+
+	/**
+	 * @throws Exception
+	 */
+	public static function createFromGlobals() {
+		throw new Exception('Not supported. Please use a factory for creation', 1430670351);
+	}
 
 	/**
 	 * @return Request
