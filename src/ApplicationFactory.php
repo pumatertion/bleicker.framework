@@ -11,6 +11,8 @@ use Bleicker\Framework\Context\Context;
 use Bleicker\Framework\Context\ContextInterface;
 use Bleicker\Framework\Converter\JsonApplicationRequestConverter;
 use Bleicker\Framework\Converter\JsonApplicationRequestConverterInterface;
+use Bleicker\Framework\Converter\MultipartApplicationRequestConverter;
+use Bleicker\Framework\Converter\MultipartApplicationRequestConverterInterface;
 use Bleicker\Framework\Converter\WellformedApplicationRequestConverter;
 use Bleicker\Framework\Converter\WellformedApplicationRequestConverterInterface;
 use Bleicker\Framework\Http\Handler;
@@ -147,6 +149,13 @@ class ApplicationFactory {
 				 */
 				if (!$converter->has(JsonApplicationRequestConverterInterface::class)) {
 					JsonApplicationRequestConverter::register();
+				}
+
+				/**
+				 * Register Multipart Request Converter
+				 */
+				if (!$converter->has(MultipartApplicationRequestConverterInterface::class)) {
+					MultipartApplicationRequestConverter::register();
 				}
 
 				/**
