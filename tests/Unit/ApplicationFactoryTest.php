@@ -17,6 +17,7 @@ use Bleicker\Framework\RequestHandlerInterface;
 use Bleicker\Framework\Utility\Arrays;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManagerInterface;
+use Bleicker\Registry\Registry;
 use Bleicker\Routing\ControllerRouteData;
 use Bleicker\Routing\RouterInterface;
 use Bleicker\Security\SecurityManagerInterface;
@@ -219,5 +220,20 @@ class ApplicationFactoryTest extends UnitTestCase {
 		ApplicationFactory::http()->run();
 		$this->assertEquals('Hello world', ob_get_contents());
 		ob_end_clean();
+	}
+
+	/**
+	 * @test
+	 */
+	public function additionalConfigurationTest(){
+		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/grant?authKey=123456789');
+		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
+
+		ApplicationFactory::http(function(ApplicationFactory $factory){
+			$this->assertInstanceOf(ApplicationFactory::class, $factory);
+			Registry::set('foo.bar.baz', TRUE);
+		});
+
+		$this->assertTrue(Registry::get('foo.bar.baz'));
 	}
 }
