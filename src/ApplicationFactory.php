@@ -10,7 +10,9 @@ use Bleicker\FastRouter\Router;
 use Bleicker\Framework\Context\Context;
 use Bleicker\Framework\Context\ContextInterface;
 use Bleicker\Framework\Converter\JsonApplicationRequestConverter;
+use Bleicker\Framework\Converter\JsonApplicationRequestConverterInterface;
 use Bleicker\Framework\Converter\WellformedApplicationRequestConverter;
+use Bleicker\Framework\Converter\WellformedApplicationRequestConverterInterface;
 use Bleicker\Framework\Http\Handler;
 use Bleicker\Framework\Http\Request;
 use Bleicker\Framework\Http\RequestFactory;
@@ -130,10 +132,22 @@ class ApplicationFactory {
 				$converter = ObjectManager::get(ConverterInterface::class, function () {
 					$converter = new Converter();
 					ObjectManager::add(ConverterInterface::class, $converter, TRUE);
-					WellformedApplicationRequestConverter::register();
-					JsonApplicationRequestConverter::register();
 					return $converter;
 				});
+
+				/**
+				 * Register Wellformed Request Converter
+				 */
+				if (!$converter->has(WellformedApplicationRequestConverterInterface::class)) {
+					WellformedApplicationRequestConverter::register();
+				}
+
+				/**
+				 * Register Json Request Converter
+				 */
+				if (!$converter->has(JsonApplicationRequestConverterInterface::class)) {
+					JsonApplicationRequestConverter::register();
+				}
 
 				/**
 				 * Using converter to get ApplicationRequest by Request and register it as singleton implementation
