@@ -39,7 +39,11 @@ class RequestFactory {
 		if (!static::supportsContent()) {
 			return NULL;
 		}
-		return file_get_contents('php://input');
+		$content = file_get_contents('php://input');
+		if($content === ''){
+			$content = http_build_query($_POST);
+		}
+		return $content;
 	}
 
 	/**
