@@ -173,10 +173,16 @@ class ApplicationFactory {
 			return $requestHandler;
 		});
 
-		$application = new HttpApplication($requestHandler);
+		if($additionalConfiguration !== NULL){
+			$instance = new static;
+			call_user_func_array($additionalConfiguration, [$instance]);
+		}
 
-		/** Register HttpApplication implementation as singleton */
-		ObjectManager::add(HttpApplicationInterface::class, $application, TRUE);
+		$application = ObjectManager::get(HttpApplicationInterface::class, function(){
+			$httpApplication = new HttpApplication();
+			ObjectManager::add(HttpApplicationInterface::class, $httpApplication, TRUE);
+			return $httpApplication;
+		});
 
 		return $application;
 	}

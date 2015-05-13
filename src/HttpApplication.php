@@ -1,6 +1,7 @@
 <?php
 
 namespace Bleicker\Framework;
+use Bleicker\ObjectManager\ObjectManager;
 
 /**
  * Class HttpApplication
@@ -14,11 +15,8 @@ class HttpApplication implements HttpApplicationInterface {
 	 */
 	protected $requestHandler;
 
-	/**
-	 * @param RequestHandlerInterface $requestHandler
-	 */
-	public function __construct(RequestHandlerInterface $requestHandler) {
-		$this->requestHandler = $requestHandler;
+	public function __construct() {
+		$this->requestHandler = ObjectManager::get(RequestHandlerInterface::class);
 	}
 
 	/**
