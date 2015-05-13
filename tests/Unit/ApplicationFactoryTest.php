@@ -28,9 +28,9 @@ use Bleicker\Translation\Locale;
 use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
 use Tests\Bleicker\Framework\Unit\Fixtures\AuthKeyToken;
-use Tests\Bleicker\Framework\Unit\Fixtures\Exception\WebLoginException;
 use Tests\Bleicker\Framework\Unit\Fixtures\EntityManager;
 use Tests\Bleicker\Framework\Unit\Fixtures\Exception\AccessDeniedException;
+use Tests\Bleicker\Framework\Unit\Fixtures\Exception\WebLoginException;
 use Tests\Bleicker\Framework\Unit\Fixtures\SimpleController;
 use Tests\Bleicker\Framework\UnitTestCase;
 
@@ -87,7 +87,8 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 * @expectedException \Tests\Bleicker\Framework\Unit\Fixtures\Exception\AccessDeniedException
 	 */
 	public function callSecuredControllerTest() {
-		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/secure?bar=baz');
+		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/secure');
+		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
 
 		ApplicationFactory::http();
@@ -107,7 +108,8 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 * @test
 	 */
 	public function callControllerTest() {
-		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/foo?bar=baz');
+		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/foo');
+		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
 
 		ApplicationFactory::http();
@@ -126,9 +128,11 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 * @test
 	 */
 	public function jsonControllerTest() {
-		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/json?bar=baz');
+		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/json');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
+		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'application/json,text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 		Arrays::setValueByPath($_SERVER, 'CONTENT_TYPE', 'application/json');
+		Arrays::setValueByPath($_GET, 'bar', 'baz');
 
 		ApplicationFactory::http();
 
@@ -153,7 +157,8 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 * @test
 	 */
 	public function loginControllerTest() {
-		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/secured_with_loginbox_redirect?bar=baz');
+		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/secured_with_loginbox_redirect');
+		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
 
 		ApplicationFactory::http();
@@ -178,7 +183,9 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 */
 	public function invalidAuthKeyControllerTest() {
 		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/deny?authKey=-987654321');
+		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
+		Arrays::setValueByPath($_GET, 'authKey', '987654321');
 		AuthKeyToken::register();
 
 		ApplicationFactory::http();
@@ -201,7 +208,9 @@ class ApplicationFactoryTest extends UnitTestCase {
 	 */
 	public function validAuthKeyControllerTest() {
 		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/grant?authKey=123456789');
+		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
+		Arrays::setValueByPath($_GET, 'authKey', '123456789');
 		AuthKeyToken::register();
 
 		ApplicationFactory::http();
@@ -225,15 +234,29 @@ class ApplicationFactoryTest extends UnitTestCase {
 	/**
 	 * @test
 	 */
-	public function additionalConfigurationTest(){
-		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/grant?authKey=123456789');
+	public function additionalConfigurationTest() {
+		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/conf');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'GET');
+		Arrays::setValueByPath($_SERVER, 'HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8');
 
-		ApplicationFactory::http(function(ApplicationFactory $factory){
-			$this->assertInstanceOf(ApplicationFactory::class, $factory);
-			Registry::set('foo.bar.baz', TRUE);
-		});
+		ApplicationFactory::http();
 
-		$this->assertTrue(Registry::get('foo.bar.baz'));
+		/** @var RouterInterface $router */
+		$router = ObjectManager::get(RouterInterface::class);
+		$router->addRoute('/conf', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
+
+		ApplicationFactory::http(
+			function (ApplicationFactory $factory) {
+				$this->assertInstanceOf(ApplicationFactory::class, $factory);
+				Registry::set('foo.bar', TRUE);
+			},
+			function (ApplicationFactory $factory) {
+				$this->assertInstanceOf(ApplicationFactory::class, $factory);
+				Registry::set('foo.baz', TRUE);
+			}
+		);
+
+		$this->assertTrue(Registry::get('foo.bar'));
+		$this->assertTrue(Registry::get('foo.baz'));
 	}
 }

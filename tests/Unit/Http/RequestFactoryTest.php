@@ -27,6 +27,7 @@ class RequestFactoryTest extends UnitTestCase {
 	 */
 	public function hasArgumentsTest() {
 		Arrays::setValueByPath($_SERVER, 'REQUEST_URI', '/foo/bar/baz?foo=bar');
+		Arrays::setValueByPath($_GET, 'foo', 'bar');
 		$request = RequestFactory::getInstance();
 		$parameter = $request->getParameter()->all();
 		$this->assertEquals('bar', Arrays::getValueByPath($parameter, 'foo'));
@@ -40,5 +41,17 @@ class RequestFactoryTest extends UnitTestCase {
 		$request = RequestFactory::getInstance();
 		$arguments = $request->getArguments()->all();
 		$this->assertEmpty($arguments);
+	}
+
+	/**
+	 * @test
+	 */
+	public function hasContentJsonRequestArgumentsOnPostByDefaultTest() {
+		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'POST');
+		Arrays::setValueByPath($_SERVER, 'CONTENT_TYPE', 'application/json');
+		Arrays::setValueByPath($_POST, 'foo', 'bar');
+		$request = RequestFactory::getInstance();
+		$content = $request->getContent();
+		$this->assertEmpty($content);
 	}
 }

@@ -21,7 +21,7 @@ class RequestFactory {
 	 * @return Request
 	 */
 	public static function getInstance() {
-		$request = Request::create(static::getUri(), static::getMethod(), [], [], [], static::getServer(), static::getContent());
+		$request = Request::createFromGlobals();
 		/** @var SessionInterface $session */
 		$session = ObjectManager::get(SessionInterface::class, function () {
 			$session = new Session();
