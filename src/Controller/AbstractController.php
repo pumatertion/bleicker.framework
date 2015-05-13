@@ -3,8 +3,8 @@
 namespace Bleicker\Framework\Controller;
 
 use Bleicker\Framework\ApplicationResponseInterface;
-use Bleicker\Framework\Controller\Exception\AcceptedContentTypeNotSupportedException;
 use Bleicker\Framework\Exception\RedirectException;
+use Bleicker\Framework\Http\JsonResponse;
 use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\HttpApplicationResponseInterface;
 use Bleicker\ObjectManager\ObjectManager;
@@ -68,19 +68,11 @@ abstract class AbstractController implements ControllerInterface {
 	/**
 	 * @param string $method
 	 * @return $this
-	 * @throws AcceptedContentTypeNotSupportedException
 	 */
 	public function resolveFormat($method) {
-		switch ($this->request->getParentRequest()->getAcceptableContentTypes()[0]) {
-			case 'application/json':
-				$this->format = 'json';
-				break;
-			case 'text/html':
-			case '*/*':
-				$this->format = 'html';
-				break;
-			default:
-				throw new AcceptedContentTypeNotSupportedException('We can not answer in the requested accept type. This controller supports only "application/json" or "text/html"', 1429528425);
+		$this->format = 'html';
+		if($this->response->getParentResponse() instanceof JsonResponse){
+			$this->format = 'json';
 		}
 		return $this;
 	}

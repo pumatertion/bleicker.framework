@@ -21,7 +21,7 @@ class RequestFactory {
 	 * @return Request
 	 */
 	public static function getInstance() {
-		$request = Request::create(static::getUri(), static::getMethod(), [], [], [], static::getServer(), static::getContent());
+		$request = Request::create(static::getUri(), static::getMethod(), static::getParameter(), static::getCookies(), static::getFiles(), static::getServer(), static::getContent());
 		/** @var SessionInterface $session */
 		$session = ObjectManager::get(SessionInterface::class, function () {
 			$session = new Session();
@@ -74,10 +74,31 @@ class RequestFactory {
 	}
 
 	/**
+	 * @return array
+	 */
+	protected static function getFiles(){
+		return $_FILES;
+	}
+
+	/**
+	 * @return array
+	 */
+	protected static function getCookies(){
+		return $_COOKIE;
+	}
+
+	/**
+	 * @return array
+	 */
+	protected static function getParameter(){
+		return $_GET;
+	}
+
+	/**
 	 * @return string
 	 */
 	protected static function getUri() {
-		$requestUri = Arrays::getValueByPath($_SERVER, 'REQUEST_URI');
+		$requestUri = Arrays::getValueByPath($_SERVER, 'PATH_INFO');
 		$uri = $requestUri;
 		return $uri;
 	}
