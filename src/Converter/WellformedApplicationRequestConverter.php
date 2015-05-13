@@ -55,6 +55,10 @@ class WellformedApplicationRequestConverter extends AbstractTypeConverter implem
 	 * @return array
 	 */
 	public function decodeContent() {
+		if(empty($this->applicationRequest->getParentRequest()->getContent())){
+			$contents = $this->applicationRequest->getParentRequest()->request->all();
+			return $contents;
+		}
 		$contents = [];
 		$content = $this->applicationRequest->getParentRequest()->getContent();
 		parse_str($content, $contents);

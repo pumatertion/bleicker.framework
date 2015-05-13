@@ -34,11 +34,6 @@ interface RequestInterface {
 	public function getParameter();
 
 	/**
-	 * @throws Exception
-	 */
-	public static function createFromGlobals();
-
-	/**
 	 * @return ParameterBag
 	 */
 	public function getArguments();
