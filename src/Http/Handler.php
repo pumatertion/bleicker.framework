@@ -17,6 +17,7 @@ use Bleicker\Framework\HttpApplicationResponseInterface;
 use Bleicker\Framework\RequestHandlerInterface;
 use Bleicker\Framework\Security\Vote\Exception\ControllerInvokationExceptionInterface;
 use Bleicker\Framework\Utility\Arrays;
+use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Routing\ControllerRouteDataInterface;
 use Bleicker\Routing\RouteInterface;
 use Bleicker\Routing\RouterInterface;
@@ -94,25 +95,6 @@ class Handler implements RequestHandlerInterface {
 	protected $isInitialized = FALSE;
 
 	/**
-	 * @param ContextInterface $context
-	 * @param HttpApplicationRequestInterface $httpApplicationRequest
-	 * @param HttpApplicationResponseInterface $httpApplicationResponse
-	 * @param LocalesInterface $locales
-	 * @param RouterInterface $router
-	 * @param SecurityManagerInterface $securityManager
-	 * @param AuthenticationManagerInterface $authenticationManager
-	 */
-	public function __construct(ContextInterface $context, HttpApplicationRequestInterface $httpApplicationRequest, HttpApplicationResponseInterface $httpApplicationResponse, LocalesInterface $locales, RouterInterface $router, SecurityManagerInterface $securityManager, AuthenticationManagerInterface $authenticationManager) {
-		$this->context = $context;
-		$this->httpApplicationRequest = $httpApplicationRequest;
-		$this->httpApplicationResponse = $httpApplicationResponse;
-		$this->locales = $locales;
-		$this->router = $router;
-		$this->securityManager = $securityManager;
-		$this->authenticationManager = $authenticationManager;
-	}
-
-	/**
 	 * @return boolean
 	 */
 	public function isInitialized() {
@@ -124,6 +106,15 @@ class Handler implements RequestHandlerInterface {
 	 */
 	public function initialize() {
 		$this->isInitialized = TRUE;
+
+		$this->context = ObjectManager::get(ContextInterface::class);
+		$this->httpApplicationRequest = ObjectManager::get(HttpApplicationRequestInterface::class);
+		$this->httpApplicationResponse = ObjectManager::get(HttpApplicationResponseInterface::class);
+		$this->locales = ObjectManager::get(LocalesInterface::class);
+		$this->router = ObjectManager::get(RouterInterface::class);
+		$this->securityManager = ObjectManager::get(SecurityManagerInterface::class);
+		$this->authenticationManager = ObjectManager::get(AuthenticationManagerInterface::class);
+
 		$routerInformation = $this->invokeRouter();
 		$this->controllerName = $this->getControllerNameByRoute($routerInformation[1]);
 		$this->methodName = $this->getMethodNameByRoute($routerInformation[1]);

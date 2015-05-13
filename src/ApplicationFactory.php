@@ -37,17 +37,13 @@ class ApplicationFactory {
 	public static function http() {
 		/**
 		 * Get implementation of ContextInterface and if not exists use fallback function and register it as singleton
-		 *
-		 * @var RequestHandlerInterface $requestHandler
 		 */
-		$requestHandler = ObjectManager::get(RequestHandlerInterface::class, function () {
+		ObjectManager::get(RequestHandlerInterface::class, function () {
 
 			/**
 			 * Get implementation of ContextInterface and if not exists use fallback function and register it as singleton
-			 *
-			 * @var ContextInterface $context
 			 */
-			$context = ObjectManager::get(ContextInterface::class, function () {
+			ObjectManager::get(ContextInterface::class, function () {
 				$context = new Context();
 				ObjectManager::add(ContextInterface::class, $context, TRUE);
 				return $context;
@@ -55,10 +51,8 @@ class ApplicationFactory {
 
 			/**
 			 * Get implementation of HttpApplicationRequestInterface as singleton
-			 *
-			 * @var HttpApplicationRequestInterface $applicationRequest
 			 */
-			$applicationRequest = ObjectManager::get(HttpApplicationRequestInterface::class, function () {
+			ObjectManager::get(HttpApplicationRequestInterface::class, function () {
 				/**
 				 * Get implementation of Http/Request and if not exists use fallback function and register it as singleton
 				 *
@@ -96,12 +90,8 @@ class ApplicationFactory {
 
 			/**
 			 * Get implementation of HttpApplicationResponseInterface and if not exists use fallback function and register it as singleton
-			 *
-			 * @var HttpApplicationResponseInterface $applicationResponse
-			 * @todo Converter from httprequest to httpapplicationresponse
-			 * @todo ResponseFactory
 			 */
-			$applicationResponse = ObjectManager::get(HttpApplicationResponseInterface::class, function () {
+			ObjectManager::get(HttpApplicationResponseInterface::class, function () {
 				/**
 				 * Get implementation of Response and if not exists use fallback function and register it as singleton
 				 *
@@ -133,10 +123,8 @@ class ApplicationFactory {
 
 			/**
 			 * Get implementation of RouterInterface and if not exists use fallback function and register it as singleton
-			 *
-			 * @var RouterInterface $router
 			 */
-			$router = ObjectManager::get(RouterInterface::class, function () {
+			ObjectManager::get(RouterInterface::class, function () {
 				/**
 				 * Get implementation of ContextInterface and if not exists use fallback function and register it as singleton
 				 *
@@ -155,10 +143,8 @@ class ApplicationFactory {
 
 			/**
 			 * Get implementation of LocalesInterface and if not exists use fallback function and register it as singleton
-			 *
-			 * @var LocalesInterface $locales
 			 */
-			$locales = ObjectManager::get(LocalesInterface::class, function () {
+			ObjectManager::get(LocalesInterface::class, function () {
 				$locales = new Locales();
 				ObjectManager::add(LocalesInterface::class, $locales, TRUE);
 				return $locales;
@@ -166,10 +152,8 @@ class ApplicationFactory {
 
 			/**
 			 * Get implementation of SecurityManagerInterface and if not exists use fallback function and register it as singleton
-			 *
-			 * @var SecurityManagerInterface $securityManager
 			 */
-			$securityManager = ObjectManager::get(SecurityManagerInterface::class, function () {
+			ObjectManager::get(SecurityManagerInterface::class, function () {
 				$securityManager = new SecurityManager();
 				ObjectManager::add(SecurityManagerInterface::class, $securityManager, TRUE);
 				return $securityManager;
@@ -177,16 +161,14 @@ class ApplicationFactory {
 
 			/**
 			 * Get implementation of AuthenticationManagerInterface and if not exists use fallback function and register it as singleton
-			 *
-			 * @var AuthenticationManagerInterface $authenticationManager
 			 */
-			$authenticationManager = ObjectManager::get(AuthenticationManagerInterface::class, function () {
+			ObjectManager::get(AuthenticationManagerInterface::class, function () {
 				$authenticationManager = new AuthenticationManager();
 				ObjectManager::add(AuthenticationManagerInterface::class, $authenticationManager, TRUE);
 				return $authenticationManager;
 			});
 
-			$requestHandler = new Handler($context, $applicationRequest, $applicationResponse, $locales, $router, $securityManager, $authenticationManager);
+			$requestHandler = new Handler();
 			ObjectManager::add(RequestHandlerInterface::class, $requestHandler, TRUE);
 			return $requestHandler;
 		});
