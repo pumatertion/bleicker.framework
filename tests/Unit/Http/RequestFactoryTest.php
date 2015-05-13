@@ -49,7 +49,6 @@ class RequestFactoryTest extends UnitTestCase {
 	public function hasContentJsonRequestArgumentsOnPostByDefaultTest() {
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'POST');
 		Arrays::setValueByPath($_SERVER, 'CONTENT_TYPE', 'application/json');
-		Arrays::setValueByPath($_POST, 'foo', 'bar');
 		$request = RequestFactory::getInstance();
 		$content = $request->getContent();
 		$this->assertEmpty($content);
