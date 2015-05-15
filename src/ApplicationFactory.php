@@ -141,7 +141,7 @@ class ApplicationFactory {
 				 * Register Wellformed Request Converter
 				 */
 				if (!$converter->has(WellformedApplicationRequestConverterInterface::class)) {
-					WellformedApplicationRequestConverter::register();
+					WellformedApplicationRequestConverter::register(PHP_INT_MAX);
 				}
 
 				/**

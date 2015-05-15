@@ -31,11 +31,7 @@ class WellformedApplicationRequestConverter extends AbstractTypeConverter implem
 		if ($targetType !== HttpApplicationRequestInterface::class) {
 			return FALSE;
 		}
-		$contentType = $source->getHeaders()->get('CONTENT_TYPE');
-		if ($contentType === NULL || $contentType === 'application/x-www-form-urlencoded' || $contentType === 'text/html') {
-			return TRUE;
-		}
-		return FALSE;
+		return TRUE;
 	}
 
 	/**
