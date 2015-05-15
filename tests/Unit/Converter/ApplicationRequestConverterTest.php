@@ -21,7 +21,7 @@ class ApplicationRequestConverterTest extends UnitTestCase {
 		parent::setUp();
 		Converter::prune();
 		WellformedApplicationRequestConverter::register();
-		JsonApplicationRequestConverter::register();
+		JsonApplicationRequestConverter::register(10);
 	}
 
 	protected function tearDown() {
