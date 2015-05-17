@@ -7,8 +7,8 @@ use Bleicker\Authentication\AuthenticationManagerInterface;
 use Bleicker\Converter\Converter;
 use Bleicker\Converter\ConverterInterface;
 use Bleicker\FastRouter\Router;
-use Bleicker\Framework\Context\Context;
-use Bleicker\Framework\Context\ContextInterface;
+use Bleicker\Context\ContextInterface;
+use Bleicker\Context\Context;
 use Bleicker\Framework\Converter\JsonApplicationRequestConverter;
 use Bleicker\Framework\Converter\JsonApplicationRequestConverterInterface;
 use Bleicker\Framework\Converter\MultipartApplicationRequestConverter;
@@ -60,6 +60,7 @@ class ApplicationFactory {
 			 */
 			ObjectManager::get(ContextInterface::class, function () {
 				$context = new Context();
+				$context->add(ContextInterface::APPLICATION_CONTEXT, getenv(ContextInterface::APPLICATION_CONTEXT_ENV_VAR));
 				ObjectManager::add(ContextInterface::class, $context, TRUE);
 				return $context;
 			});
@@ -69,17 +70,13 @@ class ApplicationFactory {
 			 */
 			ObjectManager::get(RouterInterface::class, function () {
 				/**
-				 * Get implementation of ContextInterface and if not exists use fallback function and register it as singleton
+				 * Get implementation of ContextInterface
 				 *
 				 * @var ContextInterface $context
 				 */
-				$context = ObjectManager::get(ContextInterface::class, function () {
-					$context = new Context();
-					ObjectManager::add(ContextInterface::class, $context, TRUE);
-					return $context;
-				});
+				$context = ObjectManager::get(ContextInterface::class);
 
-				$router = Router::getInstance(__DIR__ . '/../route.cache.php', !$context->isProduction());
+				$router = Router::getInstance(__DIR__ . '/../route.cache.php', $context->get(ContextInterface::APPLICATION_CONTEXT) !== ContextInterface::PRODUCTION);
 				ObjectManager::add(RouterInterface::class, $router, TRUE);
 				return $router;
 			});
