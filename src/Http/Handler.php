@@ -3,7 +3,6 @@
 namespace Bleicker\Framework\Http;
 
 use Bleicker\Authentication\AuthenticationManagerInterface;
-use Bleicker\Framework\Context\ContextInterface;
 use Bleicker\Framework\Controller\ControllerInterface;
 use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Framework\Http\Exception\ControllerRouteDataInterfaceRequiredException;
@@ -75,11 +74,6 @@ class Handler implements RequestHandlerInterface {
 	protected $locales;
 
 	/**
-	 * @var ContextInterface $context
-	 */
-	protected $context;
-
-	/**
 	 * @var SecurityManagerInterface
 	 */
 	protected $securityManager;
@@ -107,7 +101,6 @@ class Handler implements RequestHandlerInterface {
 	public function initialize() {
 		$this->isInitialized = TRUE;
 
-		$this->context = ObjectManager::get(ContextInterface::class);
 		$this->httpApplicationRequest = ObjectManager::get(HttpApplicationRequestInterface::class);
 		$this->httpApplicationResponse = ObjectManager::get(HttpApplicationResponseInterface::class);
 		$this->locales = ObjectManager::get(LocalesInterface::class);
