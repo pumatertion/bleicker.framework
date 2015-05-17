@@ -13,6 +13,7 @@
 		"bleicker/view": "1.2.*",
 		"bleicker/security": "2.0.*",
 		"bleicker/authentication": "2.2.*",
+		"bleicker/context": "0.0.*",
 		"namelesscoder/fluid": "dev-master"
 	},
 	"require-dev": {
