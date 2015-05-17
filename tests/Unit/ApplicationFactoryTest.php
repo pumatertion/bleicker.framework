@@ -3,10 +3,11 @@
 namespace Tests\Bleicker\Framework\Unit;
 
 use Bleicker\Authentication\AuthenticationManagerInterface;
+use Bleicker\Context\Context;
 use Bleicker\Converter\Converter;
 use Bleicker\Converter\ConverterInterface;
 use Bleicker\Framework\ApplicationFactory;
-use Bleicker\Framework\Context\ContextInterface;
+use Bleicker\Context\ContextInterface;
 use Bleicker\Framework\Http\JsonResponse;
 use Bleicker\Framework\Http\Request;
 use Bleicker\Framework\Http\Response;
@@ -54,6 +55,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 		Locales::prune();
 		Votes::prune();
 		Tokens::prune();
+		Context::prune();
 	}
 
 	/**
