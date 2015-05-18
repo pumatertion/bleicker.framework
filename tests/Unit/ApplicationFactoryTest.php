@@ -4,10 +4,10 @@ namespace Tests\Bleicker\Framework\Unit;
 
 use Bleicker\Authentication\AuthenticationManagerInterface;
 use Bleicker\Context\Context;
+use Bleicker\Context\ContextInterface;
 use Bleicker\Converter\Converter;
 use Bleicker\Converter\ConverterInterface;
 use Bleicker\Framework\ApplicationFactory;
-use Bleicker\Context\ContextInterface;
 use Bleicker\Framework\Http\JsonResponse;
 use Bleicker\Framework\Http\Request;
 use Bleicker\Framework\Http\Response;
@@ -16,6 +16,7 @@ use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\HttpApplicationResponseInterface;
 use Bleicker\Framework\RequestHandlerInterface;
 use Bleicker\Framework\Utility\Arrays;
+use Bleicker\Framework\Validation\ResultsInterface;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManagerInterface;
 use Bleicker\Registry\Registry;
@@ -33,6 +34,8 @@ use Tests\Bleicker\Framework\Unit\Fixtures\EntityManager;
 use Tests\Bleicker\Framework\Unit\Fixtures\Exception\AccessDeniedException;
 use Tests\Bleicker\Framework\Unit\Fixtures\Exception\WebLoginException;
 use Tests\Bleicker\Framework\Unit\Fixtures\SimpleController;
+use Tests\Bleicker\Framework\Unit\Fixtures\TypeConverter\ValidationExceptionThrowingConverter;
+use Tests\Bleicker\Framework\Unit\Fixtures\ValidationController;
 use Tests\Bleicker\Framework\UnitTestCase;
 
 /**
@@ -66,6 +69,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 		$this->assertInstanceOf(HttpApplicationInterface::class, ObjectManager::get(HttpApplicationInterface::class), 'Application exists');
 		$this->assertInstanceOf(HttpApplicationRequestInterface::class, ObjectManager::get(HttpApplicationRequestInterface::class), 'Application Request exists');
 		$this->assertInstanceOf(HttpApplicationResponseInterface::class, ObjectManager::get(HttpApplicationResponseInterface::class), 'Application Response exists');
+		$this->assertInstanceOf(ResultsInterface::class, ObjectManager::get(ResultsInterface::class), 'Validation Results exists');
 		$this->assertInstanceOf(SecurityManagerInterface::class, ObjectManager::get(SecurityManagerInterface::class), 'SecurityManager exists');
 		$this->assertInstanceOf(RouterInterface::class, ObjectManager::get(RouterInterface::class), 'Router exists');
 		$this->assertInstanceOf(ContextInterface::class, ObjectManager::get(ContextInterface::class), 'Context exists');
@@ -260,5 +264,49 @@ class ApplicationFactoryTest extends UnitTestCase {
 
 		$this->assertTrue(Registry::get('foo.bar'));
 		$this->assertTrue(Registry::get('foo.baz'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function actionOfValidationExceptionIsProcessedTest() {
+
+		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/validation');
+		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'POST');
+
+		ApplicationFactory::http();
+
+		/** @var RouterInterface $router */
+		$router = ObjectManager::get(RouterInterface::class);
+		$router->addRoute('/validation', 'post', new ControllerRouteData(ValidationController::class, 'updateAction'));
+
+		ApplicationFactory::http();
+
+		ob_start();
+		ApplicationFactory::http()->run();
+		$this->assertEquals('bar', ob_get_contents());
+		ob_end_clean();
+	}
+
+	/**
+	 * @test
+	 */
+	public function converterValidationExceptionTest() {
+		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/convertervalidation');
+		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'POST');
+
+		ValidationExceptionThrowingConverter::register();
+		ApplicationFactory::http();
+
+		/** @var RouterInterface $router */
+		$router = ObjectManager::get(RouterInterface::class);
+		$router->addRoute('/convertervalidation', 'post', new ControllerRouteData(ValidationController::class, 'converterValidationAction'));
+
+		ApplicationFactory::http();
+
+		ob_start();
+		ApplicationFactory::http()->run();
+		$this->assertEquals('invoked by converter', ob_get_contents());
+		ob_end_clean();
 	}
 }
