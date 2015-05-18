@@ -147,11 +147,7 @@ class Handler implements RequestHandlerInterface {
 		if ($this->securityManager->vote($this->controllerName . '::' . $this->methodName)->getResults()->count()) {
 			$firstVoteException = $this->securityManager->getResults()->first();
 			if ($firstVoteException instanceof ControllerInvokationExceptionInterface) {
-				$this->methodArguments = [
-					ControllerInvokationExceptionInterface::ORIGIN_CONTROLLER_NAME => $this->controllerName,
-					ControllerInvokationExceptionInterface::ORIGIN_METHOD_NAME => $this->methodName,
-					ControllerInvokationExceptionInterface::ORIGIN_EXCEPTION_NAME => $firstVoteException
-				];
+				$this->methodArguments = [ControllerInvokationExceptionInterface::ORIGIN_EXCEPTION_NAME => $firstVoteException];
 				$this->controllerName = $firstVoteException->getControllerName();
 				$this->methodName = $firstVoteException->getMethodName();
 			} else {
