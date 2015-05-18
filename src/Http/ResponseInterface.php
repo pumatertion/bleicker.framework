@@ -14,4 +14,10 @@ interface ResponseInterface {
 	 * @return ResponseInterface
 	 */
 	public function send();
+
+	/**
+	 * @param string $content
+	 * @return ResponseInterface
+	 */
+	public function setContent($content);
 }
