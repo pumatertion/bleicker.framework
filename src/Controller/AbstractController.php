@@ -2,6 +2,7 @@
 
 namespace Bleicker\Framework\Controller;
 
+use Bleicker\Exception\ThrowableException as Exception;
 use Bleicker\Framework\ApplicationResponseInterface;
 use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Framework\Http\JsonResponse;
@@ -20,6 +21,11 @@ use Bleicker\View\ViewInterface;
  * @package Bleicker\Framework\Controller
  */
 abstract class AbstractController implements ControllerInterface {
+
+	/**
+	 * @var Exception
+	 */
+	protected $exception;
 
 	/**
 	 * @var HttpApplicationRequestInterface
@@ -57,6 +63,22 @@ abstract class AbstractController implements ControllerInterface {
 	}
 
 	/**
+	 * @param Exception $exception
+	 * @return $this
+	 */
+	public function setException($exception) {
+		$this->exception = $exception;
+		return $this;
+	}
+
+	/**
+	 * @return Exception
+	 */
+	public function getException() {
+		return $this->exception;
+	}
+
+	/**
 	 * @param string $method
 	 * @return $this
 	 */
@@ -71,7 +93,7 @@ abstract class AbstractController implements ControllerInterface {
 	 */
 	public function resolveFormat($method) {
 		$this->format = 'html';
-		if($this->response->getParentResponse() instanceof JsonResponse){
+		if ($this->response->getParentResponse() instanceof JsonResponse) {
 			$this->format = 'json';
 		}
 		return $this;

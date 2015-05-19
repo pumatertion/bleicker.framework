@@ -3,8 +3,10 @@
 namespace Bleicker\Framework\Http;
 
 use Bleicker\Authentication\AuthenticationManagerInterface;
+use Bleicker\Exception\ThrowableException as Exception;
 use Bleicker\Framework\Controller\ControllerInterface;
 use Bleicker\Framework\Exception\RedirectException;
+use Bleicker\Framework\Validation\Exception\ValidationException;
 use Bleicker\Framework\Http\Exception\ControllerRouteDataInterfaceRequiredException;
 use Bleicker\Framework\Http\Exception\IsNotInitializedException;
 use Bleicker\Framework\Http\Exception\MethodNotSupportedException;
@@ -67,6 +69,11 @@ class Handler implements RequestHandlerInterface {
 	 * @var array
 	 */
 	protected $methodArguments;
+
+	/**
+	 * @var Exception
+	 */
+	protected $controllerException;
 
 	/**
 	 * @var LocalesInterface $locales
@@ -134,20 +141,28 @@ class Handler implements RequestHandlerInterface {
 
 	/**
 	 * @return $this
-	 * @throws IsNotInitializedException
-	 * @throws AbstractVoteException
 	 */
 	public function run() {
 		if (!$this->isInitialized()) {
 			$this->initialize();
 		}
 
+		return $this->callControllerMethod();
+	}
+
+	/**
+	 * @return $this
+	 * @throws IsNotInitializedException
+	 * @throws AbstractVoteException
+	 */
+	protected function callControllerMethod(){
+
 		$this->authenticationManager->run();
 
 		if ($this->securityManager->vote($this->controllerName . '::' . $this->methodName)->getResults()->count()) {
 			$firstVoteException = $this->securityManager->getResults()->first();
 			if ($firstVoteException instanceof ControllerInvokationExceptionInterface) {
-				$this->methodArguments = [ControllerInvokationExceptionInterface::ORIGIN_EXCEPTION_NAME => $firstVoteException];
+				$this->controllerException = $firstVoteException;
 				$this->controllerName = $firstVoteException->getControllerName();
 				$this->methodName = $firstVoteException->getMethodName();
 			} else {
@@ -159,6 +174,7 @@ class Handler implements RequestHandlerInterface {
 		/** @var ControllerInterface $controller */
 		$controller = new $this->controllerName();
 		$controller
+			->setException($this->controllerException)
 			->setRequest($this->httpApplicationRequest)
 			->setResponse($this->httpApplicationResponse)
 			->resolveFormat($this->methodName)
@@ -174,7 +190,14 @@ class Handler implements RequestHandlerInterface {
 			$httpResponse->headers->set('Location', $redirect->getUri());
 			$httpResponse->setStatusCode($redirect->getStatus(), $redirect->getMessage());
 			$httpResponse->send();
+		} catch (ValidationException $exception) {
+			$this->controllerException = $exception;
+			$this->controllerName = $exception->getControllerName();
+			$this->methodName = $exception->getMethodName();
+			$this->methodArguments = $exception->getMethodArguments();
+			$this->callControllerMethod();
 		}
+
 		return $this;
 	}
 
