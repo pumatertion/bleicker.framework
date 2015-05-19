@@ -9,7 +9,7 @@ namespace Bleicker\Framework\Validation;
 interface ResultsInterface {
 
 	/**
-	 * @return array
+	 * @return ResultInterface[]
 	 */
 	public static function storage();
 
