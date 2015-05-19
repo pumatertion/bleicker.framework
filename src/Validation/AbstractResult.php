@@ -7,7 +7,7 @@ namespace Bleicker\Framework\Validation;
  *
  * @package Bleicker\Framework\Validation
  */
-class Result implements ResultInterface {
+abstract class AbstractResult implements ResultInterface {
 
 	/**
 	 * @var string
@@ -81,7 +81,7 @@ class Result implements ResultInterface {
 	 * @param string $message
 	 * @param integer $code
 	 * @param array $arguments
-	 * @return Result
+	 * @return AbstractResult
 	 */
 	public static function create($message, $code, array $arguments = array()) {
 		return new static($message, $code, $arguments);

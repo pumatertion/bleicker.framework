@@ -295,14 +295,13 @@ class ApplicationFactoryTest extends UnitTestCase {
 		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/convertervalidation');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'POST');
 
-		ValidationExceptionThrowingConverter::register();
-		ApplicationFactory::http();
+		ApplicationFactory::http(NULL, function(){
+			ValidationExceptionThrowingConverter::register();
+		});
 
 		/** @var RouterInterface $router */
 		$router = ObjectManager::get(RouterInterface::class);
 		$router->addRoute('/convertervalidation', 'post', new ControllerRouteData(ValidationController::class, 'converterValidationAction'));
-
-		ApplicationFactory::http();
 
 		ob_start();
 		ApplicationFactory::http()->run();

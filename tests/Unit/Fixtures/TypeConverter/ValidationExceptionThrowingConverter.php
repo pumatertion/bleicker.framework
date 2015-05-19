@@ -3,10 +3,11 @@
 namespace Tests\Bleicker\Framework\Unit\Fixtures\TypeConverter;
 
 use Bleicker\Converter\AbstractTypeConverter;
+use Bleicker\Framework\Validation\ErrorInterface;
 use Bleicker\Framework\Validation\Exception\ValidationException;
-use Bleicker\Framework\Validation\Result;
 use Bleicker\Framework\Validation\ResultsInterface;
 use Bleicker\ObjectManager\ObjectManager;
+use Tests\Bleicker\Framework\Unit\Fixtures\Validation\TestValidator;
 
 /**
  * Class ValidationExceptionThrowingConverter
@@ -32,7 +33,12 @@ class ValidationExceptionThrowingConverter extends AbstractTypeConverter {
 	public function convert($source) {
 		/** @var ResultsInterface $validationResults */
 		$validationResults = ObjectManager::get(ResultsInterface::class);
-		$validationResults->add('foo.bar.baz', Result::create('Invalid input', 1431982690, ['foo' => 'bar']));
+		$validationResult = TestValidator::create()->validate('foo');
+
+		if ($validationResult instanceof ErrorInterface) {
+			$validationResults->add('foo.bar.baz', $validationResult);
+		}
+
 		throw ValidationException::create('Your data is invalid', 1431981824);
 	}
 }
