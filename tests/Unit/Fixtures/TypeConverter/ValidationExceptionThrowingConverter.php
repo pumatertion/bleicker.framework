@@ -33,10 +33,10 @@ class ValidationExceptionThrowingConverter extends AbstractTypeConverter {
 	public function convert($source) {
 		/** @var ResultsInterface $validationResults */
 		$validationResults = ObjectManager::get(ResultsInterface::class);
-		$validationResult = TestValidator::create()->validate('foo');
+		$validationResult = TestValidator::create()->validate('foo@bar.com');
 
 		if ($validationResult instanceof ErrorInterface) {
-			$validationResults->add('foo.bar.baz', $validationResult);
+			$validationResults->add('foo.bar.baz', 'foo@bar.com', $validationResult);
 		}
 
 		throw ValidationException::create('Your data is invalid', 1431981824);

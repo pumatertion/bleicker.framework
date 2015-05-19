@@ -16,6 +16,7 @@ use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\HttpApplicationResponseInterface;
 use Bleicker\Framework\RequestHandlerInterface;
 use Bleicker\Framework\Utility\Arrays;
+use Bleicker\Framework\Validation\Results;
 use Bleicker\Framework\Validation\ResultsInterface;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManagerInterface;

@@ -2,8 +2,6 @@
 
 namespace Bleicker\Framework\Validation;
 
-use Bleicker\Container\AbstractContainer;
-
 /**
  * Class Results
  *
@@ -18,11 +16,12 @@ class Results implements ResultsInterface {
 
 	/**
 	 * @param string $propertyPath
+	 * @param mixed $propertyValue
 	 * @param ResultInterface $result
 	 * @return static
 	 */
-	public static function add($propertyPath, ResultInterface $result) {
-		$result->setPropertyPath($propertyPath);
+	public static function add($propertyPath, $propertyValue, ResultInterface $result) {
+		$result->setPropertyPath($propertyPath)->setPropertyValue($propertyValue);
 		static::$storage[] = $result;
 		return new static;
 	}

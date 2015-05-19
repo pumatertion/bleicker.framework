@@ -15,10 +15,11 @@ interface ResultsInterface {
 
 	/**
 	 * @param string $propertyPath
+	 * @param string $propertyValue
 	 * @param ResultInterface $result
 	 * @return static
 	 */
-	public static function add($propertyPath, ResultInterface $result);
+	public static function add($propertyPath, $propertyValue, ResultInterface $result);
 
 	/**
 	 * @return static

@@ -10,11 +10,6 @@ namespace Bleicker\Framework\Validation;
 interface ResultInterface {
 
 	/**
-	 * @return array
-	 */
-	public function getArguments();
-
-	/**
 	 * @return string
 	 */
 	public function getCode();
@@ -30,16 +25,31 @@ interface ResultInterface {
 	public function getPropertyPath();
 
 	/**
+	 * @return mixed
+	 */
+	public function getPropertyValue();
+
+	/**
 	 * @param string $propertyPath
 	 * @return $this
 	 */
 	public function setPropertyPath($propertyPath);
 
 	/**
+	 * @param mixed $propertyValue
+	 * @return $this
+	 */
+	public function setPropertyValue($propertyValue);
+
+	/**
 	 * @param string $message
 	 * @param integer $code
-	 * @param array $arguments
 	 * @return ResultInterface
 	 */
-	public static function create($message, $code, array $arguments = array());
+	public static function create($message, $code);
+
+	/**
+	 * @return string
+	 */
+	public function __toString();
 }

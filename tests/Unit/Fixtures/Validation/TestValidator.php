@@ -18,6 +18,6 @@ class TestValidator extends AbstractValidator {
 	 * @return ResultInterface
 	 */
 	public function validate($source = NULL) {
-		return Error::create('Invalid email "%1s"', 1432028399, ['foo@bar.com']);
+		return Error::create('Invalid email "%1s"', 1432028399);
 	}
 }

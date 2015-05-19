@@ -15,14 +15,14 @@ abstract class AbstractResult implements ResultInterface {
 	protected $propertyPath;
 
 	/**
+	 * @var mixed
+	 */
+	protected $propertyValue;
+
+	/**
 	 * @var string
 	 */
 	protected $message;
-
-	/**
-	 * @var array
-	 */
-	protected $arguments;
 
 	/**
 	 * @var string
@@ -32,19 +32,10 @@ abstract class AbstractResult implements ResultInterface {
 	/**
 	 * @param string $message
 	 * @param integer $code
-	 * @param array $arguments
 	 */
-	public function __construct($message, $code, array $arguments = array()) {
+	public function __construct($message, $code) {
 		$this->message = $message;
 		$this->code = $code;
-		$this->arguments = $arguments;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getArguments() {
-		return $this->arguments;
 	}
 
 	/**
@@ -69,6 +60,13 @@ abstract class AbstractResult implements ResultInterface {
 	}
 
 	/**
+	 * @return mixed
+	 */
+	public function getPropertyValue() {
+		return $this->propertyValue;
+	}
+
+	/**
 	 * @param string $propertyPath
 	 * @return $this
 	 */
@@ -78,12 +76,27 @@ abstract class AbstractResult implements ResultInterface {
 	}
 
 	/**
+	 * @param string $propertyValue
+	 * @return $this
+	 */
+	public function setPropertyValue($propertyValue) {
+		$this->propertyValue = $propertyValue;
+		return $this;
+	}
+
+	/**
 	 * @param string $message
 	 * @param integer $code
-	 * @param array $arguments
 	 * @return AbstractResult
 	 */
-	public static function create($message, $code, array $arguments = array()) {
-		return new static($message, $code, $arguments);
+	public static function create($message, $code) {
+		return new static($message, $code);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function __toString() {
+		return sprintf($this->getMessage(), $this->getCode(), $this->getPropertyPath(), $this->getPropertyValue());
 	}
 }
