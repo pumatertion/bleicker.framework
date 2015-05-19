@@ -40,7 +40,7 @@ class RequestFactory {
 			return NULL;
 		}
 		$content = file_get_contents('php://input');
-		if($content === ''){
+		if ($content === '') {
 			$content = http_build_query($_POST);
 		}
 		return $content;
@@ -80,21 +80,21 @@ class RequestFactory {
 	/**
 	 * @return array
 	 */
-	protected static function getFiles(){
+	protected static function getFiles() {
 		return $_FILES;
 	}
 
 	/**
 	 * @return array
 	 */
-	protected static function getCookies(){
+	protected static function getCookies() {
 		return $_COOKIE;
 	}
 
 	/**
 	 * @return array
 	 */
-	protected static function getParameter(){
+	protected static function getParameter() {
 		return $_GET;
 	}
 

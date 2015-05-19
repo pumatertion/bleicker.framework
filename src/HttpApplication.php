@@ -1,6 +1,7 @@
 <?php
 
 namespace Bleicker\Framework;
+
 use Bleicker\ObjectManager\ObjectManager;
 
 /**
