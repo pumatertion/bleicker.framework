@@ -2,10 +2,11 @@
 
 namespace Bleicker\Framework\Controller;
 
+use Bleicker\Exception\ThrowableException as Exception;
 use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\HttpApplicationResponseInterface;
-use Bleicker\Response\ResponseInterface as ApplicationResponseInterface;
+use Bleicker\Framework\Validation\ResultsInterface;
 use Bleicker\View\ViewInterface;
 
 /**
@@ -58,6 +59,17 @@ interface ControllerInterface {
 	 * @return HttpApplicationResponseInterface
 	 */
 	public function getResponse();
+
+	/**
+	 * @param Exception $exception
+	 * @return $this
+	 */
+	public function setException($exception);
+
+	/**
+	 * @return Exception
+	 */
+	public function getException();
 
 	/**
 	 * @param string $uri
