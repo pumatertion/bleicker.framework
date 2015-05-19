@@ -10,7 +10,7 @@ namespace Bleicker\Framework\Validation;
 class Results implements ResultsInterface {
 
 	/**
-	 * @var array
+	 * @var ResultInterface[]
 	 */
 	public static $storage = [];
 
@@ -35,7 +35,7 @@ class Results implements ResultsInterface {
 	}
 
 	/**
-	 * @return array
+	 * @return ResultInterface[]
 	 */
 	public static function storage() {
 		return static::$storage;
