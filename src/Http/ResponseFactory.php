@@ -1,6 +1,7 @@
 <?php
 
 namespace Bleicker\Framework\Http;
+
 use Bleicker\Framework\Utility\Arrays;
 
 /**
