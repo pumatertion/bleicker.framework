@@ -33,7 +33,7 @@ class ValidationException extends Exception implements ValidationExceptionInterf
 	 * @param integer $code
 	 * @param \Exception $previous
 	 */
-	public function __construct($message = "", $code = 0, \Exception $previous = null) {
+	public function __construct($message = "", $code = 0, \Exception $previous = NULL) {
 		parent::__construct($message, $code, $previous);
 	}
 
@@ -91,7 +91,7 @@ class ValidationException extends Exception implements ValidationExceptionInterf
 	 * @param \Exception $previous
 	 * @return ValidationException
 	 */
-	public static function create($message = "", $code = 0, \Exception $previous = null) {
+	public static function create($message = "", $code = 0, \Exception $previous = NULL) {
 		return new static($message, $code, $previous);
 	}
 }
