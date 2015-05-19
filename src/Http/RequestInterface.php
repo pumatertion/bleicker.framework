@@ -1,7 +1,6 @@
 <?php
 namespace Bleicker\Framework\Http;
 
-use Exception;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
