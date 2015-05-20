@@ -2,12 +2,13 @@
 
 namespace Bleicker\Framework\Controller;
 
-use Bleicker\Exception\ThrowableException as Exception;
 use Bleicker\Framework\ApplicationResponseInterface;
 use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Framework\Http\JsonResponse;
 use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\HttpApplicationResponseInterface;
+use Bleicker\Framework\Security\Vote\Exception\ControllerInvocationExceptionInterface;
+use Bleicker\Framework\Validation\Exception\ValidationExceptionInterface;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManagerInterface;
 use Bleicker\Translation\Locales;
@@ -23,9 +24,14 @@ use Bleicker\View\ViewInterface;
 abstract class AbstractController implements ControllerInterface {
 
 	/**
-	 * @var Exception
+	 * @var ControllerInvocationExceptionInterface
 	 */
-	protected $exception;
+	protected $invokingException;
+
+	/**
+	 * @var ValidationExceptionInterface
+	 */
+	protected $validationException;
 
 	/**
 	 * @var HttpApplicationRequestInterface
@@ -63,19 +69,35 @@ abstract class AbstractController implements ControllerInterface {
 	}
 
 	/**
-	 * @param Exception $exception
+	 * @param ControllerInvocationExceptionInterface $exception
 	 * @return $this
 	 */
-	public function setException($exception) {
-		$this->exception = $exception;
+	public function setInvokingException(ControllerInvocationExceptionInterface $exception = NULL) {
+		$this->invokingException = $exception;
 		return $this;
 	}
 
 	/**
-	 * @return Exception
+	 * @return ControllerInvocationExceptionInterface
 	 */
-	public function getException() {
-		return $this->exception;
+	public function getInvokingException() {
+		return $this->invokingException;
+	}
+
+	/**
+	 * @param ValidationExceptionInterface $exception
+	 * @return $this
+	 */
+	public function setValidationException(ValidationExceptionInterface $exception = NULL) {
+		$this->validationException = $exception;
+		return $this;
+	}
+
+	/**
+	 * @return ValidationExceptionInterface
+	 */
+	public function getValidationException() {
+		return $this->validationException;
 	}
 
 	/**

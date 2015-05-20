@@ -3,10 +3,8 @@
 namespace Bleicker\Framework\Http;
 
 use Bleicker\Authentication\AuthenticationManagerInterface;
-use Bleicker\Exception\ThrowableException as Exception;
 use Bleicker\Framework\Controller\ControllerInterface;
 use Bleicker\Framework\Exception\RedirectException;
-use Bleicker\Framework\Validation\Exception\ValidationException;
 use Bleicker\Framework\Http\Exception\ControllerRouteDataInterfaceRequiredException;
 use Bleicker\Framework\Http\Exception\IsNotInitializedException;
 use Bleicker\Framework\Http\Exception\MethodNotSupportedException;
@@ -16,8 +14,10 @@ use Bleicker\Framework\Http\Exception\RequestedLocaleNotDefinedException;
 use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\HttpApplicationResponseInterface;
 use Bleicker\Framework\RequestHandlerInterface;
-use Bleicker\Framework\Security\Vote\Exception\ControllerInvokationExceptionInterface;
+use Bleicker\Framework\Security\Vote\Exception\ControllerInvocationExceptionInterface;
 use Bleicker\Framework\Utility\Arrays;
+use Bleicker\Framework\Validation\Exception\ValidationException;
+use Bleicker\Framework\Validation\Exception\ValidationExceptionInterface;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Routing\ControllerRouteDataInterface;
 use Bleicker\Routing\RouteInterface;
@@ -71,9 +71,14 @@ class Handler implements RequestHandlerInterface {
 	protected $methodArguments;
 
 	/**
-	 * @var Exception
+	 * @var ControllerInvocationExceptionInterface
 	 */
-	protected $controllerException;
+	protected $controllerInvocationException;
+
+	/**
+	 * @var ValidationExceptionInterface
+	 */
+	protected $controllerValidationException;
 
 	/**
 	 * @var LocalesInterface $locales
@@ -155,14 +160,14 @@ class Handler implements RequestHandlerInterface {
 	 * @throws IsNotInitializedException
 	 * @throws AbstractVoteException
 	 */
-	protected function callControllerMethod(){
+	protected function callControllerMethod() {
 
 		$this->authenticationManager->run();
 
 		if ($this->securityManager->vote($this->controllerName . '::' . $this->methodName)->getResults()->count()) {
 			$firstVoteException = $this->securityManager->getResults()->first();
-			if ($firstVoteException instanceof ControllerInvokationExceptionInterface) {
-				$this->controllerException = $firstVoteException;
+			if ($firstVoteException instanceof ControllerInvocationExceptionInterface) {
+				$this->controllerInvocationException = $firstVoteException;
 				$this->controllerName = $firstVoteException->getControllerName();
 				$this->methodName = $firstVoteException->getMethodName();
 			} else {
@@ -174,7 +179,8 @@ class Handler implements RequestHandlerInterface {
 		/** @var ControllerInterface $controller */
 		$controller = new $this->controllerName();
 		$controller
-			->setException($this->controllerException)
+			->setInvokingException($this->controllerInvocationException)
+			->setValidationException($this->controllerValidationException)
 			->setRequest($this->httpApplicationRequest)
 			->setResponse($this->httpApplicationResponse)
 			->resolveFormat($this->methodName)
@@ -191,7 +197,7 @@ class Handler implements RequestHandlerInterface {
 			$httpResponse->setStatusCode($redirect->getStatus(), $redirect->getMessage());
 			$httpResponse->send();
 		} catch (ValidationException $exception) {
-			$this->controllerException = $exception;
+			$this->controllerValidationException = $exception;
 			$this->controllerName = $exception->getControllerName();
 			$this->methodName = $exception->getMethodName();
 			$this->methodArguments = $exception->getMethodArguments();
@@ -301,8 +307,8 @@ class Handler implements RequestHandlerInterface {
 
 	/**
 	 * @return array
-	 * @throws Exception\NotFoundException
-	 * @throws Exception\MethodNotSupportedException
+	 * @throws NotFoundException
+	 * @throws MethodNotSupportedException
 	 */
 	protected function invokeRouter() {
 		$routeResult = $this->router->dispatch($this->httpApplicationRequest->getParentRequest()->getPathInfo(), $this->httpApplicationRequest->getParentRequest()->getMethod());

@@ -20,7 +20,7 @@ use Bleicker\Framework\Http\Request;
 use Bleicker\Framework\Http\RequestFactory;
 use Bleicker\Framework\Http\Response;
 use Bleicker\Framework\Http\ResponseFactory;
-use Bleicker\Framework\Validation\Results;
+use Bleicker\Framework\Validation\ResultCollection;
 use Bleicker\Framework\Validation\ResultsInterface;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Routing\RouterInterface;
@@ -65,15 +65,6 @@ class ApplicationFactory {
 				$context->add(ContextInterface::APPLICATION_CONTEXT, getenv(ContextInterface::APPLICATION_CONTEXT_ENV_VAR));
 				ObjectManager::add(ContextInterface::class, $context, TRUE);
 				return $context;
-			});
-
-			/**
-			 * Get implementation of ResultsInterface and if not exists use fallback function and register it as singleton
-			 */
-			ObjectManager::get(ResultsInterface::class, function () {
-				$results = new Results();
-				ObjectManager::add(ResultsInterface::class, $results, TRUE);
-				return $results;
 			});
 
 			/**

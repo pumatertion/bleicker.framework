@@ -22,10 +22,11 @@ class ValidationController extends AbstractController {
 	}
 
 	/**
-	 * @throws ValidationException
+	 * @param $passedArgument
+	 * @return string
 	 */
-	public function updateAction() {
-		throw ValidationException::create('Your data is invalid', 1431981824)->setControllerName(static::class)->setMethodName('editAction')->setMethodArguments(['bar']);
+	public function validationErrorAction($passedArgument){
+		return $passedArgument . '::' . (string)$this->getValidationException()->getResults()->first();
 	}
 
 	/**
@@ -33,9 +34,9 @@ class ValidationController extends AbstractController {
 	 */
 	public function converterValidationAction() {
 		try {
-			Converter::convert([], 'foo');
+			Converter::convert(['foo' => ['bar' => 'baz']], 'whatever');
 		} catch (ValidationException $exception) {
-			$exception->setControllerName(static::class)->setMethodName('editAction')->setMethodArguments(['invoked by converter']);
+			$exception->setControllerName(static::class)->setMethodName('validationErrorAction')->setMethodArguments(['invoked by converter']);
 			throw $exception;
 		}
 	}

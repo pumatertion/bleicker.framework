@@ -2,11 +2,11 @@
 namespace Bleicker\Framework\Security\Vote\Exception;
 
 /**
- * Class AbstractControllerInvokationException
+ * Class AbstractControllerInvocationException
  *
  * @package Bleicker\Framework\Security\Vote\Exception
  */
-interface ControllerInvokationExceptionInterface {
+interface ControllerInvocationExceptionInterface {
 
 	const CONTROLLER_NAME = NULL, METHOD_NAME = NULL;
 

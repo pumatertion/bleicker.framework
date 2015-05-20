@@ -10,12 +10,13 @@ interface ValidatorInterface {
 
 	/**
 	 * @param mixed $source
-	 * @return ResultInterface
+	 * @return $this
 	 */
 	public function validate($source = NULL);
 
 	/**
-	 * @return static
+	 * @return ResultCollection
 	 */
-	public static function create();
+	public function getResults();
+
 }

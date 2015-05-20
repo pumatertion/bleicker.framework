@@ -16,7 +16,7 @@ use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\HttpApplicationResponseInterface;
 use Bleicker\Framework\RequestHandlerInterface;
 use Bleicker\Framework\Utility\Arrays;
-use Bleicker\Framework\Validation\Results;
+use Bleicker\Framework\Validation\ResultCollection;
 use Bleicker\Framework\Validation\ResultsInterface;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManagerInterface;
@@ -70,7 +70,6 @@ class ApplicationFactoryTest extends UnitTestCase {
 		$this->assertInstanceOf(HttpApplicationInterface::class, ObjectManager::get(HttpApplicationInterface::class), 'Application exists');
 		$this->assertInstanceOf(HttpApplicationRequestInterface::class, ObjectManager::get(HttpApplicationRequestInterface::class), 'Application Request exists');
 		$this->assertInstanceOf(HttpApplicationResponseInterface::class, ObjectManager::get(HttpApplicationResponseInterface::class), 'Application Response exists');
-		$this->assertInstanceOf(ResultsInterface::class, ObjectManager::get(ResultsInterface::class), 'Validation Results exists');
 		$this->assertInstanceOf(SecurityManagerInterface::class, ObjectManager::get(SecurityManagerInterface::class), 'SecurityManager exists');
 		$this->assertInstanceOf(RouterInterface::class, ObjectManager::get(RouterInterface::class), 'Router exists');
 		$this->assertInstanceOf(ContextInterface::class, ObjectManager::get(ContextInterface::class), 'Context exists');
@@ -270,28 +269,6 @@ class ApplicationFactoryTest extends UnitTestCase {
 	/**
 	 * @test
 	 */
-	public function actionOfValidationExceptionIsProcessedTest() {
-
-		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/validation');
-		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'POST');
-
-		ApplicationFactory::http();
-
-		/** @var RouterInterface $router */
-		$router = ObjectManager::get(RouterInterface::class);
-		$router->addRoute('/validation', 'post', new ControllerRouteData(ValidationController::class, 'updateAction'));
-
-		ApplicationFactory::http();
-
-		ob_start();
-		ApplicationFactory::http()->run();
-		$this->assertEquals('bar', ob_get_contents());
-		ob_end_clean();
-	}
-
-	/**
-	 * @test
-	 */
 	public function converterValidationExceptionTest() {
 		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/convertervalidation');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'POST');
@@ -306,7 +283,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 
 		ob_start();
 		ApplicationFactory::http()->run();
-		$this->assertEquals('invoked by converter', ob_get_contents());
+		$this->assertEquals('invoked by converter::Error(1432028399): Source "baz" is invalid.', ob_get_contents());
 		ob_end_clean();
 	}
 }
