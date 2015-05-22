@@ -16,12 +16,9 @@ use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\HttpApplicationResponseInterface;
 use Bleicker\Framework\RequestHandlerInterface;
 use Bleicker\Framework\Utility\Arrays;
-use Bleicker\Framework\Validation\ResultCollection;
-use Bleicker\Framework\Validation\ResultsInterface;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManagerInterface;
 use Bleicker\Registry\Registry;
-use Bleicker\Routing\ControllerRouteData;
 use Bleicker\Routing\RouterInterface;
 use Bleicker\Security\SecurityManagerInterface;
 use Bleicker\Security\Vote;
@@ -101,7 +98,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 
 		/** @var RouterInterface $router */
 		$router = ObjectManager::get(RouterInterface::class);
-		$router->addRoute('/secure', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
+		$router->addRoute(SimpleController::class, 'indexAction', '/secure', 'get');
 
 		Vote::register('securedController', function () {
 			throw new AccessDeniedException();
@@ -122,7 +119,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 
 		/** @var RouterInterface $router */
 		$router = ObjectManager::get(RouterInterface::class);
-		$router->addRoute('/foo', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
+		$router->addRoute(SimpleController::class, 'indexAction', '/foo', 'get');
 
 		ob_start();
 		ApplicationFactory::http()->run();
@@ -144,7 +141,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 
 		/** @var RouterInterface $router */
 		$router = ObjectManager::get(RouterInterface::class);
-		$router->addRoute('/json', 'get', new ControllerRouteData(SimpleController::class, 'jsonAction'));
+		$router->addRoute(SimpleController::class, 'jsonAction', '/json', 'get');
 
 		ob_start();
 		ApplicationFactory::http()->run();
@@ -171,7 +168,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 
 		/** @var RouterInterface $router */
 		$router = ObjectManager::get(RouterInterface::class);
-		$router->addRoute('/secured_with_loginbox_redirect', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
+		$router->addRoute(SimpleController::class, 'indexAction', '/secured_with_loginbox_redirect', 'get');
 
 		Vote::register('securedController', function () {
 			throw new WebLoginException();
@@ -198,7 +195,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 
 		/** @var RouterInterface $router */
 		$router = ObjectManager::get(RouterInterface::class);
-		$router->addRoute('/deny', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
+		$router->addRoute(SimpleController::class, 'indexAction', '/deny', 'get');
 
 		Vote::register('securedController', function () {
 			if (!ObjectManager::get(AuthenticationManagerInterface::class)->hasRole('Guest')) {
@@ -223,7 +220,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 
 		/** @var RouterInterface $router */
 		$router = ObjectManager::get(RouterInterface::class);
-		$router->addRoute('/grant', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
+		$router->addRoute(SimpleController::class, 'indexAction', '/grant', 'get');
 
 		Vote::register('securedController', function () {
 			if (!ObjectManager::get(AuthenticationManagerInterface::class)->hasRole('Guest')) {
@@ -249,7 +246,7 @@ class ApplicationFactoryTest extends UnitTestCase {
 
 		/** @var RouterInterface $router */
 		$router = ObjectManager::get(RouterInterface::class);
-		$router->addRoute('/conf', 'get', new ControllerRouteData(SimpleController::class, 'indexAction'));
+		$router->addRoute(SimpleController::class, 'indexAction', '/conf', 'get');
 
 		ApplicationFactory::http(
 			function (ApplicationFactory $factory) {
@@ -273,13 +270,13 @@ class ApplicationFactoryTest extends UnitTestCase {
 		Arrays::setValueByPath($_SERVER, 'PATH_INFO', '/convertervalidation');
 		Arrays::setValueByPath($_SERVER, 'REQUEST_METHOD', 'POST');
 
-		ApplicationFactory::http(NULL, function(){
+		ApplicationFactory::http(NULL, function () {
 			ValidationExceptionThrowingConverter::register();
 		});
 
 		/** @var RouterInterface $router */
 		$router = ObjectManager::get(RouterInterface::class);
-		$router->addRoute('/convertervalidation', 'post', new ControllerRouteData(ValidationController::class, 'converterValidationAction'));
+		$router->addRoute(ValidationController::class, 'converterValidationAction', '/convertervalidation', 'post');
 
 		ob_start();
 		ApplicationFactory::http()->run();
