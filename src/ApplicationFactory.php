@@ -77,8 +77,19 @@ class ApplicationFactory {
 				 */
 				$context = ObjectManager::get(ContextInterface::class);
 
+				/**
+				 * Get implementation of Http/Request and if not exists use fallback function and register it as singleton
+				 *
+				 * @var Request $httpRequest
+				 */
+				$httpRequest = ObjectManager::get(Request::class, function () {
+					$request = RequestFactory::getInstance();
+					ObjectManager::add(Request::class, $request, TRUE);
+					return $request;
+				});
+
 				if ($context->get(ContextInterface::APPLICATION_CONTEXT) === ContextInterface::PRODUCTION && Registry::get('paths.cache.default') !== NULL) {
-					$router = Router::create(Registry::get('paths.cache.default') . '/route.cache.php');
+					$router = Router::create(Registry::get('paths.cache.default') .'/'. $httpRequest->getHttpHost() .'.route.cache.php');
 				} else {
 					$router = Router::create();
 				}
