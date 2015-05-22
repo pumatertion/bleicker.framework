@@ -1,6 +1,9 @@
 <?php
 namespace Bleicker\Framework\Validation\Exception;
 
+use Bleicker\Framework\Validation\ResultCollectionInterface;
+use Exception;
+
 /**
  * Interface ValidationExceptionInterface
  *
@@ -9,9 +12,13 @@ namespace Bleicker\Framework\Validation\Exception;
 interface ValidationExceptionInterface {
 
 	/**
-	 * @return ValidationExceptionInterface
+	 * @param ResultCollectionInterface $results
+	 * @param string $message
+	 * @param integer $code
+	 * @param Exception $previous
+	 * @return ValidationException
 	 */
-	public static function create();
+	public static function create(ResultCollectionInterface $results, $message = "", $code = 0, Exception $previous = NULL);
 
 	/**
 	 * @return string
@@ -55,4 +62,9 @@ interface ValidationExceptionInterface {
 	 * @return mixed|integer
 	 */
 	public function getCode();
+
+	/**
+	 * @return ResultCollectionInterface
+	 */
+	public function getResults();
 }

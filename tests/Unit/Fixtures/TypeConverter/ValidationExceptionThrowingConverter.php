@@ -3,11 +3,14 @@
 namespace Tests\Bleicker\Framework\Unit\Fixtures\TypeConverter;
 
 use Bleicker\Converter\AbstractTypeConverter;
+use Bleicker\Framework\Validation\ArrayValidator;
 use Bleicker\Framework\Validation\ErrorInterface;
 use Bleicker\Framework\Validation\Exception\ValidationException;
+use Bleicker\Framework\Validation\MessageInterface;
 use Bleicker\Framework\Validation\ResultsInterface;
 use Bleicker\ObjectManager\ObjectManager;
-use Tests\Bleicker\Framework\Unit\Fixtures\Validation\TestValidator;
+use Tests\Bleicker\Framework\Unit\Fixtures\Validation\FailingTestValidator;
+use Tests\Bleicker\Framework\Unit\Fixtures\Validation\SuccessTestValidator;
 
 /**
  * Class ValidationExceptionThrowingConverter
@@ -31,14 +34,20 @@ class ValidationExceptionThrowingConverter extends AbstractTypeConverter {
 	 * @throws ValidationException
 	 */
 	public function convert($source) {
-		/** @var ResultsInterface $validationResults */
-		$validationResults = ObjectManager::get(ResultsInterface::class);
-		$validationResult = TestValidator::create()->validate('foo@bar.com');
+		$failingValidator = new FailingTestValidator();
+		$successValidator = new SuccessTestValidator();
+		$validationResults = ArrayValidator::create()
+			->addValidatorForPropertyPath('foo.bar', $failingValidator)
+			->addValidatorForPropertyPath('foo.bar', $successValidator)
+			->validate($source)
+			->getResults();
 
-		if ($validationResult instanceof ErrorInterface) {
-			$validationResults->add('foo.bar.baz', 'foo@bar.com', $validationResult);
+		if($validationResults->filter(function(MessageInterface $message){
+			return $message->getSeverity() === MessageInterface::SEVERITY_ERROR;
+		})->count() > 0){
+			throw ValidationException::create($validationResults, 'Your data is invalid', 1431981824);
 		}
 
-		throw ValidationException::create('Your data is invalid', 1431981824);
+		return $source;
 	}
 }

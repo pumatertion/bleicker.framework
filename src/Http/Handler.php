@@ -3,11 +3,9 @@
 namespace Bleicker\Framework\Http;
 
 use Bleicker\Authentication\AuthenticationManagerInterface;
-use Bleicker\Exception\ThrowableException as Exception;
+use Bleicker\FastRouter\Router;
 use Bleicker\Framework\Controller\ControllerInterface;
 use Bleicker\Framework\Exception\RedirectException;
-use Bleicker\Framework\Validation\Exception\ValidationException;
-use Bleicker\Framework\Http\Exception\ControllerRouteDataInterfaceRequiredException;
 use Bleicker\Framework\Http\Exception\IsNotInitializedException;
 use Bleicker\Framework\Http\Exception\MethodNotSupportedException;
 use Bleicker\Framework\Http\Exception\NoLocaleDefinedException;
@@ -16,11 +14,12 @@ use Bleicker\Framework\Http\Exception\RequestedLocaleNotDefinedException;
 use Bleicker\Framework\HttpApplicationRequestInterface;
 use Bleicker\Framework\HttpApplicationResponseInterface;
 use Bleicker\Framework\RequestHandlerInterface;
-use Bleicker\Framework\Security\Vote\Exception\ControllerInvokationExceptionInterface;
+use Bleicker\Framework\Security\Vote\Exception\ControllerInvocationExceptionInterface;
 use Bleicker\Framework\Utility\Arrays;
+use Bleicker\Framework\Validation\Exception\ValidationException;
+use Bleicker\Framework\Validation\Exception\ValidationExceptionInterface;
 use Bleicker\ObjectManager\ObjectManager;
-use Bleicker\Routing\ControllerRouteDataInterface;
-use Bleicker\Routing\RouteInterface;
+use Bleicker\Routing\ResultInterface;
 use Bleicker\Routing\RouterInterface;
 use Bleicker\Security\Exception\AbstractVoteException;
 use Bleicker\Security\SecurityManagerInterface;
@@ -71,9 +70,14 @@ class Handler implements RequestHandlerInterface {
 	protected $methodArguments;
 
 	/**
-	 * @var Exception
+	 * @var ControllerInvocationExceptionInterface
 	 */
-	protected $controllerException;
+	protected $controllerInvocationException;
+
+	/**
+	 * @var ValidationExceptionInterface
+	 */
+	protected $controllerValidationException;
 
 	/**
 	 * @var LocalesInterface $locales
@@ -115,11 +119,11 @@ class Handler implements RequestHandlerInterface {
 		$this->securityManager = ObjectManager::get(SecurityManagerInterface::class);
 		$this->authenticationManager = ObjectManager::get(AuthenticationManagerInterface::class);
 
-		$routerInformation = $this->invokeRouter();
-		$this->controllerName = $this->getControllerNameByRoute($routerInformation[1]);
-		$this->methodName = $this->getMethodNameByRoute($routerInformation[1]);
-		$this->methodArguments = $this->getMethodArgumentsByRouterInformation($this->controllerName, $this->methodName, $routerInformation[2]);
-		$systemLocale = $this->getSystemLocaleByRoute($routerInformation[2]);
+		$routingResult = $this->invokeRouter();
+		$this->controllerName = $routingResult->getRoute()->getClassName();
+		$this->methodName = $routingResult->getRoute()->getMethodName();
+		$this->methodArguments = $this->extractMethodArguments($routingResult);
+		$systemLocale = $this->extractSystemLocale($routingResult);
 		$this->locales->setSystemLocale($systemLocale);
 		setlocale(LC_ALL, (string)$systemLocale);
 		return $this;
@@ -155,14 +159,14 @@ class Handler implements RequestHandlerInterface {
 	 * @throws IsNotInitializedException
 	 * @throws AbstractVoteException
 	 */
-	protected function callControllerMethod(){
+	protected function callControllerMethod() {
 
 		$this->authenticationManager->run();
 
 		if ($this->securityManager->vote($this->controllerName . '::' . $this->methodName)->getResults()->count()) {
 			$firstVoteException = $this->securityManager->getResults()->first();
-			if ($firstVoteException instanceof ControllerInvokationExceptionInterface) {
-				$this->controllerException = $firstVoteException;
+			if ($firstVoteException instanceof ControllerInvocationExceptionInterface) {
+				$this->controllerInvocationException = $firstVoteException;
 				$this->controllerName = $firstVoteException->getControllerName();
 				$this->methodName = $firstVoteException->getMethodName();
 			} else {
@@ -174,7 +178,8 @@ class Handler implements RequestHandlerInterface {
 		/** @var ControllerInterface $controller */
 		$controller = new $this->controllerName();
 		$controller
-			->setException($this->controllerException)
+			->setInvokingException($this->controllerInvocationException)
+			->setValidationException($this->controllerValidationException)
 			->setRequest($this->httpApplicationRequest)
 			->setResponse($this->httpApplicationResponse)
 			->resolveFormat($this->methodName)
@@ -191,7 +196,7 @@ class Handler implements RequestHandlerInterface {
 			$httpResponse->setStatusCode($redirect->getStatus(), $redirect->getMessage());
 			$httpResponse->send();
 		} catch (ValidationException $exception) {
-			$this->controllerException = $exception;
+			$this->controllerValidationException = $exception;
 			$this->controllerName = $exception->getControllerName();
 			$this->methodName = $exception->getMethodName();
 			$this->methodArguments = $exception->getMethodArguments();
@@ -202,13 +207,14 @@ class Handler implements RequestHandlerInterface {
 	}
 
 	/**
-	 * @param array $routeData
+	 * @param ResultInterface $result
 	 * @return LocaleInterface
 	 * @throws NoLocaleDefinedException
 	 * @throws RequestedLocaleNotDefinedException
 	 */
-	protected function getSystemLocaleByRoute(array $routeData = array()) {
-		$systemLocale = Arrays::getValueByPath($routeData, static::SYSTEM_LOCALE_NAME);
+	protected function extractSystemLocale(ResultInterface $result) {
+		$arguments = $result->getArguments();
+		$systemLocale = Arrays::getValueByPath($arguments, static::SYSTEM_LOCALE_NAME);
 		$availableLocales = new ArrayCollection($this->locales->storage());
 
 		if ($availableLocales->count() === 0) {
@@ -251,46 +257,13 @@ class Handler implements RequestHandlerInterface {
 	}
 
 	/**
-	 * @param RouteInterface $route
-	 * @return string
-	 * @throws ControllerRouteDataInterfaceRequiredException
-	 */
-	protected function getControllerNameByRoute(RouteInterface $route) {
-		/** @var ControllerRouteDataInterface $controllerRouteData */
-		$controllerRouteData = $route->getData();
-
-		if (!($controllerRouteData instanceof ControllerRouteDataInterface)) {
-			throw new ControllerRouteDataInterfaceRequiredException('No instance of ControllerRouteDataInterface given', 1429338660);
-		}
-
-		return $controllerRouteData->getController();
-	}
-
-	/**
-	 * @param RouteInterface $route
-	 * @return string
-	 * @throws ControllerRouteDataInterfaceRequiredException
-	 */
-	protected function getMethodNameByRoute(RouteInterface $route) {
-		/** @var ControllerRouteDataInterface $controllerRouteData */
-		$controllerRouteData = $route->getData();
-
-		if (!($controllerRouteData instanceof ControllerRouteDataInterface)) {
-			throw new ControllerRouteDataInterfaceRequiredException('No instance of ControllerRouteDataInterface given', 1429338661);
-		}
-
-		return $controllerRouteData->getMethod();
-	}
-
-	/**
-	 * @param string $controllerName
-	 * @param string $methodName
-	 * @param array $arguments
+	 * @param ResultInterface $result
 	 * @return array
 	 */
-	protected function getMethodArgumentsByRouterInformation($controllerName, $methodName, array $arguments = array()) {
+	protected function extractMethodArguments(ResultInterface $result) {
+		$arguments = $result->getArguments();
 		$methodArguments = [];
-		$methodReflection = new \ReflectionMethod($controllerName, $methodName);
+		$methodReflection = new \ReflectionMethod($result->getRoute()->getClassName(), $result->getRoute()->getMethodName());
 		$availableParameters = $methodReflection->getParameters();
 		/** @var ReflectionParameter $parameter */
 		foreach ($availableParameters as $parameter) {
@@ -300,19 +273,21 @@ class Handler implements RequestHandlerInterface {
 	}
 
 	/**
-	 * @return array
-	 * @throws Exception\NotFoundException
+	 * @return ResultInterface
 	 * @throws Exception\MethodNotSupportedException
+	 * @throws Exception\NotFoundException
 	 */
 	protected function invokeRouter() {
-		$routeResult = $this->router->dispatch($this->httpApplicationRequest->getParentRequest()->getPathInfo(), $this->httpApplicationRequest->getParentRequest()->getMethod());
-		switch ($routeResult[0]) {
-			case RouterInterface::NOT_FOUND:
-				throw new NotFoundException('Not Found', 1429187150);
-			case RouterInterface::METHOD_NOT_ALLOWED:
-				throw new MethodNotSupportedException('Method not allowed', 1429187151);
-			case RouterInterface::FOUND:
-				return $routeResult;
+		$uri = $this->httpApplicationRequest->getParentRequest()->getPathInfo();
+		$method = $this->httpApplicationRequest->getParentRequest()->getMethod();
+		$result = $this->router->dispatch($uri, $method);
+		switch ($result->getStatus()) {
+			case Router::NOT_FOUND:
+				throw new NotFoundException('The uri "' . $uri . '" does not exist.', 1429187150);
+			case Router::METHOD_NOT_ALLOWED:
+				throw new MethodNotSupportedException('The "' . $uri . '" does not support the requested method "' . $method . '"', 1429187151);
+			default:
+				return $result;
 		}
 	}
 }

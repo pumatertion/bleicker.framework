@@ -4,11 +4,11 @@ namespace Bleicker\Framework;
 
 use Bleicker\Authentication\AuthenticationManager;
 use Bleicker\Authentication\AuthenticationManagerInterface;
+use Bleicker\Context\Context;
+use Bleicker\Context\ContextInterface;
 use Bleicker\Converter\Converter;
 use Bleicker\Converter\ConverterInterface;
 use Bleicker\FastRouter\Router;
-use Bleicker\Context\ContextInterface;
-use Bleicker\Context\Context;
 use Bleicker\Framework\Converter\JsonApplicationRequestConverter;
 use Bleicker\Framework\Converter\JsonApplicationRequestConverterInterface;
 use Bleicker\Framework\Converter\MultipartApplicationRequestConverter;
@@ -20,8 +20,6 @@ use Bleicker\Framework\Http\Request;
 use Bleicker\Framework\Http\RequestFactory;
 use Bleicker\Framework\Http\Response;
 use Bleicker\Framework\Http\ResponseFactory;
-use Bleicker\Framework\Validation\Results;
-use Bleicker\Framework\Validation\ResultsInterface;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Routing\RouterInterface;
 use Bleicker\Security\SecurityManager;
@@ -68,15 +66,6 @@ class ApplicationFactory {
 			});
 
 			/**
-			 * Get implementation of ResultsInterface and if not exists use fallback function and register it as singleton
-			 */
-			ObjectManager::get(ResultsInterface::class, function () {
-				$results = new Results();
-				ObjectManager::add(ResultsInterface::class, $results, TRUE);
-				return $results;
-			});
-
-			/**
 			 * Get implementation of RouterInterface and if not exists use fallback function and register it as singleton
 			 */
 			ObjectManager::get(RouterInterface::class, function () {
@@ -87,7 +76,11 @@ class ApplicationFactory {
 				 */
 				$context = ObjectManager::get(ContextInterface::class);
 
-				$router = Router::getInstance(__DIR__ . '/../route.cache.php', $context->get(ContextInterface::APPLICATION_CONTEXT) !== ContextInterface::PRODUCTION);
+				if ($context->get(ContextInterface::APPLICATION_CONTEXT) === ContextInterface::PRODUCTION) {
+					$router = Router::create(__DIR__ . '/../route.cache.php');
+				} else {
+					$router = Router::create();
+				}
 				ObjectManager::add(RouterInterface::class, $router, TRUE);
 				return $router;
 			});

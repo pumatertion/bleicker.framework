@@ -3,6 +3,8 @@
 namespace Bleicker\Framework\Validation\Exception;
 
 use Bleicker\Exception\ThrowableException as Exception;
+use Bleicker\Framework\Validation\ResultCollectionInterface;
+use Exception as OriginException;
 
 /**
  * Class ValidationException
@@ -29,12 +31,30 @@ class ValidationException extends Exception implements ValidationExceptionInterf
 	protected $methodArguments;
 
 	/**
+	 * @var ResultCollectionInterface
+	 */
+	protected $results;
+
+	/**
+	 * @param ResultCollectionInterface $results
 	 * @param string $message
 	 * @param integer $code
-	 * @param \Exception $previous
+	 * @param OriginException $previous
 	 */
-	public function __construct($message = "", $code = 0, \Exception $previous = NULL) {
+	public function __construct(ResultCollectionInterface $results, $message = "", $code = 0, OriginException $previous = NULL) {
 		parent::__construct($message, $code, $previous);
+		$this->results = $results;
+	}
+
+	/**
+	 * @param ResultCollectionInterface $results
+	 * @param string $message
+	 * @param integer $code
+	 * @param OriginException $previous
+	 * @return ValidationException
+	 */
+	public static function create(ResultCollectionInterface $results, $message = "", $code = 0, OriginException $previous = NULL) {
+		return new static($results, $message, $code, $previous);
 	}
 
 	/**
@@ -86,12 +106,9 @@ class ValidationException extends Exception implements ValidationExceptionInterf
 	}
 
 	/**
-	 * @param string $message
-	 * @param integer $code
-	 * @param \Exception $previous
-	 * @return ValidationException
+	 * @return ResultCollectionInterface
 	 */
-	public static function create($message = "", $code = 0, \Exception $previous = NULL) {
-		return new static($message, $code, $previous);
+	public function getResults() {
+		return $this->results;
 	}
 }

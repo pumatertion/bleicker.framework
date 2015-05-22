@@ -5,11 +5,11 @@ namespace Bleicker\Framework\Security\Vote\Exception;
 use Bleicker\Security\Exception\AbstractVoteException;
 
 /**
- * Class AbstractControllerInvokationException
+ * Class AbstractControllerInvocationException
  *
  * @package Bleicker\Framework\Security\Vote\Exception
  */
-abstract class AbstractControllerInvokationException extends AbstractVoteException implements ControllerInvokationExceptionInterface {
+abstract class AbstractControllerInvocationException extends AbstractVoteException implements ControllerInvocationExceptionInterface {
 
 	/**
 	 * @return string

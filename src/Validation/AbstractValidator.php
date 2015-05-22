@@ -12,6 +12,22 @@ use ReflectionClass;
 abstract class AbstractValidator implements ValidatorInterface {
 
 	/**
+	 * @var ResultCollection
+	 */
+	protected $results;
+
+	public function __construct() {
+		$this->results = new ResultCollection();
+	}
+
+	/**
+	 * @return ResultCollection
+	 */
+	public function getResults() {
+		return $this->results;
+	}
+
+	/**
 	 * @return static
 	 */
 	public static function create() {

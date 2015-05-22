@@ -3,7 +3,7 @@
 	"type": "library",
 	"require": {
 		"bleicker/exception": "1.0.*",
-		"bleicker/fastrouter": "1.0.*",
+		"bleicker/fastrouter": "1.1.*",
 		"symfony/http-foundation": "2.6.*",
 		"bleicker/translation": "0.2.*",
 		"bleicker/persistence": "1.1.*",
