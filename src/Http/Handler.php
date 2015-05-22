@@ -3,7 +3,6 @@
 namespace Bleicker\Framework\Http;
 
 use Bleicker\Authentication\AuthenticationManagerInterface;
-use Bleicker\FastRouter\Router;
 use Bleicker\Framework\Controller\ControllerInterface;
 use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Framework\Http\Exception\IsNotInitializedException;
@@ -282,9 +281,9 @@ class Handler implements RequestHandlerInterface {
 		$method = $this->httpApplicationRequest->getParentRequest()->getMethod();
 		$result = $this->router->dispatch($uri, $method);
 		switch ($result->getStatus()) {
-			case Router::NOT_FOUND:
+			case ResultInterface::STATUS_NOT_FOUND:
 				throw new NotFoundException('The uri "' . $uri . '" does not exist.', 1429187150);
-			case Router::METHOD_NOT_ALLOWED:
+			case ResultInterface::STATUS_METHOD_NOT_ALLOWED:
 				throw new MethodNotSupportedException('The "' . $uri . '" does not support the requested method "' . $method . '"', 1429187151);
 			default:
 				return $result;
