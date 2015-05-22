@@ -88,8 +88,8 @@ class ApplicationFactory {
 					return $request;
 				});
 
-				if ($context->get(ContextInterface::APPLICATION_CONTEXT) === ContextInterface::PRODUCTION && Registry::get('paths.cache.default') !== NULL) {
-					$router = Router::create(Registry::get('paths.cache.default') .'/'. $httpRequest->getHttpHost() .'.route.cache.php');
+				if ($context->get(ContextInterface::APPLICATION_CONTEXT) === ContextInterface::PRODUCTION && Registry::get('paths.cache.routing') !== NULL) {
+					$router = Router::create(Registry::get('paths.cache.routing') .'/'. $httpRequest->getHttpHost() .'.route.cache.php');
 				} else {
 					$router = Router::create();
 				}
