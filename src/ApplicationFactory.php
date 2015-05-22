@@ -21,6 +21,7 @@ use Bleicker\Framework\Http\RequestFactory;
 use Bleicker\Framework\Http\Response;
 use Bleicker\Framework\Http\ResponseFactory;
 use Bleicker\ObjectManager\ObjectManager;
+use Bleicker\Registry\Registry;
 use Bleicker\Routing\RouterInterface;
 use Bleicker\Security\SecurityManager;
 use Bleicker\Security\SecurityManagerInterface;
@@ -77,7 +78,7 @@ class ApplicationFactory {
 				$context = ObjectManager::get(ContextInterface::class);
 
 				if ($context->get(ContextInterface::APPLICATION_CONTEXT) === ContextInterface::PRODUCTION) {
-					$router = Router::create(__DIR__ . '/../route.cache.php');
+					$router = Router::create(Registry::get('paths.cache.default'));
 				} else {
 					$router = Router::create();
 				}
