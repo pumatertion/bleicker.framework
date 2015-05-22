@@ -2,6 +2,7 @@
 
 namespace Bleicker\Framework\Controller;
 
+use Bleicker\Context\ContextInterface;
 use Bleicker\Framework\ApplicationResponseInterface;
 use Bleicker\Framework\Exception\RedirectException;
 use Bleicker\Framework\Http\JsonResponse;
@@ -63,9 +64,15 @@ abstract class AbstractController implements ControllerInterface {
 	 */
 	protected $locales;
 
+	/**
+	 * @var ContextInterface
+	 */
+	protected $context;
+
 	public function __construct() {
 		$this->entityManager = ObjectManager::get(EntityManagerInterface::class);
 		$this->locales = ObjectManager::get(LocalesInterface::class);
+		$this->context = ObjectManager::get(ContextInterface::class);
 	}
 
 	/**
