@@ -77,8 +77,8 @@ class ApplicationFactory {
 				 */
 				$context = ObjectManager::get(ContextInterface::class);
 
-				if ($context->get(ContextInterface::APPLICATION_CONTEXT) === ContextInterface::PRODUCTION) {
-					$router = Router::create(Registry::get('paths.cache.default'));
+				if ($context->get(ContextInterface::APPLICATION_CONTEXT) === ContextInterface::PRODUCTION && Registry::get('paths.cache.default') !== NULL) {
+					$router = Router::create(Registry::get('paths.cache.default') . '/route.cache.php');
 				} else {
 					$router = Router::create();
 				}
