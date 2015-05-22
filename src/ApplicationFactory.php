@@ -62,6 +62,7 @@ class ApplicationFactory {
 			ObjectManager::get(ContextInterface::class, function () {
 				$context = new Context();
 				$context->add(ContextInterface::APPLICATION_CONTEXT, getenv(ContextInterface::APPLICATION_CONTEXT_ENV_VAR));
+				$context->add(ContextInterface::DOMAIN_CONTEXT, getenv(ContextInterface::DOMAIN_CONTEXT_ENV_VAR));
 				ObjectManager::add(ContextInterface::class, $context, TRUE);
 				return $context;
 			});
