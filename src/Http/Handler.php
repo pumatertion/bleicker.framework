@@ -284,7 +284,7 @@ class Handler implements RequestHandlerInterface {
 			case ResultInterface::STATUS_NOT_FOUND:
 				throw new NotFoundException('The uri "' . $uri . '" does not exist.', 1429187150);
 			case ResultInterface::STATUS_METHOD_NOT_ALLOWED:
-				throw new MethodNotSupportedException('The "' . $uri . '" does not support the requested method "' . $method . '"', 1429187151);
+				throw new MethodNotSupportedException('The uri "' . $uri . '" does not support the requested method "' . $method . '"', 1429187151);
 			default:
 				return $result;
 		}
