@@ -65,7 +65,7 @@ abstract class AbstractController implements ControllerInterface {
 
 	public function __construct() {
 		$this->entityManager = ObjectManager::get(EntityManagerInterface::class);
-		$this->locales = ObjectManager::get(LocalesInterface::class, Locales::class);
+		$this->locales = ObjectManager::get(LocalesInterface::class);
 	}
 
 	/**
