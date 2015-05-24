@@ -2,6 +2,7 @@
 
 namespace Bleicker\Framework\Controller;
 
+use Bleicker\Authentication\AuthenticationManagerInterface;
 use Bleicker\Context\ContextInterface;
 use Bleicker\Framework\ApplicationResponseInterface;
 use Bleicker\Framework\Exception\RedirectException;
@@ -68,10 +69,16 @@ abstract class AbstractController implements ControllerInterface {
 	 */
 	protected $context;
 
+	/**
+	 * @var AuthenticationManagerInterface
+	 */
+	protected $authenticationManager;
+
 	public function __construct() {
 		$this->entityManager = ObjectManager::get(EntityManagerInterface::class);
 		$this->locales = ObjectManager::get(LocalesInterface::class);
 		$this->context = ObjectManager::get(ContextInterface::class);
+		$this->authenticationManager = ObjectManager::get(AuthenticationManagerInterface::class);
 	}
 
 	/**
