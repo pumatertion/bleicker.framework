@@ -95,7 +95,7 @@ class Message implements MessageInterface {
 	 * @return mixed
 	 */
 	public function getSource() {
-		$this->source;
+		return $this->source;
 	}
 
 	/**
