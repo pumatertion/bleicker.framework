@@ -12,7 +12,6 @@ use Bleicker\Framework\Security\Vote\Exception\ControllerInvocationExceptionInte
 use Bleicker\Framework\Validation\Exception\ValidationExceptionInterface;
 use Bleicker\ObjectManager\ObjectManager;
 use Bleicker\Persistence\EntityManagerInterface;
-use Bleicker\Translation\Locales;
 use Bleicker\Translation\LocalesInterface;
 use Bleicker\View\Template\View;
 use Bleicker\View\ViewInterface;
